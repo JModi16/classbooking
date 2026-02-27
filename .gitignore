@@ -6,7 +6,7 @@ __pycache__/
 env.py
 .DS_Store
 /media/
-/static/
+/staticfiles/
 *.log
 .vscode/
 *.egg-info/
