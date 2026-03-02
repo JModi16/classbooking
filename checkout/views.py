@@ -5,7 +5,7 @@ from django.conf import settings
 from django.views.decorators.http import require_http_methods
 import stripe
 import uuid
-from .models import ClassBooking
+from .models import ClassBooking, ClassBookingLineItem
 from services.models import ExerciseClass
 
 
@@ -59,28 +59,65 @@ def checkout(request):
     
     grand_total = total + delivery
     
-    # Stripe amount in pence
-    stripe_total = round(grand_total * 100)
+    if request.method == 'POST':
+        # Process payment (simulated for now)
+        return process_payment(request, cart_items, total, delivery, grand_total)
     
+    # GET request - show checkout form
     context = {
         'cart_items': cart_items,
         'total': total,
         'delivery': delivery,
         'grand_total': grand_total,
         'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
-        'client_secret': 'test_secret',  # This will be set via AJAX
     }
     
     return render(request, 'checkout/checkout.html', context)
+
+
+def process_payment(request, cart_items, total, delivery, grand_total):
+    """Process payment and create bookings"""
+    try:
+        booking_id = uuid.uuid4()
+        
+        # Create main ClassBooking record
+        booking = ClassBooking.objects.create(
+            booking_id=booking_id,
+            user=request.user,
+            course=cart_items[0]['exercise_class'],  # First class for main booking
+            status='confirmed',
+            payment_status='paid',
+            amount_paid=grand_total,
+            stripe_pid='test_' + str(booking_id),  # Mock Stripe PID for testing
+        )
+        
+        # Create line items for each class in cart
+        for item in cart_items:
+            for i in range(item['quantity']):
+                ClassBookingLineItem.objects.create(
+                    booking=booking,
+                    exercise_class=item['exercise_class'],
+                    quantity=1,
+                    lineitem_total=item['exercise_class'].price,
+                )
+        
+        # Clear the cart
+        if 'cart' in request.session:
+            del request.session['cart']
+            request.session.modified = True
+        
+        messages.success(request, 'Booking confirmed! Check your email for details.')
+        return redirect('checkout_success', booking_id=booking_id)
+    
+    except Exception as e:
+        messages.error(request, f'Error processing booking: {str(e)}')
+        return redirect('view_cart')
 
 
 @login_required
 def checkout_success(request, booking_id):
     """Success page after payment"""
     booking = get_object_or_404(ClassBooking, booking_id=booking_id, user=request.user)
-    
-    if 'cart' in request.session:
-        del request.session['cart']
     
     context = {
         'booking': booking,
