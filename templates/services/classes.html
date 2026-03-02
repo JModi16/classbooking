@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}- Exercise Classes{% endblock %}
+
+{% block page_header %}
+<div class="container header-container mt-3">
+    <div class="row">
+        <div class="col">
+            <h2 class="text-center">Exercise Classes</h2>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Filters</h5>
+                    <form method="get" action="{% url 'classes' %}">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select name="category" id="category" class="form-select">
+                                    <option value="">All Categories</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.name }}">{{ category.get_friendly_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="difficulty" class="form-label">Difficulty</label>
+                                <select name="difficulty" id="difficulty" class="form-select">
+                                    <option value="">All Levels</option>
+                                    {% for value, label in difficulty_choices %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="sort" class="form-label">Sort By</label>
+                                <select name="sort" id="sort" class="form-select">
+                                    <option value="date">Date</option>
+                                    <option value="price_asc">Price: Low to High</option>
+                                    <option value="price_desc">Price: High to Low</option>
+                                    <option value="rating">Instructor Rating</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Class Results -->
+    <div class="row">
+        <div class="col-12">
+            <p class="text-muted">{{ classes|length }} class(es) found</p>
+        </div>
+    </div>
+
+    <div class="row">
+        {% if classes %}
+            {% for class in classes %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        {% if class.image %}
+                            <img src="{{ class.image.url }}" class="card-img-top" alt="{{ class.name }}">
+                        {% else %}
+                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span>No Image</span>
+                            </div>
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ class.name }}</h5>
+                            <p class="card-text text-muted small">
+                                <strong>Instructor:</strong> 
+                                <a href="{% url 'instructor_profile' class.instructor.id %}">
+                                    {{ class.instructor.get_display_name }}
+                                </a>
+                            </p>
+                            <p class="card-text">
+                                <span class="badge bg-info text-dark">{{ class.get_difficulty_level_display }}</span>
+                                {% if class.category %}
+                                    <span class="badge bg-secondary">{{ class.category.name }}</span>
+                                {% endif %}
+                            </p>
+                            <p class="card-text small">
+                                <i class="far fa-calendar"></i> {{ class.start_datetime|date:"D, M d, Y" }}<br>
+                                <i class="far fa-clock"></i> {{ class.start_datetime|date:"g:i A" }} - {{ class.end_datetime|date:"g:i A" }}
+                            </p>
+                            <p class="card-text">
+                                <strong>£{{ class.price }}</strong>
+                            </p>
+                            <p class="card-text small">
+                                {% if class.is_full %}
+                                    <span class="badge bg-danger">Class Full</span>
+                                {% else %}
+                                    <span class="badge bg-success">{{ class.get_available_spots }} spot(s) left</span>
+                                {% endif %}
+                            </p>
+                            <div class="mt-auto">
+                                <a href="{% url 'class_detail' class.id %}" class="btn btn-outline-primary w-100">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <h4>No classes found</h4>
+                    <p>Try adjusting your filters or check back later for new classes.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
