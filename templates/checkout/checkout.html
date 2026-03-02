@@ -103,6 +103,9 @@
                                 <p class="mb-1">
                                     <small>{{ item.exercise_class.start_datetime|date:"l, F d, Y g:i A" }}</small>
                                 </p>
+                                <p class="mb-1">
+                                    <small>Quantity: {{ item.quantity }}</small>
+                                </p>
                                 <p class="mb-0">
                                     <small>Instructor: {{ item.exercise_class.instructor.user.get_full_name }}</small>
                                 </p>
@@ -112,20 +115,25 @@
                         
                         <hr>
                         
-                        <!-- Stripe Payment Element -->
+                        <!-- Payment Section (Test Mode) -->
                         <div class="mb-3">
-                            <h6>Payment Method</h6>
-                            <div id="card-element" class="form-control p-3" style="height: 40px;"></div>
-                            <div id="card-errors" class="text-danger mt-2"></div>
+                            <h6>Payment Information</h6>
+                            <div class="alert alert-info">
+                                <small>
+                                    <i class="fas fa-info-circle"></i>
+                                    <strong>Test Mode:</strong> This is a test checkout. No actual payment will be processed.
+                                    Click "Complete Booking" to simulate payment and create your booking.
+                                </small>
+                            </div>
                         </div>
                         
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary btn-lg w-100" id="checkout-btn">
-                            Complete Payment - £{{ grand_total|floatformat:2 }}
+                            <i class="fas fa-check me-2"></i>Complete Booking - £{{ grand_total|floatformat:2 }}
                         </button>
                         
-                        <p class="text-muted text-center mt-2">
-                            <small>Your payment is secure and encrypted</small>
+                        <p class="text-muted text-center mt-3">
+                            <small>Your booking information is secure</small>
                         </p>
                     </form>
                 </div>
@@ -144,33 +152,11 @@
 
 {% block postloadjs %}
 {{ block.super }}
-<script src="https://js.stripe.com/v3/"></script>
 <script>
-    var stripe = Stripe('{{ stripe_public_key }}');
-    var elements = stripe.elements();
-    var cardElement = elements.create('card');
-    
-    cardElement.mount('#card-element');
-    
-    cardElement.on('change', function(event) {
-        var displayError = document.getElementById('card-errors');
-        if (event.error) {
-            displayError.textContent = event.error.message;
-        } else {
-            displayError.textContent = '';
-        }
-    });
-    
-    var form = document.getElementById('checkout-form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        
+    document.getElementById('checkout-form').addEventListener('submit', function(event) {
         var submitBtn = document.getElementById('checkout-btn');
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
-        
-        // For now, just submit the form. In production, create a PaymentIntent first
-        form.submit();
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing Booking...';
     });
 </script>
 {% endblock %}
