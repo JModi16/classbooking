@@ -1,3 +1,37 @@
 from django.contrib import admin
+from .models import Instructor
 
-# Register your models here.
+
+class InstructorAdmin(admin.ModelAdmin):
+    list_display = ('get_name', 'is_verified', 'years_experience', 'rating', 'total_reviews', 'is_active')
+    list_filter = ('is_verified', 'is_active', 'created_at', 'years_experience')
+    search_fields = ('user__first_name', 'user__last_name', 'user__email', 'specialties')
+    readonly_fields = ('created_at', 'updated_at')
+    fieldsets = (
+        ('User Info', {
+            'fields': ('user',)
+        }),
+        ('Professional Info', {
+            'fields': ('bio', 'specialties', 'certifications', 'years_experience')
+        }),
+        ('Rating & Reviews', {
+            'fields': ('rating', 'total_reviews')
+        }),
+        ('Media & Contact', {
+            'fields': ('image', 'phone', 'instagram')
+        }),
+        ('Status', {
+            'fields': ('is_active', 'is_verified')
+        }),
+        ('Tracking', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def get_name(self, obj):
+        return obj.get_display_name()
+    get_name.short_description = 'Instructor Name'
+
+
+admin.site.register(Instructor, InstructorAdmin)
