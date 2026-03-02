@@ -158,18 +158,21 @@
         $('#add-to-cart-form').submit(function(e) {
             e.preventDefault();
             
-            const quantity = $('#quantity').val();
-            const classId = {{ exercise_class.id }};
-            const btn = $('#add-to-cart-btn');
+            var form = $(this);
+            var quantity = $('#quantity').val();
+            var addUrl = form.data('add-url');
+            var cartUrl = form.data('cart-url');
+            var btn = $('#add-to-cart-btn');
+            var csrfToken = form.find('input[name="csrfmiddlewaretoken"]').val();
             
             btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Adding...');
             
             $.ajax({
-                url: "{% url 'add_class_to_cart' exercise_class.id %}",
+                url: addUrl,
                 type: 'POST',
                 data: {
                     'quantity': quantity,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    'csrfmiddlewaretoken': csrfToken
                 },
                 success: function(response) {
                     if (response.success) {
@@ -177,7 +180,7 @@
                            .html('<i class="fas fa-check me-2"></i>Added to Cart!');
                         
                         setTimeout(function() {
-                            window.location.href = "{% url 'view_cart' %}";
+                            window.location.href = cartUrl;
                         }, 1000);
                     } else {
                         alert(response.message || 'Error adding to cart');
