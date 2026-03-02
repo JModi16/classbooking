@@ -97,7 +97,7 @@ def class_detail(request, class_id):
     instructor = exercise_class.instructor
     
     context = {
-        'class': exercise_class,
+        'exercise_class': exercise_class,
         'instructor': instructor,
         'available_spots': available_spots,
         'is_full': is_full,
