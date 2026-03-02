@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}- {{ instructor.get_display_name }}{% endblock %}
+
+{% block page_header %}
+<div class="container header-container mt-3">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'classes' %}">Classes</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Instructor Profile</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <!-- Instructor Header -->
+    <div class="row mb-5">
+        <div class="col-md-3 text-center">
+            {% if instructor.image %}
+                <img src="{{ instructor.image.url }}" alt="{{ instructor.get_display_name }}" 
+                     class="img-fluid rounded-circle mb-3" style="width: 200px; height: 200px; object-fit: cover;">
+            {% else %}
+                <div class="bg-secondary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" 
+                     style="width: 200px; height: 200px;">
+                    <span class="h1">{{ instructor.user.first_name.0 }}{{ instructor.user.last_name.0 }}</span>
+                </div>
+            {% endif %}
+            
+            {% if instructor.is_verified %}
+                <span class="badge bg-success mb-2">
+                    <i class="fas fa-check-circle"></i> Verified Instructor
+                </span>
+            {% endif %}
+            
+            {% if instructor.rating %}
+                <div class="text-warning h4 mb-2">
+                    ★ {{ instructor.rating|floatformat:1 }}
+                </div>
+                <p class="text-muted small">{{ instructor.total_reviews }} review{{ instructor.total_reviews|pluralize }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-9">
+            <h1 class="mb-3">{{ instructor.get_display_name }}</h1>
+            
+            {% if instructor.specialties %}
+                <div class="mb-3">
+                    <h6 class="text-muted">Specialties</h6>
+                    <p>{{ instructor.specialties }}</p>
+                </div>
+            {% endif %}
+            
+            {% if instructor.years_experience %}
+                <div class="mb-3">
+                    <h6 class="text-muted">Experience</h6>
+                    <p>{{ instructor.years_experience }} year{{ instructor.years_experience|pluralize }} of experience</p>
+                </div>
+            {% endif %}
+            
+            {% if instructor.bio %}
+                <div class="mb-3">
+                    <h6 class="text-muted">About</h6>
+                    <p>{{ instructor.bio|linebreaks }}</p>
+                </div>
+            {% endif %}
+            
+            {% if instructor.certifications %}
+                <div class="mb-3">
+                    <h6 class="text-muted">Certifications & Qualifications</h6>
+                    <p>{{ instructor.certifications|linebreaks }}</p>
+                </div>
+            {% endif %}
+            
+            {% if instructor.instagram %}
+                <div class="mb-3">
+                    <a href="{{ instructor.instagram }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="fab fa-instagram me-2"></i>Follow on Instagram
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Upcoming Classes -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">Upcoming Classes</h3>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        {% if classes %}
+            {% for class in classes %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        {% if class.image %}
+                            <img src="{{ class.image.url }}" class="card-img-top" alt="{{ class.name }}">
+                        {% else %}
+                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span>No Image</span>
+                            </div>
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ class.name }}</h5>
+                            <p class="card-text">
+                                <span class="badge bg-info text-dark">{{ class.get_difficulty_level_display }}</span>
+                                {% if class.category %}
+                                    <span class="badge bg-secondary">{{ class.category.name }}</span>
+                                {% endif %}
+                            </p>
+                            <p class="card-text small">
+                                <i class="far fa-calendar"></i> {{ class.start_datetime|date:"D, M d, Y" }}<br>
+                                <i class="far fa-clock"></i> {{ class.start_datetime|date:"g:i A" }} - {{ class.end_datetime|date:"g:i A" }}
+                            </p>
+                            <p class="card-text">
+                                <strong>£{{ class.price }}</strong>
+                            </p>
+                            <p class="card-text small">
+                                {% if class.is_full %}
+                                    <span class="badge bg-danger">Class Full</span>
+                                {% else %}
+                                    <span class="badge bg-success">{{ class.get_available_spots }} spot(s) left</span>
+                                {% endif %}
+                            </p>
+                            <div class="mt-auto">
+                                <a href="{% url 'class_detail' class.id %}" class="btn btn-outline-primary w-100">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <h5>No upcoming classes scheduled</h5>
+                    <p class="mb-0">Check back later for new classes from this instructor.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Back Button -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <a href="{% url 'classes' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to All Classes
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
