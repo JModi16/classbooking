@@ -95,13 +95,14 @@ def process_payment(request, cart_items, total, delivery, grand_total):
         
         # Create line items for each class in cart
         for item in cart_items:
-            for i in range(item['quantity']):
-                ClassBookingLineItem.objects.create(
-                    booking=booking,
-                    exercise_class=item['exercise_class'],
-                    quantity=1,
-                    lineitem_total=item['exercise_class'].price,
-                )
+            # Create one line item per class booking
+            ClassBookingLineItem.objects.create(
+                booking=booking,
+                item_type='class',
+                description=item['exercise_class'].name,
+                quantity=item['quantity'],
+                unit_price=item['exercise_class'].price,
+            )
         
         # Clear the cart
         if 'cart' in request.session:
