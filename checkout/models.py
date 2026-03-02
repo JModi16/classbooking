@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from services.models import Service, ExerciseClass
 import uuid
 
@@ -134,6 +135,3 @@ class ClassBookingLineItem(models.Model):
 
     def __str__(self):
         return f"{self.description} x{self.quantity} - {self.booking.booking_id}"
-
-
-from django.core.validators import MinValueValidator

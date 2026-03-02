@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Instructor
+from .models import UserProfile, Instructor
+
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone_number', 'town_or_city', 'country')
+    list_filter = ('country', 'created_at')
+    search_fields = ('user__username', 'phone_number', 'postcode')
+    readonly_fields = ('created_at', 'updated_at')
 
 
 class InstructorAdmin(admin.ModelAdmin):
@@ -34,4 +41,5 @@ class InstructorAdmin(admin.ModelAdmin):
     get_name.short_description = 'Instructor Name'
 
 
+admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Instructor, InstructorAdmin)

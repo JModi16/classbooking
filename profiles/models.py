@@ -3,6 +3,32 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
+class UserProfile(models.Model):
+    """User profile for storing delivery/booking information"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='userprofile')
+    
+    # Contact Information
+    phone_number = models.CharField(max_length=20, blank=True)
+    
+    # Address Information
+    street_address1 = models.CharField(max_length=80, blank=True)
+    street_address2 = models.CharField(max_length=80, blank=True)
+    town_or_city = models.CharField(max_length=40, blank=True)
+    county = models.CharField(max_length=80, blank=True)
+    postcode = models.CharField(max_length=20, blank=True)
+    country = models.CharField(max_length=40, blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'User Profile'
+        verbose_name_plural = 'User Profiles'
+
+    def __str__(self):
+        return f"Profile for {self.user.username}"
+
+
 class Instructor(models.Model):
     """Personal fitness instructor profile"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='instructor_profile')
