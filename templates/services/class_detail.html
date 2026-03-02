@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}- {{ class.name }}{% endblock %}
+
+{% block page_header %}
+<div class="container header-container mt-3">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'classes' %}">Classes</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ class.name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <!-- Class Image -->
+        <div class="col-md-6 mb-4">
+            {% if class.image %}
+                <img src="{{ class.image.url }}" class="img-fluid rounded" alt="{{ class.name }}">
+            {% else %}
+                <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 400px;">
+                    <span class="h3">No Image Available</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Class Details -->
+        <div class="col-md-6">
+            <h1 class="mb-3">{{ class.name }}</h1>
+            
+            <!-- Category and Difficulty -->
+            <div class="mb-3">
+                {% if class.category %}
+                    <span class="badge bg-secondary me-2">{{ class.category.get_friendly_name }}</span>
+                {% endif %}
+                <span class="badge bg-info text-dark">{{ class.get_difficulty_level_display }}</span>
+            </div>
+
+            <!-- Instructor Info -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Instructor</h6>
+                    <div class="d-flex align-items-center">
+                        {% if instructor.image %}
+                            <img src="{{ instructor.image.url }}" alt="{{ instructor.get_display_name }}" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                        {% endif %}
+                        <div>
+                            <h5 class="mb-0">
+                                <a href="{% url 'instructor_profile' instructor.id %}" class="text-decoration-none">
+                                    {{ instructor.get_display_name }}
+                                </a>
+                            </h5>
+                            {% if instructor.rating %}
+                                <div class="text-warning">
+                                    ★ {{ instructor.rating|floatformat:1 }} 
+                                    <span class="text-muted">({{ instructor.total_reviews }} reviews)</span>
+                                </div>
+                            {% endif %}
+                            {% if instructor.specialties %}
+                                <p class="small text-muted mb-0">{{ instructor.specialties }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schedule -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Schedule</h6>
+                    <p class="mb-1">
+                        <i class="far fa-calendar me-2"></i>
+                        <strong>{{ class.start_datetime|date:"l, F d, Y" }}</strong>
+                    </p>
+                    <p class="mb-0">
+                        <i class="far fa-clock me-2"></i>
+                        {{ class.start_datetime|date:"g:i A" }} - {{ class.end_datetime|date:"g:i A" }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Price and Availability -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3 class="mb-1">£{{ class.price }}</h3>
+                            {% if is_full %}
+                                <span class="badge bg-danger">Class Full</span>
+                            {% else %}
+                                <span class="badge bg-success">{{ available_spots }} spot(s) available</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Button -->
+            {% if user.is_authenticated %}
+                {% if is_upcoming and not is_full %}
+                    <form method="post" id="add-to-cart-form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Number of Participants</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" max="{{ available_spots }}" required>
+                            <div class="form-text">Maximum {{ available_spots }} spot(s) available</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100" id="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                        </button>
+                    </form>
+                {% elif not is_upcoming %}
+                    <div class="alert alert-warning">This class has already taken place.</div>
+                {% elif is_full %}
+                    <div class="alert alert-danger">This class is fully booked.</div>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info">
+                    <a href="{% url 'account_login' %}" class="alert-link">Log in</a> to book this class.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3>About This Class</h3>
+            <hr>
+            <p class="lead">{{ class.description|linebreaks }}</p>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <a href="{% url 'classes' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Classes
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script>
+    $(document).ready(function() {
+        $('#add-to-cart-form').submit(function(e) {
+            e.preventDefault();
+            
+            const quantity = $('#quantity').val();
+            const classId = {{ class.id }};
+            const btn = $('#add-to-cart-btn');
+            
+            btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Adding...');
+            
+            $.ajax({
+                url: "{% url 'add_class_to_cart' class.id %}",
+                type: 'POST',
+                data: {
+                    'quantity': quantity,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        btn.removeClass('btn-primary').addClass('btn-success')
+                           .html('<i class="fas fa-check me-2"></i>Added to Cart!');
+                        
+                        setTimeout(function() {
+                            window.location.href = "{% url 'view_cart' %}";
+                        }, 1000);
+                    } else {
+                        alert(response.message || 'Error adding to cart');
+                        btn.prop('disabled', false).html('<i class="fas fa-shopping-cart me-2"></i>Add to Cart');
+                    }
+                },
+                error: function() {
+                    alert('Error adding to cart. Please try again.');
+                    btn.prop('disabled', false).html('<i class="fas fa-shopping-cart me-2"></i>Add to Cart');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
