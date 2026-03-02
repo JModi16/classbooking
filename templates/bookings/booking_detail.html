@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}- Booking Details{% endblock %}
+
+{% block page_header %}
+<div class="container header-container mt-3">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'my_bookings' %}">My Bookings</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Booking Details</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Booking Header -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Booking Confirmation</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Booking ID:</strong></p>
+                            <p class="text-muted">{{ booking.booking_id }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Booking Date:</strong></p>
+                            <p class="text-muted">{{ booking.created_at|date:"F d, Y g:i A" }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Status:</strong></p>
+                            {% if booking.status == 'confirmed' %}
+                                <span class="badge bg-success">Confirmed</span>
+                            {% elif booking.status == 'pending' %}
+                                <span class="badge bg-warning">Pending Payment</span>
+                            {% elif booking.status == 'cancelled' %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% elif booking.status == 'completed' %}
+                                <span class="badge bg-primary">Completed</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Payment:</strong></p>
+                            {% if booking.payment_status == 'paid' %}
+                                <span class="badge bg-success">Paid</span>
+                            {% elif booking.payment_status == 'unpaid' %}
+                                <span class="badge bg-warning">Unpaid</span>
+                            {% elif booking.payment_status == 'refunded' %}
+                                <span class="badge bg-info">Refunded</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Details -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Class Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            {% if booking.course.image %}
+                                <img src="{{ booking.course.image.url }}" class="img-fluid rounded" alt="{{ booking.course.name }}">
+                            {% else %}
+                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 150px;">
+                                    <span>No Image</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <h4>{{ booking.course.name }}</h4>
+                            <p class="text-muted mb-2">
+                                <span class="badge bg-info text-dark">{{ booking.course.get_difficulty_level_display }}</span>
+                                {% if booking.course.category %}
+                                    <span class="badge bg-secondary">{{ booking.course.category.name }}</span>
+                                {% endif %}
+                            </p>
+                            <p class="mb-1">
+                                <strong>Instructor:</strong> 
+                                <a href="{% url 'instructor_profile' booking.course.instructor.id %}">
+                                    {{ booking.course.instructor.get_display_name }}
+                                </a>
+                            </p>
+                            <p class="mb-1">
+                                <i class="far fa-calendar me-2"></i>
+                                <strong>Date:</strong> {{ booking.course.start_datetime|date:"l, F d, Y" }}
+                            </p>
+                            <p class="mb-0">
+                                <i class="far fa-clock me-2"></i>
+                                <strong>Time:</strong> {{ booking.course.start_datetime|date:"g:i A" }} - {{ booking.course.end_datetime|date:"g:i A" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Participant Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Participant Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Name:</strong></p>
+                            <p class="text-muted">{{ booking.full_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Email:</strong></p>
+                            <p class="text-muted">{{ booking.email }}</p>
+                        </div>
+                    </div>
+                    {% if booking.phone %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Phone:</strong></p>
+                                <p class="text-muted">{{ booking.phone }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if booking.notes %}
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="mb-1"><strong>Notes:</strong></p>
+                                <p class="text-muted">{{ booking.notes }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Payment Summary -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Payment Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Class Fee:</span>
+                        <span>£{{ booking.total_amount }}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total Paid:</strong>
+                        <h4 class="mb-0 text-primary">£{{ booking.total_amount }}</h4>
+                    </div>
+                    {% if booking.stripe_pid %}
+                        <p class="text-muted small mt-2 mb-0">
+                            Payment ID: {{ booking.stripe_pid|slice:":20" }}...
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'my_bookings' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to My Bookings
+                </a>
+                
+                {% if booking.status == 'confirmed' and booking.course.start_datetime > now %}
+                    <a href="{% url 'cancel_booking' booking.booking_id %}" class="btn btn-outline-danger">
+                        <i class="fas fa-times me-2"></i>Cancel Booking
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
