@@ -85,9 +85,11 @@ def process_payment(request, cart_items, total, delivery, grand_total):
             booking_id=booking_id,
             user=request.user,
             course=cart_items[0]['exercise_class'],  # First class for main booking
+            full_name=request.user.get_full_name() or request.user.username,
+            email=request.user.email,
             status='confirmed',
             payment_status='paid',
-            amount_paid=grand_total,
+            total_amount=grand_total,
             stripe_pid='test_' + str(booking_id),  # Mock Stripe PID for testing
         )
         
