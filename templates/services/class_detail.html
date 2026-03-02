@@ -107,7 +107,7 @@
             <!-- Booking Button -->
             {% if user.is_authenticated %}
                 {% if is_upcoming and not is_full %}
-                    <form method="post" id="add-to-cart-form">
+                    <form method="post" id="add-to-cart-form" data-class-id="{{ exercise_class.id }}" data-add-url="{% url 'add_class_to_cart' exercise_class.id %}" data-cart-url="{% url 'view_cart' %}">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="quantity" class="form-label">Number of Participants</label>
