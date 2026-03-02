@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}- Cancel Booking{% endblock %}
+
+{% block page_header %}
+<div class="container header-container mt-3">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'my_bookings' %}">My Bookings</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'booking_detail' booking.booking_id %}">Booking Details</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Cancel Booking</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Cancel Booking</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <strong>Warning!</strong> You are about to cancel your class booking.
+                    </div>
+
+                    <!-- Class Details Summary -->
+                    <div class="mb-4">
+                        <h5>Class Details</h5>
+                        <hr>
+                        <p class="mb-1"><strong>Class:</strong> {{ booking.course.name }}</p>
+                        <p class="mb-1"><strong>Instructor:</strong> {{ booking.course.instructor.get_display_name }}</p>
+                        <p class="mb-1">
+                            <strong>Date & Time:</strong> 
+                            {{ booking.course.start_datetime|date:"l, F d, Y" }} at {{ booking.course.start_datetime|date:"g:i A" }}
+                        </p>
+                        <p class="mb-0"><strong>Amount Paid:</strong> £{{ booking.total_amount }}</p>
+                    </div>
+
+                    <!-- Cancellation Policy -->
+                    <div class="mb-4">
+                        <h5>Cancellation Policy</h5>
+                        <hr>
+                        <ul class="small">
+                            <li>Cancellations made more than 24 hours before the class will receive a full refund.</li>
+                            <li>Cancellations made within 24 hours of the class may not be eligible for a refund.</li>
+                            <li>No-shows will not receive a refund.</li>
+                            <li>Refunds will be processed to your original payment method within 5-10 business days.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Confirmation Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <p>Are you sure you want to cancel this booking?</p>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'booking_detail' booking.booking_id %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>No, Keep Booking
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-times me-2"></i>Yes, Cancel Booking
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="card mt-4">
+                <div class="card-body text-center">
+                    <h6>Need Help?</h6>
+                    <p class="small text-muted mb-2">
+                        If you have any questions about cancellations or refunds, please contact us.
+                    </p>
+                    <a href="mailto:support@classbooking.com" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-envelope me-2"></i>Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
