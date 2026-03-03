@@ -1,12 +1,169 @@
 /* Base styles for service booking platform */
-body {
-    font-family: 'Arial', sans-serif;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar Styling */
+.navbar-dark.bg-dark {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+    border-bottom: 3px solid #e94560;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+    color: #fff !important;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: #e94560 !important;
+    transform: scale(1.05);
+}
+
+.navbar-dark .nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar-dark .nav-link:hover {
+    color: #e94560 !important;
+}
+
+.navbar-dark .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #e94560;
+    transition: width 0.3s ease;
+}
+
+.navbar-dark .nav-link:hover::after {
+    width: 100%;
+}
+
+/* Search Bar */
+.input-group {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.input-group .form-control {
+    border: none !important;
+    background-color: #fff !important;
+    color: #333 !important;
+    padding: 8px 15px !important;
+}
+
+.input-group .form-control::placeholder {
+    color: #999;
+}
+
+.input-group .btn-outline-light {
+    border: none !important;
+    background-color: #e94560 !important;
+    color: #fff !important;
+    padding: 8px 15px !important;
+    transition: all 0.3s ease;
+}
+
+.input-group .btn-outline-light:hover {
+    background-color: #d63a52 !important;
+}
+
+/* Cart Badge */
+.navbar .badge {
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    padding-top: 85px;
+}
+
+/* Message Container */
 .message-container {
     position: fixed;
-    top: 80px;
+    top: 90px;
     right: 20px;
     z-index: 9999;
     max-width: 400px;
+}
+
+/* Sticky positioning for navbar */
+.sticky-top {
+    top: 0;
+    z-index: 1020;
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-radius: 10px;
+}
+
+.card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #e94560 !important;
+    border-color: #e94560 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #d63a52 !important;
+    border-color: #d63a52 !important;
+    transform: scale(1.05);
+}
+
+/* Badges */
+.badge {
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Container padding */
+.container {
+    margin-top: 2rem;
+}
+
+/* Footer spacing */
+body {
+    padding-bottom: 2rem;
 }
