@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %}- Our Instructors{% endblock %}
+
+{% block page_header %}
+<div class="container header-container mt-3">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'classes' %}">Classes</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Our Instructors</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h1>Our Expert Instructors</h1>
+            <p class="text-muted">Meet the certified professionals leading our classes</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+    <!-- Instructors Grid -->
+    <div class="row">
+        {% if instructors %}
+            {% for instructor in instructors %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <!-- Instructor Image -->
+                        {% if instructor.image %}
+                            <img src="{{ instructor.image.url }}" alt="{{ instructor.get_display_name }}" 
+                                 class="card-img-top" style="height: 250px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" 
+                                 style="height: 250px;">
+                                <div class="text-center">
+                                    <h1 class="mb-0">{{ instructor.user.first_name.0 }}{{ instructor.user.last_name.0 }}</h1>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="card-body d-flex flex-column">
+                            <!-- Name and Badge -->
+                            <h5 class="card-title">{{ instructor.get_display_name }}</h5>
+                            
+                            {% if instructor.is_verified %}
+                                <span class="badge bg-success mb-2 w-fit">
+                                    <i class="fas fa-check-circle"></i> Verified
+                                </span>
+                            {% endif %}
+                            
+                            <!-- Rating -->
+                            {% if instructor.rating %}
+                                <div class="mb-2">
+                                    <span class="text-warning">
+                                        ★ {{ instructor.rating|floatformat:1 }}
+                                    </span>
+                                    <small class="text-muted">({{ instructor.total_reviews }} reviews)</small>
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Specialties -->
+                            {% if instructor.specialties %}
+                                <p class="card-text small mb-2">
+                                    <i class="fas fa-dumbbell text-primary"></i>
+                                    <strong>{{ instructor.specialties|truncatewords:5 }}</strong>
+                                </p>
+                            {% endif %}
+                            
+                            <!-- Bio Preview -->
+                            {% if instructor.bio %}
+                                <p class="card-text small text-muted flex-grow-1">
+                                    {{ instructor.bio|truncatewords:20 }}
+                                </p>
+                            {% endif %}
+                            
+                            <!-- Experience -->
+                            {% if instructor.years_experience %}
+                                <p class="card-text small mb-3">
+                                    <i class="fas fa-calendar"></i> {{ instructor.years_experience }} years experience
+                                </p>
+                            {% endif %}
+                            
+                            <!-- View Profile Button -->
+                            <a href="{% url 'instructor_profile' instructor.id %}" class="btn btn-primary mt-auto">
+                                <i class="fas fa-eye"></i> View Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <h5>No instructors available</h5>
+                    <p class="mb-0">Check back soon for our team of expert instructors.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Back Button -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <a href="{% url 'classes' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Classes
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

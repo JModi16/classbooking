@@ -140,3 +140,18 @@ def instructor_profile(request, instructor_id):
         'classes': classes,
     }
     return render(request, 'services/instructor_profile.html', context)
+
+
+def all_instructors(request):
+    """Display all active instructors (each instructor once)"""
+    from profiles.models import Instructor
+    
+    # Get all active instructors, ordered by verification and rating
+    instructors = Instructor.objects.filter(
+        is_active=True
+    ).select_related('user').order_by('-is_verified', '-rating')
+    
+    context = {
+        'instructors': instructors,
+    }
+    return render(request, 'services/instructors.html', context)
