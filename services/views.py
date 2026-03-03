@@ -46,6 +46,21 @@ def all_classes(request):
     ).select_related('instructor', 'category')
     
     categories = Category.objects.all()
+    search_query = None
+    
+    # Search functionality
+    search = request.GET.get('search')
+    if search:
+        search_query = search
+        classes = classes.filter(
+            name__icontains=search
+        ) | classes.filter(
+            description__icontains=search
+        ) | classes.filter(
+            instructor__user__first_name__icontains=search
+        ) | classes.filter(
+            instructor__user__last_name__icontains=search
+        )
     
     # Filter by category
     category = request.GET.get('category')
@@ -82,6 +97,7 @@ def all_classes(request):
         'classes': classes,
         'categories': categories,
         'difficulty_choices': difficulty_choices,
+        'search_query': search_query,
     }
     return render(request, 'services/classes.html', context)
 
