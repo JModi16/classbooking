@@ -1,38 +1,63 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home' %}">Service Booking</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <!-- Brand/Logo -->
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+            <i class="fas fa-dumbbell me-2"></i>ClassBooking
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <!-- Left side navigation -->
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="{% url 'classes' %}" id="classesDropdown" role="button" data-bs-toggle="dropdown">
-                        Classes
+                    <a class="nav-link dropdown-toggle" href="{% url 'classes' %}" id="classesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-list me-1"></i>Classes
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="classesDropdown">
                         <li><a class="dropdown-item" href="{% url 'classes' %}">All Classes</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'classes' %}?category=Yoga">Yoga</a></li>
+                        <li><a class="dropdown-item" href="{% url 'classes' %}?difficulty=beginner">Beginner</a></li>
+                        <li><a class="dropdown-item" href="{% url 'classes' %}?difficulty=intermediate">Intermediate</a></li>
+                        <li><a class="dropdown-item" href="{% url 'classes' %}?difficulty=advanced">Advanced</a></li>
                     </ul>
                 </li>
+            </ul>
+
+            <!-- Center - Search Bar -->
+            <form class="d-flex mx-auto" role="search" action="{% url 'classes' %}" method="get" style="width: 300px;">
+                <div class="input-group">
+                    <input class="form-control form-control-sm" type="search" name="search" placeholder="Search classes..." aria-label="Search" value="{{ request.GET.search }}">
+                    <button class="btn btn-outline-light btn-sm" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Right side navigation -->
+            <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'view_cart' %}">
-                        <i class="fas fa-shopping-cart"></i> Cart
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge bg-danger ms-1">{{ cart_items|length }}</span>
                     </a>
                 </li>
+                
                 {% if request.user.is_authenticated %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user"></i> Account
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-1"></i>{{ request.user.first_name|default:request.user.username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="{% url 'my_bookings' %}">My Bookings</a></li>
+                            <li><a class="dropdown-item" href="{% url 'my_bookings' %}"><i class="fas fa-calendar me-2"></i>My Bookings</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
+                            <li><a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>
                     </li>
                 {% else %}
@@ -40,7 +65,7 @@
                         <a class="nav-link" href="{% url 'account_signup' %}">Register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+                        <a class="nav-link btn btn-primary btn-sm text-white ms-2" href="{% url 'account_login' %}">Login</a>
                     </li>
                 {% endif %}
             </ul>
