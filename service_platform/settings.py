@@ -53,8 +53,11 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'django_countries',
-    'storages',
 ]
+
+# Only add storages app if AWS is configured
+if 'USE_AWS' in os.environ:
+    INSTALLED_APPS.append('storages')
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
