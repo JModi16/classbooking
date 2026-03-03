@@ -35,11 +35,40 @@ class Instructor(models.Model):
     
     # Basic Info
     bio = models.TextField(blank=True, help_text="Professional biography")
+    lesson_description = models.TextField(blank=True, help_text="Description of lesson style, approach, and what students can expect")
     specialties = models.CharField(max_length=500, blank=True, help_text="Comma-separated specialties (e.g., Yoga, Pilates, HIIT)")
     
     # Qualifications
     certifications = models.TextField(blank=True, help_text="Professional certifications and qualifications")
     years_experience = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    
+    # Pricing
+    hourly_rate = models.DecimalField(
+        max_digits=6, 
+        decimal_places=2, 
+        null=True, 
+        blank=True,
+        validators=[MinValueValidator(0)],
+        help_text="Hourly rate in GBP for private sessions"
+    )
+    
+    # Package Options
+    package_single_rate = models.DecimalField(
+        max_digits=6, decimal_places=2, null=True, blank=True,
+        help_text="Single session rate"
+    )
+    package_5_rate = models.DecimalField(
+        max_digits=6, decimal_places=2, null=True, blank=True,
+        help_text="5 session package rate (total)"
+    )
+    package_10_rate = models.DecimalField(
+        max_digits=6, decimal_places=2, null=True, blank=True,
+        help_text="10 session package rate (total)"
+    )
+    package_monthly_rate = models.DecimalField(
+        max_digits=6, decimal_places=2, null=True, blank=True,
+        help_text="Monthly unlimited package rate"
+    )
     
     # Rating & Reviews
     rating = models.DecimalField(
