@@ -25,6 +25,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-change-this')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEVELOPMENT' in os.environ
+USE_AWS = os.environ.get('USE_AWS', '').strip().lower() in ('1', 'true', 'yes', 'on')
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -56,7 +57,7 @@ INSTALLED_APPS = [
 ]
 
 # Only add storages app if AWS is configured
-if 'USE_AWS' in os.environ:
+if USE_AWS:
     INSTALLED_APPS.append('storages')
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -166,7 +167,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-if 'USE_AWS' in os.environ:
+if USE_AWS:
     # Cache control
     AWS_S3_OBJECT_PARAMETERS = {
         'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
