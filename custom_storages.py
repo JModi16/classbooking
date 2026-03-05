@@ -1,8 +1,7 @@
-import os
 from django.conf import settings
 
 # Only import S3 storage if AWS is being used
-if 'USE_AWS' in os.environ:
+if getattr(settings, 'USE_AWS', False):
     from storages.backends.s3boto3 import S3Boto3Storage
 
     class StaticStorage(S3Boto3Storage):
