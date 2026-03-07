@@ -104,12 +104,22 @@ def all_classes(request):
         ('Boxercise', 2),
     ]
 
+    category_name_set = {name for name, _ in target_instructor_counts}
+    selected_category = category if category in category_name_set else ''
+
+    if selected_category:
+        filtered_target_instructor_counts = [
+            (name, count) for name, count in target_instructor_counts if name == selected_category
+        ]
+    else:
+        filtered_target_instructor_counts = target_instructor_counts
+
     active_instructors = Instructor.objects.filter(
         is_active=True
     ).select_related('user').order_by('-is_verified', '-rating')
 
     category_instructor_sections = []
-    for category_name, target_count in target_instructor_counts:
+    for category_name, target_count in filtered_target_instructor_counts:
         selected_instructors = []
         selected_ids = set()
 
@@ -179,6 +189,9 @@ def all_classes(request):
         'difficulty_choices': difficulty_choices,
         'search_query': search_query,
         'category_instructor_sections': category_instructor_sections,
+        'selected_category': selected_category,
+        'selected_difficulty': difficulty or '',
+        'selected_sort': sort or 'date',
     }
     return render(request, 'services/classes.html', context)
 
