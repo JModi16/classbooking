@@ -98,8 +98,8 @@ def all_classes(request):
     from profiles.models import Instructor
 
     target_instructor_counts = [
-        ('Personal Trainer', 4),
-        ('Yoga', 4),
+        ('Personal Trainer', 3),
+        ('Yoga', 3),
         ('Pilates', 2),
         ('Boxercise', 2),
     ]
