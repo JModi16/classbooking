@@ -28,7 +28,7 @@
                                 <select name="category" id="category" class="form-select">
                                     <option value="">All Categories</option>
                                     {% for category in categories %}
-                                        <option value="{{ category.name }}">{{ category.get_friendly_name }}</option>
+                                        <option value="{{ category.name }}" {% if category.name == selected_category %}selected{% endif %}>{{ category.get_friendly_name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -37,17 +37,17 @@
                                 <select name="difficulty" id="difficulty" class="form-select">
                                     <option value="">All Levels</option>
                                     {% for value, label in difficulty_choices %}
-                                        <option value="{{ value }}">{{ label }}</option>
+                                        <option value="{{ value }}" {% if value == selected_difficulty %}selected{% endif %}>{{ label }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <label for="sort" class="form-label">Sort By</label>
                                 <select name="sort" id="sort" class="form-select">
-                                    <option value="date">Date</option>
-                                    <option value="price_asc">Price: Low to High</option>
-                                    <option value="price_desc">Price: High to Low</option>
-                                    <option value="rating">Instructor Rating</option>
+                                    <option value="date" {% if selected_sort == 'date' %}selected{% endif %}>Date</option>
+                                    <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                                    <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                                    <option value="rating" {% if selected_sort == 'rating' %}selected{% endif %}>Instructor Rating</option>
                                 </select>
                             </div>
                             <div class="col-md-3 d-flex align-items-end">
