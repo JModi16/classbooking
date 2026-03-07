@@ -1,8 +1,9 @@
 """
 Script to populate instructor images and biographical data programmatically.
-This script updates existing instructors or creates new ones with complete profiles,
-including bios, lesson descriptions, and generated profile images.
-Images are automatically uploaded to S3.
+Safe mode behavior:
+- New records are created with full data.
+- Existing records only have blank fields filled.
+- Existing non-blank Admin values are never overwritten.
 """
 
 import os
@@ -179,13 +180,26 @@ def generate_placeholder_image(first_name, last_name, color_scheme=None):
     return img_io
 
 
+def set_if_blank(instance, field_name, value):
+    """Set a model field only when it's blank/empty."""
+    current_value = getattr(instance, field_name)
+    if current_value in (None, ''):
+        setattr(instance, field_name, value)
+        return True
+    return False
+
+
 def populate_instructors():
-    """Populate or update instructors with complete data and generated images."""
+    """Populate instructors in safe mode (fill blanks only for existing records)."""
     
     print("\n" + "="*70)
     print("POPULATING INSTRUCTOR DATA AND IMAGES")
     print("="*70 + "\n")
     
+    created_count = 0
+    updated_count = 0
+    unchanged_count = 0
+
     for data in INSTRUCTORS_DATA:
         username = data['username']
         print(f"Processing: {data['first_name']} {data['last_name']}...", end=" ")
@@ -204,48 +218,93 @@ def populate_instructors():
             print(f"(new user)", end=" → ")
         else:
             print(f"(existing user)", end=" → ")
+
+        # Safe mode for existing user data
+        user_changed_fields = []
+        if set_if_blank(user, 'email', data['email']):
+            user_changed_fields.append('email')
+        if set_if_blank(user, 'first_name', data['first_name']):
+            user_changed_fields.append('first_name')
+        if set_if_blank(user, 'last_name', data['last_name']):
+            user_changed_fields.append('last_name')
+        if user_changed_fields:
+            user.save(update_fields=user_changed_fields)
         
         # Get or create instructor profile
         instructor, created = Instructor.objects.get_or_create(user=user)
-        
-        # Update fields
-        instructor.bio = data['bio']
-        instructor.lesson_description = data['lesson_description']
-        instructor.specialties = data['specialties']
-        instructor.certifications = data['certifications']
-        instructor.years_experience = data['years_experience']
-        instructor.hourly_rate = data['hourly_rate']
-        instructor.package_single_rate = data['package_single_rate']
-        instructor.package_5_rate = data['package_5_rate']
-        instructor.package_10_rate = data['package_10_rate']
-        instructor.package_monthly_rate = data['package_monthly_rate']
-        instructor.rating = data['rating']
-        instructor.total_reviews = data['total_reviews']
-        instructor.instagram = data['instagram']
-        instructor.is_verified = data['is_verified']
-        instructor.is_active = True
-        
-        # Generate and save image
-        img_io = generate_placeholder_image(data['first_name'], data['last_name'])
-        image_name = f"instructor_{username}.png"
-        instructor.image.save(image_name, ContentFile(img_io.read()), save=False)
-        
-        # Save instructor
-        instructor.save()
-        
-        print(f"✅ Updated")
-        print(f"   → Profile image uploaded to S3")
-        print(f"   → Bio, rates, and contact info saved")
+
+        changed_fields = []
+        if created:
+            # New records receive full dataset
+            instructor.bio = data['bio']
+            instructor.lesson_description = data['lesson_description']
+            instructor.specialties = data['specialties']
+            instructor.certifications = data['certifications']
+            instructor.years_experience = data['years_experience']
+            instructor.hourly_rate = data['hourly_rate']
+            instructor.package_single_rate = data['package_single_rate']
+            instructor.package_5_rate = data['package_5_rate']
+            instructor.package_10_rate = data['package_10_rate']
+            instructor.package_monthly_rate = data['package_monthly_rate']
+            instructor.rating = data['rating']
+            instructor.total_reviews = data['total_reviews']
+            instructor.instagram = data['instagram']
+            instructor.is_verified = data['is_verified']
+            instructor.is_active = True
+
+            img_io = generate_placeholder_image(data['first_name'], data['last_name'])
+            image_name = f"instructor_{username}.png"
+            instructor.image.save(image_name, ContentFile(img_io.read()), save=False)
+            instructor.save()
+            created_count += 1
+
+            print("✅ Created")
+            print("   → Full profile created")
+            print("   → Profile image generated")
+        else:
+            # Existing records: fill blank fields only
+            field_map = {
+                'bio': data['bio'],
+                'lesson_description': data['lesson_description'],
+                'specialties': data['specialties'],
+                'certifications': data['certifications'],
+                'hourly_rate': data['hourly_rate'],
+                'package_single_rate': data['package_single_rate'],
+                'package_5_rate': data['package_5_rate'],
+                'package_10_rate': data['package_10_rate'],
+                'package_monthly_rate': data['package_monthly_rate'],
+                'rating': data['rating'],
+                'instagram': data['instagram'],
+            }
+
+            for field_name, field_value in field_map.items():
+                if set_if_blank(instructor, field_name, field_value):
+                    changed_fields.append(field_name)
+
+            if not instructor.image:
+                img_io = generate_placeholder_image(data['first_name'], data['last_name'])
+                image_name = f"instructor_{username}.png"
+                instructor.image.save(image_name, ContentFile(img_io.read()), save=False)
+                changed_fields.append('image')
+
+            if changed_fields:
+                instructor.save(update_fields=changed_fields)
+                updated_count += 1
+                print("✅ Updated (blank fields only)")
+                print("   → Existing Admin values preserved")
+            else:
+                unchanged_count += 1
+                print("✅ No changes (existing values preserved)")
         print()
     
     print("="*70)
     print("✅ ALL INSTRUCTORS POPULATED SUCCESSFULLY")
     print("="*70)
+    print(f"\nSummary: {created_count} created, {updated_count} updated, {unchanged_count} unchanged")
     print("\nInstructor profiles are now live on the platform:")
     print("  • Visit: http://127.0.0.1:8000/services/")
     print("  • Admin: http://127.0.0.1:8000/admin/profiles/instructor/")
-    print("\nImages are stored in S3 at:")
-    print("  • https://class-booking.s3.amazonaws.com/media/instructor_*.png")
+    print("\nStorage location depends on USE_AWS setting (S3 when enabled, local media folder otherwise).")
 
 
 if __name__ == '__main__':
