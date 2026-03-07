@@ -111,3 +111,17 @@ class Instructor(models.Model):
 
     def get_average_rating(self):
         return self.rating or 0.0
+
+    def get_location(self):
+        try:
+            user_profile = self.user.userprofile
+        except UserProfile.DoesNotExist:
+            return 'Location to be updated'
+
+        if user_profile.town_or_city and user_profile.country:
+            return f"{user_profile.town_or_city}, {user_profile.country}"
+        if user_profile.town_or_city:
+            return user_profile.town_or_city
+        if user_profile.country:
+            return user_profile.country
+        return 'Location to be updated'
