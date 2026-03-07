@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
+from django.db.models import Q
 from .models import Service, Category, ExerciseClass
 
 
@@ -93,11 +94,91 @@ def all_classes(request):
     
     difficulty_choices = ExerciseClass.DIFFICULTY_CHOICES
     
+    # Instructor directory grouped by class type with required display counts
+    from profiles.models import Instructor
+
+    target_instructor_counts = [
+        ('Personal Trainer', 4),
+        ('Yoga', 4),
+        ('Pilates', 2),
+        ('Boxercise', 2),
+    ]
+
+    active_instructors = Instructor.objects.filter(
+        is_active=True
+    ).select_related('user').order_by('-is_verified', '-rating')
+
+    category_instructor_sections = []
+    for category_name, target_count in target_instructor_counts:
+        selected_instructors = []
+        selected_ids = set()
+
+        category_obj = Category.objects.filter(name=category_name).first()
+
+        # 1) Prioritize instructors with upcoming classes in this category
+        if category_obj:
+            class_instructors = active_instructors.filter(
+                classes__category=category_obj,
+                classes__start_datetime__gte=timezone.now(),
+                classes__available=True,
+            ).distinct()
+            for instructor_item in class_instructors:
+                if instructor_item.id not in selected_ids and len(selected_instructors) < target_count:
+                    selected_instructors.append(instructor_item)
+                    selected_ids.add(instructor_item.id)
+
+        # 2) Next, instructors whose specialties mention the category
+        if len(selected_instructors) < target_count:
+            specialty_instructors = active_instructors.filter(
+                Q(specialties__icontains=category_name) |
+                Q(specialties__icontains=category_name.replace(' ', ''))
+            ).exclude(id__in=selected_ids).distinct()
+
+            for instructor_item in specialty_instructors:
+                if len(selected_instructors) < target_count:
+                    selected_instructors.append(instructor_item)
+                    selected_ids.add(instructor_item.id)
+
+        # 3) Fallback to other active instructors
+        if len(selected_instructors) < target_count:
+            fallback_instructors = active_instructors.exclude(id__in=selected_ids)
+            for instructor_item in fallback_instructors:
+                if len(selected_instructors) < target_count:
+                    selected_instructors.append(instructor_item)
+                    selected_ids.add(instructor_item.id)
+
+        instructor_cards = []
+        for instructor_item in selected_instructors:
+            brief_description = instructor_item.bio or instructor_item.lesson_description or 'Instructor profile coming soon.'
+            instructor_cards.append({
+                'id': instructor_item.id,
+                'name': instructor_item.get_display_name(),
+                'location': instructor_item.get_location(),
+                'brief_description': brief_description,
+            })
+
+        # 4) Guarantee the requested number of cards even if data is incomplete
+        while len(instructor_cards) < target_count:
+            slot_number = len(instructor_cards) + 1
+            instructor_cards.append({
+                'id': None,
+                'name': f'Instructor {slot_number}',
+                'location': 'Location to be updated',
+                'brief_description': 'Profile coming soon.',
+            })
+
+        category_instructor_sections.append({
+            'category_name': category_name,
+            'target_count': target_count,
+            'instructors': instructor_cards,
+        })
+
     context = {
         'classes': classes,
         'categories': categories,
         'difficulty_choices': difficulty_choices,
         'search_query': search_query,
+        'category_instructor_sections': category_instructor_sections,
     }
     return render(request, 'services/classes.html', context)
 
