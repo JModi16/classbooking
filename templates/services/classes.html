@@ -60,6 +60,40 @@
         </div>
     </div>
 
+    <!-- Instructors by Class Type -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3">Instructors by Class Type</h4>
+        </div>
+        {% for section in category_instructor_sections %}
+            <div class="col-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">{{ section.category_name }} ({{ section.target_count }} instructors)</h5>
+                        <div class="row">
+                            {% for instructor in section.instructors %}
+                                <div class="col-md-6 col-lg-3 mb-3">
+                                    <div class="border rounded p-3 h-100 bg-white">
+                                        <h6 class="mb-1">{{ instructor.name }}</h6>
+                                        <p class="text-muted small mb-2">
+                                            <i class="fas fa-map-marker-alt"></i> {{ instructor.location }}
+                                        </p>
+                                        <p class="small mb-2">{{ instructor.brief_description|truncatewords:20 }}</p>
+                                        {% if instructor.id %}
+                                            <a href="{% url 'instructor_profile' instructor.id %}" class="btn btn-outline-primary btn-sm">View Profile</a>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Profile coming soon</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
     <!-- Class Results -->
     <div class="row">
         <div class="col-12">
