@@ -1,7 +1,11 @@
 """
 Create 10 unique instructors, each assigned to exactly one class type.
 Distribution: Personal Trainer (3), Yoga (3), Pilates (2), Boxercise (2)
-Each instructor has specialties that match only their assigned class type.
+
+Safe mode behavior:
+- New records are created with full data.
+- Existing records only have blank fields filled.
+- Existing non-blank Admin values are never overwritten.
 """
 
 import os
@@ -305,8 +309,17 @@ def generate_instructor_image(first_name, last_name, bg_color):
     return img_io
 
 
+def set_if_blank(instance, field_name, value):
+    """Set a model field only when it's blank/empty."""
+    current_value = getattr(instance, field_name)
+    if current_value in (None, ''):
+        setattr(instance, field_name, value)
+        return True
+    return False
+
+
 def create_10_instructors():
-    """Create 10 unique instructors with exclusive class type assignments."""
+    """Create 10 unique instructors with safe-mode updates for existing records."""
     
     print("\n" + "="*80)
     print("CREATING 10 INSTRUCTORS WITH EXCLUSIVE CLASS TYPE ASSIGNMENTS")
@@ -316,6 +329,7 @@ def create_10_instructors():
     
     created_count = 0
     updated_count = 0
+    unchanged_count = 0
     
     for data in INSTRUCTORS:
         username = data['username']
@@ -330,46 +344,90 @@ def create_10_instructors():
                 'last_name': data['last_name'],
             }
         )
+
+        # Existing users: fill blank account fields only
+        user_changed_fields = []
+        if set_if_blank(user, 'email', data['email']):
+            user_changed_fields.append('email')
+        if set_if_blank(user, 'first_name', data['first_name']):
+            user_changed_fields.append('first_name')
+        if set_if_blank(user, 'last_name', data['last_name']):
+            user_changed_fields.append('last_name')
+        if user_changed_fields:
+            user.save(update_fields=user_changed_fields)
         
         # Update user profile with location
         user_profile, _ = UserProfile.objects.get_or_create(user=user)
-        user_profile.town_or_city = data['location']['city']
-        user_profile.country = data['location']['country']
-        user_profile.save()
+        profile_changed_fields = []
+        if set_if_blank(user_profile, 'town_or_city', data['location']['city']):
+            profile_changed_fields.append('town_or_city')
+        if set_if_blank(user_profile, 'country', data['location']['country']):
+            profile_changed_fields.append('country')
+        if profile_changed_fields:
+            user_profile.save(update_fields=profile_changed_fields)
         
         # Get or create instructor profile
         instructor, created = Instructor.objects.get_or_create(user=user)
-        
-        # Update all fields
-        instructor.bio = data['bio']
-        instructor.lesson_description = data['lesson_description']
-        instructor.specialties = data['specialties']
-        instructor.certifications = data['certifications']
-        instructor.years_experience = data['years_experience']
-        instructor.hourly_rate = data['hourly_rate']
-        instructor.package_single_rate = data['package_single_rate']
-        instructor.package_5_rate = data['package_5_rate']
-        instructor.package_10_rate = data['package_10_rate']
-        instructor.package_monthly_rate = data['package_monthly_rate']
-        instructor.rating = data['rating']
-        instructor.total_reviews = data['total_reviews']
-        instructor.instagram = data['instagram']
-        instructor.is_verified = data['is_verified']
-        instructor.is_active = True
-        
-        # Generate and save image
-        img_io = generate_instructor_image(data['first_name'], data['last_name'], data['color'])
-        image_name = f"instructor_{username}.png"
-        instructor.image.save(image_name, ContentFile(img_io.read()), save=False)
-        
-        instructor.save()
-        
+
         if created:
+            # New records receive full dataset
+            instructor.bio = data['bio']
+            instructor.lesson_description = data['lesson_description']
+            instructor.specialties = data['specialties']
+            instructor.certifications = data['certifications']
+            instructor.years_experience = data['years_experience']
+            instructor.hourly_rate = data['hourly_rate']
+            instructor.package_single_rate = data['package_single_rate']
+            instructor.package_5_rate = data['package_5_rate']
+            instructor.package_10_rate = data['package_10_rate']
+            instructor.package_monthly_rate = data['package_monthly_rate']
+            instructor.rating = data['rating']
+            instructor.total_reviews = data['total_reviews']
+            instructor.instagram = data['instagram']
+            instructor.is_verified = data['is_verified']
+            instructor.is_active = True
+
+            img_io = generate_instructor_image(data['first_name'], data['last_name'], data['color'])
+            image_name = f"instructor_{username}.png"
+            instructor.image.save(image_name, ContentFile(img_io.read()), save=False)
+            instructor.save()
+
             created_count += 1
-            print(f"✅ Created")
+            print("✅ Created")
         else:
-            updated_count += 1
-            print(f"✅ Updated")
+            # Existing records: fill blank fields only
+            changed_fields = []
+            field_map = {
+                'bio': data['bio'],
+                'lesson_description': data['lesson_description'],
+                'specialties': data['specialties'],
+                'certifications': data['certifications'],
+                'hourly_rate': data['hourly_rate'],
+                'package_single_rate': data['package_single_rate'],
+                'package_5_rate': data['package_5_rate'],
+                'package_10_rate': data['package_10_rate'],
+                'package_monthly_rate': data['package_monthly_rate'],
+                'rating': data['rating'],
+                'instagram': data['instagram'],
+            }
+
+            for field_name, field_value in field_map.items():
+                if set_if_blank(instructor, field_name, field_value):
+                    changed_fields.append(field_name)
+
+            if not instructor.image:
+                img_io = generate_instructor_image(data['first_name'], data['last_name'], data['color'])
+                image_name = f"instructor_{username}.png"
+                instructor.image.save(image_name, ContentFile(img_io.read()), save=False)
+                changed_fields.append('image')
+
+            if changed_fields:
+                instructor.save(update_fields=changed_fields)
+                updated_count += 1
+                print("✅ Updated (blank fields only)")
+            else:
+                unchanged_count += 1
+                print("✅ No changes (existing values preserved)")
         
         print(f"   → Class Type: {data['class_type']}")
         print(f"   → Location: {data['location']['city']}, {data['location']['country']}")
@@ -377,7 +435,7 @@ def create_10_instructors():
         print()
     
     print("="*80)
-    print(f"✅ COMPLETED: {created_count} created, {updated_count} updated")
+    print(f"✅ COMPLETED: {created_count} created, {updated_count} updated, {unchanged_count} unchanged")
     print("="*80)
     print("\n📊 Distribution Summary:")
     print("   • Personal Trainer: 3 instructors")
