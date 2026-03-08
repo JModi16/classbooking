@@ -3,6 +3,10 @@
 
 {% block extra_title %}- Checkout{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+{% endblock %}
+
 {% block page_header %}
 <div class="container header-container mt-3">
     <div class="row">
@@ -91,7 +95,7 @@
                     <h5 class="card-title">Booking Details</h5>
                     <hr>
                     
-                    <form method="post" id="checkout-form" action="{% url 'checkout' %}">
+                    <form method="post" id="payment-form" action="{% url 'checkout' %}">
                         {% csrf_token %}
                         
                         <!-- Class Details -->
@@ -117,176 +121,66 @@
                         
                         <!-- Payment Section -->
                         <div class="mb-4">
-                            <h6>Payment Information</h6>
+                            <h6 class="fieldset-label">Payment</h6>
                             <div class="alert alert-info mb-3">
                                 <small>
                                     <i class="fas fa-info-circle"></i>
-                                    <strong>Test Mode:</strong> Use test card 4242 4242 4242 4242, any future expiry date, any CVC, and any postal code.
+                                    <strong>Test Mode:</strong> Use test card <code>4242 4242 4242 4242</code>, any future expiry date, any CVC, and any postal code.
                                 </small>
                             </div>
                             
                             <!-- Stripe Card Element -->
-                            <div id="card-element" class="p-3 border rounded"></div>
+                            <div id="card-element" class="mb-3"></div>
                             
                             <!-- Display error messages -->
-                            <div id="card-errors" class="text-danger mt-2" role="alert"></div>
+                            <div id="card-errors" class="mb-3 text-danger" role="alert"></div>
+                            
+                            <!-- Pass the client secret to the view so we can get the payment intent id -->
+                            <input type="hidden" value="{{ client_secret }}" name="client_secret">
                         </div>
                         
                         <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary btn-lg w-100" id="submit-button">
-                            <span id="button-text">
-                                <i class="fas fa-lock me-2"></i>Pay £{{ grand_total|floatformat:2 }}
-                            </span>
-                            <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </span>
-                        </button>
-                        
-                        <p class="text-muted text-center mt-3">
-                            <small>Your booking information is secure</small>
-                        </p>
+                        <div class="submit-button text-end mt-5 mb-2">
+                            <a href="{% url 'view_cart' %}" class="btn btn-outline-secondary">
+                                <span class="icon">
+                                    <i class="fas fa-chevron-left"></i>
+                                </span>
+                                <span class="font-weight-bold">Adjust Cart</span>
+                            </a>
+                            <button id="submit-button" class="btn btn-primary">
+                                <span class="font-weight-bold">Complete Order</span>
+                                <span class="icon">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </button>
+                            <p class="small text-danger my-0">
+                                <span class="icon">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                </span>
+                                <span>Your card will be charged <strong>£{{ grand_total|floatformat:2 }}</strong></span>
+                            </p>
+                        </div>
                     </form>
                 </div>
-            </div>
-            
-            <!-- Back to Cart -->
-            <div class="mt-3">
-                <a href="{% url 'view_cart' %}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Cart
-                </a>
             </div>
         </div>
     </div>
 </div>
+
+<div id="loading-overlay">
+    <h1 class="text-light logo-font loading-spinner">
+        <span class="icon">
+            <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+        </span>
+    </h1>
+</div>
+
 {% endblock %}
 
 {% block postloadjs %}
 {{ block.super }}
-
-<!-- Stripe JS -->
+{{ stripe_public_key|json_script:"id_stripe_public_key" }}
+{{ client_secret|json_script:"id_client_secret" }}
 <script src="https://js.stripe.com/v3/"></script>
-
-<script>
-    // Get Stripe public key and client secret from template
-    var stripePublicKey = '{{ stripe_public_key }}';
-    var clientSecret = '{{ client_secret }}';
-    
-    // Initialize Stripe
-    var stripe = Stripe(stripePublicKey);
-    var elements = stripe.elements();
-    
-    // Create card element with styling
-    var style = {
-        base: {
-            color: '#000',
-            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-            fontSmoothing: 'antialiased',
-            fontSize: '16px',
-            '::placeholder': {
-                color: '#aab7c4'
-            }
-        },
-        invalid: {
-            color: '#dc3545',
-            iconColor: '#dc3545'
-        }
-    };
-    
-    var card = elements.create('card', {style: style});
-    card.mount('#card-element');
-    
-    // Handle real-time validation errors
-    card.on('change', function(event) {
-        var displayError = document.getElementById('card-errors');
-        if (event.error) {
-            displayError.textContent = event.error.message;
-        } else {
-            displayError.textContent = '';
-        }
-    });
-    
-    // Handle form submission
-    var form = document.getElementById('checkout-form');
-    form.addEventListener('submit', function(ev) {
-        ev.preventDefault();
-        
-        // Disable card and button
-        card.update({'disabled': true});
-        document.getElementById('submit-button').disabled = true;
-        document.getElementById('button-text').classList.add('d-none');
-        document.getElementById('spinner').classList.remove('d-none');
-        
-        // Cache checkout data
-        var url = '/checkout/cache_checkout_data/';
-        var csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
-        var postData = {
-            'client_secret': clientSecret,
-        };
-        
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,
-            },
-            body: JSON.stringify(postData)
-        })
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            if (data.error) {
-                // Show error
-                var errorDiv = document.getElementById('card-errors');
-                errorDiv.textContent = data.error;
-                
-                // Re-enable card and button
-                card.update({'disabled': false});
-                document.getElementById('submit-button').disabled = false;
-                document.getElementById('button-text').classList.remove('d-none');
-                document.getElementById('spinner').classList.add('d-none');
-                return;
-            }
-            
-            // Store booking ID for redirect
-            var bookingId = data.booking_id;
-            
-            // Confirm card payment
-            stripe.confirmCardPayment(clientSecret, {
-                payment_method: {
-                    card: card,
-                }
-            }).then(function(result) {
-                if (result.error) {
-                    // Show error to customer
-                    var errorDiv = document.getElementById('card-errors');
-                    errorDiv.textContent = result.error.message;
-                    
-                    // Re-enable card and button
-                    card.update({'disabled': false});
-                    document.getElementById('submit-button').disabled = false;
-                    document.getElementById('button-text').classList.remove('d-none');
-                    document.getElementById('spinner').classList.add('d-none');
-                } else {
-                    // Payment succeeded
-                    if (result.paymentIntent.status === 'succeeded') {
-                        // Redirect to success page
-                        window.location.href = '/checkout/success/' + bookingId + '/';
-                    }
-                }
-            });
-        })
-        .catch(function(error) {
-            // Show error to customer
-            var errorDiv = document.getElementById('card-errors');
-            errorDiv.textContent = 'Payment processing error. Please try again.';
-            
-            // Re-enable card and button
-            card.update({'disabled': false});
-            document.getElementById('submit-button').disabled = false;
-            document.getElementById('button-text').classList.remove('d-none');
-            document.getElementById('spinner').classList.add('d-none');
-        });
-    });
-</script>
+<script src="{% static 'js/stripe_elements.js' %}"></script>
 {% endblock %}
