@@ -37,6 +37,7 @@ class Instructor(models.Model):
     bio = models.TextField(blank=True, help_text="Professional biography")
     lesson_description = models.TextField(blank=True, help_text="Description of lesson style, approach, and what students can expect")
     specialties = models.CharField(max_length=500, blank=True, help_text="Comma-separated specialties (e.g., Yoga, Pilates, HIIT)")
+    class_type = models.CharField(max_length=100, blank=True, help_text="Primary class type (e.g., Personal Trainer, Yoga, Pilates, Boxercise)")
     
     # Qualifications
     certifications = models.TextField(blank=True, help_text="Professional certifications and qualifications")
