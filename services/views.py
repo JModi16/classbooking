@@ -125,19 +125,28 @@ def all_classes(request):
 
         category_obj = Category.objects.filter(name=category_name).first()
 
-        # 1) Prioritize instructors with upcoming classes in this category
-        if category_obj:
+        # 1) Prioritize instructors assigned to this class type
+        class_type_instructors = active_instructors.filter(
+            class_type=category_name
+        ).distinct()
+        for instructor_item in class_type_instructors:
+            if instructor_item.id not in selected_ids and len(selected_instructors) < target_count:
+                selected_instructors.append(instructor_item)
+                selected_ids.add(instructor_item.id)
+
+        # 2) Next, instructors with upcoming classes in this category (if still slots available)
+        if len(selected_instructors) < target_count and category_obj:
             class_instructors = active_instructors.filter(
                 classes__category=category_obj,
                 classes__start_datetime__gte=timezone.now(),
                 classes__available=True,
-            ).distinct()
+            ).exclude(id__in=selected_ids).distinct()
             for instructor_item in class_instructors:
-                if instructor_item.id not in selected_ids and len(selected_instructors) < target_count:
+                if len(selected_instructors) < target_count:
                     selected_instructors.append(instructor_item)
                     selected_ids.add(instructor_item.id)
 
-        # 2) Next, instructors whose specialties mention the category
+        # 3) Fallback: instructors whose specialties mention the category
         if len(selected_instructors) < target_count:
             specialty_instructors = active_instructors.filter(
                 Q(specialties__icontains=category_name) |
