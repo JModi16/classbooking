@@ -217,14 +217,7 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
-        'level': 'INFO',
-    },
-    'loggers': {
-        'checkout': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
+        'level': 'DEBUG',
     },
 }
 

@@ -15,13 +15,13 @@ from services.models import ExerciseClass
 logger = logging.getLogger(__name__)
 
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
-
 @login_required
 @require_http_methods(["GET", "POST"])
 def checkout(request):
     """Checkout page for class bookings"""
+    # Set Stripe API key at request time
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    
     cart = request.session.get('cart', {})
     
     if not cart:
@@ -118,6 +118,9 @@ def checkout(request):
 @login_required
 def cache_checkout_data(request):
     """Cache checkout data and create pending booking"""
+    # Set Stripe API key at request time
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    
     try:
         # Get client_secret from POST data
         client_secret = request.POST.get('client_secret')
