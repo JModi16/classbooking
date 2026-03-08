@@ -25,7 +25,23 @@ def checkout(request):
         messages.error(request, 'Your cart is empty')
         return redirect('classes')
     
-    # Build cart items with availability check
+    if request.method == 'POST':
+        # Payment successful, get booking and redirect
+        client_secret = request.POST.get('client_secret', '')
+        pid = client_secret.split('_secret')[0]
+        
+        try:
+            booking = ClassBooking.objects.get(stripe_pid=pid)
+            # Clear cart
+            if 'cart' in request.session:
+                del request.session['cart']
+                request.session.modified = True
+            return redirect('checkout_success', booking_id=booking.booking_id)
+        except ClassBooking.DoesNotExist:
+            messages.error(request, 'Booking not found. Please contact support.')
+            return redirect('view_cart')
+    
+    # GET request - Build cart items with availability check
     cart_items = []
     total = 0
     
@@ -74,7 +90,7 @@ def checkout(request):
         messages.error(request, f'Payment error: {str(e)}')
         return redirect('view_cart')
     
-    # GET request - show checkout form
+    # Show checkout form
     context = {
         'cart_items': cart_items,
         'total': total,
@@ -92,8 +108,20 @@ def checkout(request):
 def cache_checkout_data(request):
     """Cache checkout data and create pending booking"""
     try:
-        data = json.loads(request.body)
-        pid = data.get('client_secret').split('_secret')[0]
+        # Get client_secret from POST data
+        client_secret = request.POST.get('client_secret')
+        if not client_secret:
+            # Try JSON body for backwards compatibility
+            try:
+                data = json.loads(request.body)
+                client_secret = data.get('client_secret')
+            except:
+                pass
+        
+        if not client_secret:
+            return JsonResponse({'error': 'Missing client secret'}, status=400)
+            
+        pid = client_secret.split('_secret')[0]
         cart = request.session.get('cart', {})
         
         # Get cart items and create booking
