@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 import stripe
+import json
 import uuid
 from .models import ClassBooking, ClassBookingLineItem
 from services.models import ExerciseClass
@@ -51,17 +54,25 @@ def checkout(request):
         messages.error(request, 'No valid items in cart')
         return redirect('view_cart')
     
-    # Apply delivery threshold logic if applicable
-    if total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
-    else:
-        delivery = 0
-    
+    # Apply delivery threshold logic if applicable (set to 0 for class bookings)
+    delivery = 0
     grand_total = total + delivery
     
-    if request.method == 'POST':
-        # Process payment (simulated for now)
-        return process_payment(request, cart_items, total, delivery, grand_total)
+    # Create Stripe Payment Intent
+    stripe_total = round(grand_total * 100)  # Stripe expects amount in pence
+    
+    try:
+        intent = stripe.PaymentIntent.create(
+            amount=stripe_total,
+            currency=settings.STRIPE_CURRENCY,
+            metadata={
+                'username': request.user.username,
+                'cart': json.dumps(cart),
+            }
+        )
+    except Exception as e:
+        messages.error(request, f'Payment error: {str(e)}')
+        return redirect('view_cart')
     
     # GET request - show checkout form
     context = {
@@ -70,32 +81,49 @@ def checkout(request):
         'delivery': delivery,
         'grand_total': grand_total,
         'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
+        'client_secret': intent.client_secret,
     }
     
     return render(request, 'checkout/checkout.html', context)
 
 
-def process_payment(request, cart_items, total, delivery, grand_total):
-    """Process payment and create bookings"""
+@require_POST
+@login_required
+def cache_checkout_data(request):
+    """Cache checkout data and create pending booking"""
     try:
-        booking_id = uuid.uuid4()
+        data = json.loads(request.body)
+        pid = data.get('client_secret').split('_secret')[0]
+        cart = request.session.get('cart', {})
         
-        # Create main ClassBooking record
+        # Get cart items and create booking
+        cart_items = []
+        total = 0
+        for class_id, quantity in cart.items():
+            exercise_class = ExerciseClass.objects.get(id=class_id)
+            item_total = float(exercise_class.price) * int(quantity)
+            cart_items.append({
+                'exercise_class': exercise_class,
+                'quantity': int(quantity),
+                'item_total': item_total,
+            })
+            total += item_total
+        
+        # Create booking with pending status
         booking = ClassBooking.objects.create(
-            booking_id=booking_id,
+            booking_id=str(uuid.uuid4()),
             user=request.user,
-            course=cart_items[0]['exercise_class'],  # First class for main booking
+            course=cart_items[0]['exercise_class'],
             full_name=request.user.get_full_name() or request.user.username,
             email=request.user.email,
-            status='confirmed',
-            payment_status='paid',
-            total_amount=grand_total,
-            stripe_pid='test_' + str(booking_id),  # Mock Stripe PID for testing
+            status='pending',
+            payment_status='unpaid',
+            total_amount=total,
+            stripe_pid=pid,
         )
         
-        # Create line items for each class in cart
+        # Create line items
         for item in cart_items:
-            # Create one line item per class booking
             ClassBookingLineItem.objects.create(
                 booking=booking,
                 item_type='class',
@@ -104,26 +132,90 @@ def process_payment(request, cart_items, total, delivery, grand_total):
                 unit_price=item['exercise_class'].price,
             )
         
-        # Clear the cart
-        if 'cart' in request.session:
-            del request.session['cart']
-            request.session.modified = True
+        # Update Payment Intent metadata
+        stripe.PaymentIntent.modify(pid, metadata={
+            'cart': json.dumps(cart),
+            'username': request.user.username,
+            'user_id': request.user.id,
+            'booking_id': str(booking.booking_id),
+        })
         
-        messages.success(request, 'Booking confirmed! Check your email for details.')
-        return redirect('checkout_success', booking_id=booking_id)
-    
+        return JsonResponse({'success': True, 'booking_id': str(booking.booking_id)})
     except Exception as e:
-        messages.error(request, f'Error processing booking: {str(e)}')
-        return redirect('view_cart')
+        messages.error(request, 'Sorry, your payment cannot be processed right now. Please try again later.')
+        return JsonResponse({'error': str(e)}, status=400)
 
 
 @login_required
 def checkout_success(request, booking_id):
-    """Success page after payment"""
+    """Success page after payment confirmation"""
     booking = get_object_or_404(ClassBooking, booking_id=booking_id, user=request.user)
+    
+    # Clear the cart
+    if 'cart' in request.session:
+        del request.session['cart']
+        request.session.modified = True
+    
+    messages.success(request, f'Booking confirmed! Your booking ID is {booking_id}')
     
     context = {
         'booking': booking,
     }
     return render(request, 'checkout/checkout_success.html', context)
-    return render(request, 'checkout/checkout_success.html', context)
+
+
+@csrf_exempt
+@require_POST
+def stripe_webhook(request):
+    """Handle Stripe webhook events"""
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_WH_SECRET
+        )
+    except ValueError:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    # Handle the event
+    if event['type'] == 'payment_intent.succeeded':
+        payment_intent = event['data']['object']
+        handle_payment_intent_succeeded(payment_intent)
+    
+    elif event['type'] == 'payment_intent.payment_failed':
+        payment_intent = event['data']['object']
+        handle_payment_intent_failed(payment_intent)
+
+    return HttpResponse(status=200)
+
+
+def handle_payment_intent_succeeded(payment_intent):
+    """Handle successful payment - update booking status"""
+    pid = payment_intent.id
+    
+    try:
+        # Find booking by stripe_pid
+        booking = ClassBooking.objects.get(stripe_pid=pid)
+        
+        # Update booking status
+        booking.status = 'confirmed'
+        booking.payment_status = 'paid'
+        booking.save()
+        
+        print(f"✅ Booking {booking.booking_id} confirmed via webhook")
+        
+    except ClassBooking.DoesNotExist:
+        print(f"❌ No booking found for payment {pid}")
+    except Exception as e:
+        print(f"❌ Error updating booking: {e}")
+
+
+def handle_payment_intent_failed(payment_intent):
+    """Handle failed payment"""
+    print(f"❌ Payment failed: {payment_intent.id}")
