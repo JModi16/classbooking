@@ -237,10 +237,13 @@ def instructor_profile(request, instructor_id):
         start_datetime__gte=timezone.now(),
         available=True
     ).order_by('start_datetime')
+
+    next_bookable_class = classes.first()
     
     context = {
         'instructor': instructor,
         'classes': classes,
+        'next_bookable_class': next_bookable_class,
     }
     return render(request, 'services/instructor_profile.html', context)
 

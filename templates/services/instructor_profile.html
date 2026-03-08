@@ -162,9 +162,15 @@
             
             <!-- 4. BOOK A CLASS BUTTON -->
             <div class="text-center mb-4">
-                <a href="{% url 'classes' %}?instructor={{ instructor.id }}" class="btn btn-primary btn-lg px-5 shadow">
-                    <i class="fas fa-calendar-check"></i> Book a Class with {{ instructor.get_display_name }}
-                </a>
+                {% if next_bookable_class %}
+                    <a href="{% url 'class_detail' next_bookable_class.id %}" class="btn btn-primary btn-lg px-5 shadow">
+                        <i class="fas fa-calendar-check"></i> Book a Class with {{ instructor.get_display_name }}
+                    </a>
+                {% else %}
+                    <a href="#upcoming-classes" class="btn btn-secondary btn-lg px-5 shadow disabled" aria-disabled="true">
+                        <i class="fas fa-calendar-times"></i> No upcoming classes available
+                    </a>
+                {% endif %}
                 {% if instructor.instagram %}
                     <a href="{{ instructor.instagram }}" target="_blank" class="btn btn-outline-primary btn-lg ms-2">
                         <i class="fab fa-instagram"></i> Follow
@@ -177,7 +183,7 @@
     <!-- Upcoming Classes -->
     <div class="row">
         <div class="col-12">
-            <h3 class="mb-4">Upcoming Classes</h3>
+            <h3 id="upcoming-classes" class="mb-4">Upcoming Classes</h3>
             <hr>
         </div>
     </div>
