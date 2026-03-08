@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from services.models import Service, ExerciseClass
 
 
@@ -17,6 +18,7 @@ def view_cart(request):
             item_total = float(exercise_class.price) * quantity
             cart_items.append({
                 'class': exercise_class,
+                'class_id': exercise_class.id,
                 'quantity': quantity,
                 'item_total': item_total,
                 'available_spots': available_spots,
@@ -24,10 +26,19 @@ def view_cart(request):
             total += item_total
         except ExerciseClass.DoesNotExist:
             pass
+
+    if total < getattr(settings, 'FREE_DELIVERY_THRESHOLD', 0):
+        delivery = total * getattr(settings, 'STANDARD_DELIVERY_PERCENTAGE', 0) / 100
+    else:
+        delivery = 0
+
+    grand_total = total + delivery
     
     context = {
         'cart_items': cart_items,
         'total': total,
+        'delivery': delivery,
+        'grand_total': grand_total,
     }
     return render(request, 'cart/cart.html', context)
 
