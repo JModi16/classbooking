@@ -8,8 +8,11 @@ from django.http import JsonResponse
 import stripe
 import json
 import uuid
+import logging
 from .models import ClassBooking, ClassBookingLineItem
 from services.models import ExerciseClass
+
+logger = logging.getLogger(__name__)
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -78,6 +81,12 @@ def checkout(request):
     stripe_total = round(grand_total * 100)  # Stripe expects amount in pence
     
     try:
+        # Explicitly set and verify API key
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        logger.debug(f'Stripe API Key before Payment Intent: {stripe.api_key[:20]}...')
+        logger.debug(f'Stripe Currency: {settings.STRIPE_CURRENCY}')
+        logger.debug(f'Stripe Amount (pence): {stripe_total}')
+        
         intent = stripe.PaymentIntent.create(
             amount=stripe_total,
             currency=settings.STRIPE_CURRENCY,
@@ -86,7 +95,9 @@ def checkout(request):
                 'cart': json.dumps(cart),
             }
         )
+        logger.debug(f'Payment Intent created successfully: {intent.id}')
     except Exception as e:
+        logger.error(f'Stripe API Error - Type: {type(e).__name__}, Message: {str(e)}, ApiKey set: {bool(stripe.api_key)}')
         messages.error(request, f'Payment error: {str(e)}')
         return redirect('view_cart')
     
