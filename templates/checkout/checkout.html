@@ -128,12 +128,25 @@
                             <div class="alert alert-info mb-3">
                                 <small>
                                     <i class="fas fa-info-circle"></i>
-                                    <strong>Test Mode:</strong> Use test card <code>4242 4242 4242 4242</code>, any future expiry date, any CVC, and any postal code.
+                                    <strong>Test Mode:</strong> Use test card <code>4242 4242 4242 4242</code> (success), <code>4000 0025 0000 3155</code> (3D Secure), or <code>4000 0000 0000 9995</code> (declined). Use any future expiry date and any CVC.
                                 </small>
                             </div>
                             
-                            <!-- Stripe Card Element -->
-                            <div id="card-element" class="mb-3"></div>
+                            <!-- Stripe Split Card Elements -->
+                            <div class="mb-3">
+                                <label class="form-label" for="card-number-element">Card number</label>
+                                <div id="card-number-element" class="mb-2"></div>
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="card-expiry-element">Expiry date</label>
+                                        <div id="card-expiry-element"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="card-cvc-element">CVC</label>
+                                        <div id="card-cvc-element"></div>
+                                    </div>
+                                </div>
+                            </div>
                             
                             <!-- Display error messages -->
                             <div id="card-errors" class="mb-3 text-danger" role="alert"></div>
