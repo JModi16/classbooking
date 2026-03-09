@@ -157,7 +157,7 @@ def cache_checkout_data(request):
         
         # Create booking with pending status
         booking = ClassBooking.objects.create(
-            booking_id=str(uuid.uuid4()),
+            booking_id=uuid.uuid4().hex,
             user=request.user,
             course=cart_items[0]['exercise_class'],
             full_name=request.user.get_full_name() or request.user.username,

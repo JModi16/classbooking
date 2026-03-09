@@ -95,7 +95,7 @@ class ClassBooking(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.booking_id:
-            self.booking_id = str(uuid.uuid4())
+            self.booking_id = uuid.uuid4().hex
         super().save(*args, **kwargs)
 
     def __str__(self):
