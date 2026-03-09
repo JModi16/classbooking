@@ -66,46 +66,58 @@
                 </div>
             </div>
 
-            <!-- Class Details -->
+            <!-- Booking Item Details -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0">Class Details</h5>
+                    <h5 class="mb-0">Booking Details</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            {% if booking.course.image %}
-                                <img src="{{ booking.course.image.url }}" class="img-fluid rounded" alt="{{ booking.course.name }}">
-                            {% else %}
-                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 150px;">
-                                    <span>No Image</span>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <h4>{{ booking.course.name }}</h4>
-                            <p class="text-muted mb-2">
-                                <span class="badge bg-info text-dark">{{ booking.course.get_difficulty_level_display }}</span>
-                                {% if booking.course.category %}
-                                    <span class="badge bg-secondary">{{ booking.course.category.name }}</span>
+                    {% if booking.course %}
+                        <div class="row">
+                            <div class="col-md-4">
+                                {% if booking.course.image %}
+                                    <img src="{{ booking.course.image.url }}" class="img-fluid rounded" alt="{{ booking.course.name }}">
+                                {% else %}
+                                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 150px;">
+                                        <span>No Image</span>
+                                    </div>
                                 {% endif %}
-                            </p>
-                            <p class="mb-1">
-                                <strong>Instructor:</strong> 
-                                <a href="{% url 'instructor_profile' booking.course.instructor.id %}">
-                                    {{ booking.course.instructor.get_display_name }}
-                                </a>
-                            </p>
-                            <p class="mb-1">
-                                <i class="far fa-calendar me-2"></i>
-                                <strong>Date:</strong> {{ booking.course.start_datetime|date:"l, F d, Y" }}
-                            </p>
-                            <p class="mb-0">
-                                <i class="far fa-clock me-2"></i>
-                                <strong>Time:</strong> {{ booking.course.start_datetime|date:"g:i A" }} - {{ booking.course.end_datetime|date:"g:i A" }}
-                            </p>
+                            </div>
+                            <div class="col-md-8">
+                                <h4>{{ booking.course.name }}</h4>
+                                <p class="text-muted mb-2">
+                                    <span class="badge bg-info text-dark">{{ booking.course.get_difficulty_level_display }}</span>
+                                    {% if booking.course.category %}
+                                        <span class="badge bg-secondary">{{ booking.course.category.name }}</span>
+                                    {% endif %}
+                                </p>
+                                <p class="mb-1">
+                                    <strong>Instructor:</strong> 
+                                    <a href="{% url 'instructor_profile' booking.course.instructor.id %}">
+                                        {{ booking.course.instructor.get_display_name }}
+                                    </a>
+                                </p>
+                                <p class="mb-1">
+                                    <i class="far fa-calendar me-2"></i>
+                                    <strong>Date:</strong> {{ booking.course.start_datetime|date:"l, F d, Y" }}
+                                </p>
+                                <p class="mb-0">
+                                    <i class="far fa-clock me-2"></i>
+                                    <strong>Time:</strong> {{ booking.course.start_datetime|date:"g:i A" }} - {{ booking.course.end_datetime|date:"g:i A" }}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    {% else %}
+                        {% for line_item in booking.line_items.all %}
+                            <div class="d-flex justify-content-between align-items-center {% if not forloop.last %}mb-2 pb-2 border-bottom{% endif %}">
+                                <div>
+                                    <strong>{{ line_item.description }}</strong>
+                                    <div class="small text-muted">Quantity: {{ line_item.quantity }}</div>
+                                </div>
+                                <div class="text-end">£{{ line_item.line_total|floatformat:2 }}</div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
 
@@ -151,13 +163,13 @@
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
-                        <span>Class Fee:</span>
-                        <span>£{{ booking.total_amount }}</span>
+                        <span>Booking Total:</span>
+                        <span>£{{ booking.total_amount|floatformat:2 }}</span>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between">
                         <strong>Total Paid:</strong>
-                        <h4 class="mb-0 text-primary">£{{ booking.total_amount }}</h4>
+                        <h4 class="mb-0 text-primary">£{{ booking.total_amount|floatformat:2 }}</h4>
                     </div>
                     {% if booking.stripe_pid %}
                         <p class="text-muted small mt-2 mb-0">
@@ -173,7 +185,7 @@
                     <i class="fas fa-arrow-left me-2"></i>Back to My Bookings
                 </a>
                 
-                {% if booking.status == 'confirmed' and booking.course.start_datetime > now %}
+                {% if booking.status == 'confirmed' and booking.course and booking.course.start_datetime > now %}
                     <a href="{% url 'cancel_booking' booking.booking_id %}" class="btn btn-outline-danger">
                         <i class="fas fa-times me-2"></i>Cancel Booking
                     </a>

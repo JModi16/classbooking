@@ -7,7 +7,7 @@
 <div class="container header-container mt-3">
     <div class="row">
         <div class="col">
-            <h2 class="text-center">My Class Bookings</h2>
+            <h2 class="text-center">My Bookings</h2>
         </div>
     </div>
 </div>
@@ -19,7 +19,7 @@
     <ul class="nav nav-tabs mb-4" id="bookingTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="upcoming-tab" data-bs-toggle="tab" data-bs-target="#upcoming" type="button" role="tab">
-                Upcoming Classes ({{ upcoming_bookings|length }})
+                Upcoming Bookings ({{ upcoming_bookings|length }})
             </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -38,22 +38,30 @@
                     {% for booking in upcoming_bookings %}
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="card h-100">
-                                {% if booking.course.image %}
+                                {% if booking.course and booking.course.image %}
                                     <img src="{{ booking.course.image.url }}" class="card-img-top" alt="{{ booking.course.name }}">
                                 {% else %}
                                     <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 150px;">
-                                        <span>No Image</span>
+                                        <span>{% if booking.course %}No Image{% else %}Package Booking{% endif %}</span>
                                     </div>
                                 {% endif %}
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title">{{ booking.course.name }}</h5>
-                                    <p class="card-text small text-muted mb-2">
-                                        <strong>Instructor:</strong> {{ booking.course.instructor.get_display_name }}
-                                    </p>
-                                    <p class="card-text small">
-                                        <i class="far fa-calendar me-1"></i>{{ booking.course.start_datetime|date:"D, M d, Y" }}<br>
-                                        <i class="far fa-clock me-1"></i>{{ booking.course.start_datetime|date:"g:i A" }} - {{ booking.course.end_datetime|date:"g:i A" }}
-                                    </p>
+                                    <h5 class="card-title">
+                                        {% if booking.course %}
+                                            {{ booking.course.name }}
+                                        {% else %}
+                                            {{ booking.line_items.first.description|default:'Package Booking' }}
+                                        {% endif %}
+                                    </h5>
+                                    {% if booking.course %}
+                                        <p class="card-text small text-muted mb-2">
+                                            <strong>Instructor:</strong> {{ booking.course.instructor.get_display_name }}
+                                        </p>
+                                        <p class="card-text small">
+                                            <i class="far fa-calendar me-1"></i>{{ booking.course.start_datetime|date:"D, M d, Y" }}<br>
+                                            <i class="far fa-clock me-1"></i>{{ booking.course.start_datetime|date:"g:i A" }} - {{ booking.course.end_datetime|date:"g:i A" }}
+                                        </p>
+                                    {% endif %}
                                     <p class="card-text">
                                         {% if booking.status == 'confirmed' %}
                                             <span class="badge bg-success">Confirmed</span>
@@ -79,7 +87,7 @@
                                         <a href="{% url 'booking_detail' booking.booking_id %}" class="btn btn-outline-primary btn-sm w-100 mb-2">
                                             View Details
                                         </a>
-                                        {% if booking.status == 'confirmed' %}
+                                        {% if booking.status == 'confirmed' and booking.course %}
                                             <a href="{% url 'cancel_booking' booking.booking_id %}" class="btn btn-outline-danger btn-sm w-100">
                                                 Cancel Booking
                                             </a>
@@ -106,7 +114,7 @@
                     {% for booking in past_bookings %}
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="card h-100 {% if booking.status == 'cancelled' %}opacity-75{% endif %}">
-                                {% if booking.course.image %}
+                                {% if booking.course and booking.course.image %}
                                     <img src="{{ booking.course.image.url }}" class="card-img-top" alt="{{ booking.course.name }}">
                                 {% else %}
                                     <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 150px;">
