@@ -10,7 +10,7 @@ import json
 import uuid
 import logging
 from .models import ClassBooking, ClassBookingLineItem
-from services.models import ExerciseClass
+from cart.utils import build_cart_items
 
 logger = logging.getLogger(__name__)
 
@@ -44,30 +44,8 @@ def checkout(request):
             messages.error(request, 'Booking not found. Please contact support.')
             return redirect('view_cart')
     
-    # GET request - Build cart items with availability check
-    cart_items = []
-    total = 0
-    
-    for class_id, quantity in cart.items():
-        try:
-            exercise_class = ExerciseClass.objects.get(id=class_id)
-            
-            # Verify quantity doesn't exceed available spots
-            available_spots = exercise_class.get_available_spots()
-            if int(quantity) > available_spots:
-                messages.warning(request, f'{exercise_class.name}: Only {available_spots} spot(s) available')
-                continue
-            
-            item_total = float(exercise_class.price) * int(quantity)
-            cart_items.append({
-                'exercise_class': exercise_class,
-                'quantity': int(quantity),
-                'item_total': item_total,
-            })
-            total += item_total
-        except ExerciseClass.DoesNotExist:
-            messages.warning(request, 'One or more classes no longer exist')
-            continue
+    # GET request - Build cart items (classes + packages)
+    cart_items, total, _ = build_cart_items(cart)
     
     if not cart_items:
         messages.error(request, 'No valid items in cart')
@@ -78,7 +56,7 @@ def checkout(request):
     grand_total = total + delivery
     
     # Create Stripe Payment Intent
-    stripe_total = round(grand_total * 100)  # Stripe expects amount in pence
+    stripe_total = round(float(grand_total) * 100)  # Stripe expects amount in pence
     
     try:
         # Explicitly set and verify API key
@@ -143,23 +121,19 @@ def cache_checkout_data(request):
         cart = request.session.get('cart', {})
         
         # Get cart items and create booking
-        cart_items = []
-        total = 0
-        for class_id, quantity in cart.items():
-            exercise_class = ExerciseClass.objects.get(id=class_id)
-            item_total = float(exercise_class.price) * int(quantity)
-            cart_items.append({
-                'exercise_class': exercise_class,
-                'quantity': int(quantity),
-                'item_total': item_total,
-            })
-            total += item_total
+        cart_items, total, _ = build_cart_items(cart)
+
+        if not cart_items:
+            return JsonResponse({'error': 'No valid items in cart'}, status=400)
+
+        first_class_item = next((item for item in cart_items if item['item_type'] == 'class'), None)
+        course = first_class_item['exercise_class'] if first_class_item else None
         
         # Create booking with pending status
         booking = ClassBooking.objects.create(
             booking_id=uuid.uuid4().hex,
             user=request.user,
-            course=cart_items[0]['exercise_class'],
+            course=course,
             full_name=request.user.get_full_name() or request.user.username,
             email=request.user.email,
             status='pending',
@@ -172,10 +146,10 @@ def cache_checkout_data(request):
         for item in cart_items:
             ClassBookingLineItem.objects.create(
                 booking=booking,
-                item_type='class',
-                description=item['exercise_class'].name,
+                item_type='class' if item['item_type'] == 'class' else 'addon',
+                description=item['display_name'],
                 quantity=item['quantity'],
-                unit_price=item['exercise_class'].price,
+                unit_price=item['unit_price'],
             )
         
         # Update Payment Intent metadata

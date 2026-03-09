@@ -36,7 +36,8 @@
                     {% for item in cart_items %}
                     <div class="row mb-3">
                         <div class="col-8">
-                            <p class="mb-0"><strong>{{ item.exercise_class.name }}</strong></p>
+                            <p class="mb-0"><strong>{{ item.display_name }}</strong></p>
+                            <small class="text-muted">{{ item.instructor_name }}</small><br>
                             <small class="text-muted">x{{ item.quantity }}</small>
                         </div>
                         <div class="col-4 text-end">
@@ -98,21 +99,23 @@
                     <form method="post" id="payment-form" action="{% url 'checkout' %}">
                         {% csrf_token %}
                         
-                        <!-- Class Details -->
+                        <!-- Booking Items -->
                         <div class="mb-3">
-                            <h6>Classes to Book:</h6>
+                            <h6>Items to Book:</h6>
                             {% for item in cart_items %}
                             <div class="alert alert-light mb-2">
-                                <p class="mb-1"><strong>{{ item.exercise_class.name }}</strong></p>
-                                <p class="mb-1">
-                                    <small>{{ item.exercise_class.start_datetime|date:"l, F d, Y g:i A" }}</small>
-                                </p>
-                                <p class="mb-1">
-                                    <small>Quantity: {{ item.quantity }}</small>
-                                </p>
-                                <p class="mb-0">
-                                    <small>Instructor: {{ item.exercise_class.instructor.user.get_full_name }}</small>
-                                </p>
+                                <p class="mb-1"><strong>{{ item.display_name }}</strong></p>
+                                {% if item.item_type == 'class' %}
+                                    <p class="mb-1">
+                                        <small>{{ item.exercise_class.start_datetime|date:"l, F d, Y g:i A" }}</small>
+                                    </p>
+                                {% else %}
+                                    <p class="mb-1">
+                                        <small>{{ item.description }}</small>
+                                    </p>
+                                {% endif %}
+                                <p class="mb-1"><small>Quantity: {{ item.quantity }}</small></p>
+                                <p class="mb-0"><small>Instructor: {{ item.instructor_name }}</small></p>
                             </div>
                             {% endfor %}
                         </div>

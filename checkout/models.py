@@ -60,7 +60,7 @@ class ClassBooking(models.Model):
     user_profile = models.ForeignKey('profiles.UserProfile', on_delete=models.SET_NULL, null=True, blank=True)
     
     # Booking details
-    course = models.ForeignKey(ExerciseClass, on_delete=models.PROTECT, related_name='bookings')
+    course = models.ForeignKey(ExerciseClass, on_delete=models.PROTECT, related_name='bookings', null=True, blank=True)
     
     # Participant info
     full_name = models.CharField(max_length=254)
@@ -103,10 +103,14 @@ class ClassBooking(models.Model):
 
     def get_instructor(self):
         """Get the instructor for this booking"""
+        if not self.course:
+            return None
         return self.course.instructor
 
     def get_class_date(self):
         """Get the class date"""
+        if not self.course:
+            return None
         return self.course.start_datetime.date()
 
 
