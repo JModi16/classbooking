@@ -103,6 +103,7 @@
                                     <th>Description</th>
                                     <th class="text-end">Price</th>
                                     <th class="text-end">Per Session</th>
+                                    <th class="text-end">Book</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -112,6 +113,13 @@
                                     <td>Pay as you go - perfect for trying out</td>
                                     <td class="text-end">£{{ instructor.package_single_rate }}</td>
                                     <td class="text-end">£{{ instructor.package_single_rate }}</td>
+                                    <td class="text-end">
+                                        {% if user.is_authenticated %}
+                                            <button class="btn btn-sm btn-outline-primary add-package-btn" data-add-url="{% url 'add_package_to_cart' instructor.id 'single' %}">Add to Cart</button>
+                                        {% else %}
+                                            <a href="{% url 'account_login' %}?next={% url 'instructor_profile' instructor.id %}" class="btn btn-sm btn-outline-secondary">Login</a>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                                 {% endif %}
                                 
@@ -121,6 +129,13 @@
                                     <td>Great for short-term commitment</td>
                                     <td class="text-end">£{{ instructor.package_5_rate }}</td>
                                     <td class="text-end">£22.00</td>
+                                    <td class="text-end">
+                                        {% if user.is_authenticated %}
+                                            <button class="btn btn-sm btn-outline-primary add-package-btn" data-add-url="{% url 'add_package_to_cart' instructor.id 'pack5' %}">Add to Cart</button>
+                                        {% else %}
+                                            <a href="{% url 'account_login' %}?next={% url 'instructor_profile' instructor.id %}" class="btn btn-sm btn-outline-secondary">Login</a>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                                 {% endif %}
                                 
@@ -130,6 +145,13 @@
                                     <td>Most popular - save more per session</td>
                                     <td class="text-end">£{{ instructor.package_10_rate }}</td>
                                     <td class="text-end">£20.00</td>
+                                    <td class="text-end">
+                                        {% if user.is_authenticated %}
+                                            <button class="btn btn-sm btn-outline-success add-package-btn" data-add-url="{% url 'add_package_to_cart' instructor.id 'pack10' %}">Add to Cart</button>
+                                        {% else %}
+                                            <a href="{% url 'account_login' %}?next={% url 'instructor_profile' instructor.id %}" class="btn btn-sm btn-outline-secondary">Login</a>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                                 {% endif %}
                                 
@@ -139,6 +161,13 @@
                                     <td>Unlimited classes for one month</td>
                                     <td class="text-end">£{{ instructor.package_monthly_rate }}</td>
                                     <td class="text-end">Unlimited</td>
+                                    <td class="text-end">
+                                        {% if user.is_authenticated %}
+                                            <button class="btn btn-sm btn-outline-primary add-package-btn" data-add-url="{% url 'add_package_to_cart' instructor.id 'monthly' %}">Add to Cart</button>
+                                        {% else %}
+                                            <a href="{% url 'account_login' %}?next={% url 'instructor_profile' instructor.id %}" class="btn btn-sm btn-outline-secondary">Login</a>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                                 {% endif %}
                                 
@@ -148,6 +177,13 @@
                                     <td>Personalized one-to-one session</td>
                                     <td class="text-end">£{{ instructor.hourly_rate }}/hour</td>
                                     <td class="text-end">Custom</td>
+                                    <td class="text-end">
+                                        {% if user.is_authenticated %}
+                                            <button class="btn btn-sm btn-outline-primary add-package-btn" data-add-url="{% url 'add_package_to_cart' instructor.id 'private' %}">Add to Cart</button>
+                                        {% else %}
+                                            <a href="{% url 'account_login' %}?next={% url 'instructor_profile' instructor.id %}" class="btn btn-sm btn-outline-secondary">Login</a>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                                 {% endif %}
                             </tbody>
@@ -248,4 +284,38 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script>
+    $(document).ready(function() {
+        $('.add-package-btn').on('click', function() {
+            var button = $(this);
+            var addUrl = button.data('add-url');
+
+            button.prop('disabled', true).text('Adding...');
+
+            $.ajax({
+                url: addUrl,
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        window.location.href = "{% url 'view_cart' %}";
+                        return;
+                    }
+                    alert(response.message || 'Error adding package to cart');
+                    button.prop('disabled', false).text('Add to Cart');
+                },
+                error: function() {
+                    alert('Error adding package to cart. Please try again.');
+                    button.prop('disabled', false).text('Add to Cart');
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}
