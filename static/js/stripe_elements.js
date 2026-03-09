@@ -25,11 +25,24 @@ var style = {
         iconColor: '#dc3545'
     }
 };
-var card = elements.create('card', {style: style});
-card.mount('#card-element');
+var cardNumber = elements.create('cardNumber', {
+    style: style,
+    showIcon: true,
+});
+var cardExpiry = elements.create('cardExpiry', {style: style});
+var cardCvc = elements.create('cardCvc', {style: style});
 
-// Handle realtime validation errors on the card element
-card.addEventListener('change', function (event) {
+cardNumber.mount('#card-number-element');
+cardExpiry.mount('#card-expiry-element');
+cardCvc.mount('#card-cvc-element');
+
+function toggleCardInputs(disabled) {
+    cardNumber.update({'disabled': disabled});
+    cardExpiry.update({'disabled': disabled});
+    cardCvc.update({'disabled': disabled});
+}
+
+function handleStripeChange(event) {
     var errorDiv = document.getElementById('card-errors');
     if (event.error) {
         var html = `
@@ -42,14 +55,18 @@ card.addEventListener('change', function (event) {
     } else {
         errorDiv.textContent = '';
     }
-});
+}
+
+cardNumber.addEventListener('change', handleStripeChange);
+cardExpiry.addEventListener('change', handleStripeChange);
+cardCvc.addEventListener('change', handleStripeChange);
 
 // Handle form submit
 var form = document.getElementById('payment-form');
 
 form.addEventListener('submit', function(ev) {
     ev.preventDefault();
-    card.update({ 'disabled': true});
+    toggleCardInputs(true);
     $('#submit-button').attr('disabled', true);
     $('#payment-form').fadeToggle(100);
     $('#loading-overlay').fadeToggle(100);
@@ -65,7 +82,7 @@ form.addEventListener('submit', function(ev) {
     $.post(url, postData).done(function () {
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
-                card: card,
+                card: cardNumber,
             }
         }).then(function(result) {
             if (result.error) {
@@ -78,7 +95,7 @@ form.addEventListener('submit', function(ev) {
                 $(errorDiv).html(html);
                 $('#payment-form').fadeToggle(100);
                 $('#loading-overlay').fadeToggle(100);
-                card.update({ 'disabled': false});
+                toggleCardInputs(false);
                 $('#submit-button').attr('disabled', false);
             } else {
                 if (result.paymentIntent.status === 'succeeded') {
