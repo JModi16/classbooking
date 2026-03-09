@@ -123,16 +123,20 @@ def cache_checkout_data(request):
     
     try:
         # Get client_secret from POST data
+        logger.debug(f'POST data: {request.POST}')
+        logger.debug(f'Body: {request.body}')
         client_secret = request.POST.get('client_secret')
         if not client_secret:
             # Try JSON body for backwards compatibility
             try:
                 data = json.loads(request.body)
                 client_secret = data.get('client_secret')
-            except:
-                pass
+                logger.debug(f'Got client_secret from JSON: {client_secret}')
+            except Exception as e:
+                logger.debug(f'Failed to parse JSON: {e}')
         
         if not client_secret:
+            logger.error('Missing client secret in cache_checkout_data')
             return JsonResponse({'error': 'Missing client secret'}, status=400)
             
         pid = client_secret.split('_secret')[0]
@@ -182,8 +186,10 @@ def cache_checkout_data(request):
             'booking_id': str(booking.booking_id),
         })
         
+        logger.debug(f'Booking created successfully: {booking.booking_id}')
         return JsonResponse({'success': True, 'booking_id': str(booking.booking_id)})
     except Exception as e:
+        logger.error(f'Error in cache_checkout_data: {type(e).__name__}: {str(e)}', exc_info=True)
         messages.error(request, 'Sorry, your payment cannot be processed right now. Please try again later.')
         return JsonResponse({'error': str(e)}, status=400)
 
