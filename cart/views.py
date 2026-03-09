@@ -3,29 +3,14 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from services.models import Service, ExerciseClass
+from profiles.models import Instructor
+from .utils import build_cart_items, build_package_key, get_package_option
 
 
 def view_cart(request):
     """Display shopping cart with bookings"""
     cart = request.session.get('cart', {})
-    cart_items = []
-    total = 0
-    
-    for class_id, quantity in cart.items():
-        try:
-            exercise_class = ExerciseClass.objects.get(id=class_id)
-            available_spots = exercise_class.get_available_spots()
-            item_total = float(exercise_class.price) * quantity
-            cart_items.append({
-                'class': exercise_class,
-                'class_id': exercise_class.id,
-                'quantity': quantity,
-                'item_total': item_total,
-                'available_spots': available_spots,
-            })
-            total += item_total
-        except ExerciseClass.DoesNotExist:
-            pass
+    cart_items, total, _ = build_cart_items(cart)
 
     if total < getattr(settings, 'FREE_DELIVERY_THRESHOLD', 0):
         delivery = total * getattr(settings, 'STANDARD_DELIVERY_PERCENTAGE', 0) / 100
@@ -87,6 +72,39 @@ def add_class_to_cart(request, class_id):
     })
 
 
+@login_required
+def add_package_to_cart(request, instructor_id, package_type):
+    """Add instructor package option to cart"""
+    instructor = get_object_or_404(Instructor, id=instructor_id, is_active=True)
+    package_option = get_package_option(instructor, package_type)
+
+    if not package_option:
+        return JsonResponse({'success': False, 'message': 'This package option is not available'})
+
+    cart = request.session.get('cart', {})
+    package_key = build_package_key(instructor_id, package_type)
+
+    quantity = request.POST.get('quantity', 1)
+    try:
+        quantity = int(quantity)
+    except (TypeError, ValueError):
+        quantity = 1
+
+    quantity = max(1, quantity)
+
+    if package_key in cart:
+        cart[package_key] += quantity
+    else:
+        cart[package_key] = quantity
+
+    request.session['cart'] = cart
+    return JsonResponse({
+        'success': True,
+        'cart_count': sum(cart.values()),
+        'message': f"Added {package_option['label']} to booking",
+    })
+
+
 def remove_from_cart(request, class_id):
     """Remove class booking from cart"""
     cart = request.session.get('cart', {})
@@ -95,6 +113,19 @@ def remove_from_cart(request, class_id):
     if class_id_str in cart:
         del cart[class_id_str]
     
+    request.session['cart'] = cart
+    return JsonResponse({'success': True})
+
+
+@login_required
+def remove_package_from_cart(request, instructor_id, package_type):
+    """Remove package booking from cart"""
+    cart = request.session.get('cart', {})
+    package_key = build_package_key(instructor_id, package_type)
+
+    if package_key in cart:
+        del cart[package_key]
+
     request.session['cart'] = cart
     return JsonResponse({'success': True})
 
