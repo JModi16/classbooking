@@ -25,21 +25,47 @@ var style = {
         iconColor: '#dc3545'
     }
 };
-var cardNumber = elements.create('cardNumber', {
-    style: style,
-    showIcon: true,
-});
-var cardExpiry = elements.create('cardExpiry', {style: style});
-var cardCvc = elements.create('cardCvc', {style: style});
+var cardNumber = null;
+var cardExpiry = null;
+var cardCvc = null;
+var card = null;
+var primaryCardElement = null;
 
-cardNumber.mount('#card-number-element');
-cardExpiry.mount('#card-expiry-element');
-cardCvc.mount('#card-cvc-element');
+if (document.getElementById('card-number-element') && document.getElementById('card-expiry-element') && document.getElementById('card-cvc-element')) {
+    cardNumber = elements.create('cardNumber', {
+        style: style,
+        showIcon: true,
+    });
+    cardExpiry = elements.create('cardExpiry', {style: style});
+    cardCvc = elements.create('cardCvc', {style: style});
+
+    cardNumber.mount('#card-number-element');
+    cardExpiry.mount('#card-expiry-element');
+    cardCvc.mount('#card-cvc-element');
+    primaryCardElement = cardNumber;
+} else if (document.getElementById('card-element')) {
+    card = elements.create('card', {style: style});
+    card.mount('#card-element');
+    primaryCardElement = card;
+}
+
+if (!primaryCardElement) {
+    var errorDivNoCard = document.getElementById('card-errors');
+    if (errorDivNoCard) {
+        errorDivNoCard.textContent = 'Payment form could not load. Please refresh and try again.';
+    }
+}
 
 function toggleCardInputs(disabled) {
-    cardNumber.update({'disabled': disabled});
-    cardExpiry.update({'disabled': disabled});
-    cardCvc.update({'disabled': disabled});
+    if (cardNumber && cardExpiry && cardCvc) {
+        cardNumber.update({'disabled': disabled});
+        cardExpiry.update({'disabled': disabled});
+        cardCvc.update({'disabled': disabled});
+        return;
+    }
+    if (card) {
+        card.update({'disabled': disabled});
+    }
 }
 
 function handleStripeChange(event) {
@@ -57,15 +83,26 @@ function handleStripeChange(event) {
     }
 }
 
-cardNumber.addEventListener('change', handleStripeChange);
-cardExpiry.addEventListener('change', handleStripeChange);
-cardCvc.addEventListener('change', handleStripeChange);
+if (cardNumber && cardExpiry && cardCvc) {
+    cardNumber.addEventListener('change', handleStripeChange);
+    cardExpiry.addEventListener('change', handleStripeChange);
+    cardCvc.addEventListener('change', handleStripeChange);
+} else if (card) {
+    card.addEventListener('change', handleStripeChange);
+}
 
 // Handle form submit
 var form = document.getElementById('payment-form');
 
 form.addEventListener('submit', function(ev) {
     ev.preventDefault();
+    if (!primaryCardElement) {
+        var errorDivMissing = document.getElementById('card-errors');
+        if (errorDivMissing) {
+            errorDivMissing.textContent = 'Payment form could not load. Please refresh and try again.';
+        }
+        return;
+    }
     toggleCardInputs(true);
     $('#submit-button').attr('disabled', true);
     $('#payment-form').fadeToggle(100);
@@ -82,7 +119,7 @@ form.addEventListener('submit', function(ev) {
     $.post(url, postData).done(function () {
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
-                card: cardNumber,
+                card: primaryCardElement,
             }
         }).then(function(result) {
             if (result.error) {
