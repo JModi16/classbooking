@@ -5,14 +5,76 @@ from django.conf import settings
 from django.views.decorators.http import require_http_methods, require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils import timezone
 import stripe
 import json
 import uuid
 import logging
+from allauth.account.models import EmailAddress
 from .models import ClassBooking, ClassBookingLineItem
 from cart.utils import build_cart_items
 
 logger = logging.getLogger(__name__)
+
+
+def get_booking_recipient_email(booking):
+    """Get recipient email, prioritizing allauth primary verified address."""
+    primary_verified = EmailAddress.objects.filter(
+        user=booking.user,
+        verified=True,
+        primary=True,
+    ).first()
+    if primary_verified:
+        return primary_verified.email
+
+    verified_email = EmailAddress.objects.filter(user=booking.user, verified=True).first()
+    if verified_email:
+        return verified_email.email
+
+    if booking.email:
+        return booking.email
+
+    return booking.user.email
+
+
+def send_booking_confirmation_email(booking):
+    """Send booking confirmation email once."""
+    if booking.confirmation_email_sent:
+        return
+
+    recipient = get_booking_recipient_email(booking)
+    if not recipient:
+        logger.warning(f'No recipient email available for booking {booking.booking_id}')
+        return
+
+    context = {
+        'booking': booking,
+        'line_items': booking.line_items.all(),
+        'support_email': settings.DEFAULT_FROM_EMAIL,
+    }
+
+    subject = f'Booking Confirmation - {booking.booking_id}'
+    text_body = render_to_string('emails/booking_confirmation.txt', context)
+    html_body = render_to_string('emails/booking_confirmation.html', context)
+
+    try:
+        email_message = EmailMultiAlternatives(
+            subject=subject,
+            body=text_body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[recipient],
+        )
+        email_message.attach_alternative(html_body, 'text/html')
+        email_message.send()
+
+        booking.confirmation_email_sent = True
+        booking.confirmation_email_sent_at = timezone.now()
+        booking.save(update_fields=['confirmation_email_sent', 'confirmation_email_sent_at', 'updated_at'])
+        logger.info(f'Booking confirmation email sent for {booking.booking_id} to {recipient}')
+    except Exception as exc:
+        logger.error(f'Failed to send booking confirmation email for {booking.booking_id}: {exc}')
 
 
 @login_required
@@ -32,9 +94,12 @@ def checkout(request):
         # Payment successful, get booking and redirect
         client_secret = request.POST.get('client_secret', '')
         pid = client_secret.split('_secret')[0]
-        
+
         try:
             booking = ClassBooking.objects.get(stripe_pid=pid)
+
+            send_booking_confirmation_email(booking)
+
             # Clear cart
             if 'cart' in request.session:
                 del request.session['cart']
@@ -119,7 +184,7 @@ def cache_checkout_data(request):
             
         pid = client_secret.split('_secret')[0]
         cart = request.session.get('cart', {})
-        
+
         # Get cart items and create booking
         cart_items, total, _ = build_cart_items(cart)
 
@@ -128,7 +193,7 @@ def cache_checkout_data(request):
 
         first_class_item = next((item for item in cart_items if item['item_type'] == 'class'), None)
         course = first_class_item['exercise_class'] if first_class_item else None
-        
+
         # Create booking with pending status
         booking = ClassBooking.objects.create(
             booking_id=uuid.uuid4().hex,
@@ -141,7 +206,7 @@ def cache_checkout_data(request):
             total_amount=total,
             stripe_pid=pid,
         )
-        
+
         # Create line items
         for item in cart_items:
             ClassBookingLineItem.objects.create(
@@ -229,6 +294,8 @@ def handle_payment_intent_succeeded(payment_intent):
         booking.status = 'confirmed'
         booking.payment_status = 'paid'
         booking.save()
+
+        send_booking_confirmation_email(booking)
         
         print(f"✅ Booking {booking.booking_id} confirmed via webhook")
         

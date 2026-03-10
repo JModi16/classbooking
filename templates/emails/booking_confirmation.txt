@@ -1,0 +1,26 @@
+Booking Confirmation
+
+Hi {{ booking.full_name|default:booking.user.username }},
+
+Your booking has been confirmed.
+
+Booking ID: {{ booking.booking_id }}
+Booking Date: {{ booking.created_at|date:"F d, Y g:i A" }}
+Payment Status: {{ booking.get_payment_status_display }}
+Total Paid: £{{ booking.total_amount|floatformat:2 }}
+
+Items:
+{% for item in line_items %}- {{ item.description }} x{{ item.quantity }} — £{{ item.line_total|floatformat:2 }}
+{% endfor %}
+
+{% if booking.course %}
+Scheduled Class:
+- {{ booking.course.name }}
+- {{ booking.course.start_datetime|date:"l, F d, Y" }}
+- {{ booking.course.start_datetime|date:"g:i A" }} to {{ booking.course.end_datetime|date:"g:i A" }}
+{% endif %}
+
+If you need support, reply to this email or contact {{ support_email }}.
+
+Thank you,
+ClassBooking

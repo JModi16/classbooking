@@ -76,6 +76,10 @@ class ClassBooking(models.Model):
     
     # Payment reference
     stripe_pid = models.CharField(max_length=254, blank=True)
+
+    # Email confirmation tracking
+    confirmation_email_sent = models.BooleanField(default=False)
+    confirmation_email_sent_at = models.DateTimeField(null=True, blank=True)
     
     # Notes
     notes = models.TextField(blank=True)
