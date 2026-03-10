@@ -4,7 +4,7 @@
 {% block extra_title %}- Checkout{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}?v=2">
 {% endblock %}
 
 {% block page_header %}
@@ -134,15 +134,15 @@
                             
                             <!-- Stripe Split Card Elements -->
                             <div class="mb-3">
-                                <label class="form-label" for="card-number-element">Card number</label>
+                                <label class="form-label">Card number</label>
                                 <div id="card-number-element" class="mb-2"></div>
                                 <div class="row g-2">
                                     <div class="col-md-6">
-                                        <label class="form-label" for="card-expiry-element">Expiry date</label>
+                                        <label class="form-label">Expiry date</label>
                                         <div id="card-expiry-element"></div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label" for="card-cvc-element">CVC</label>
+                                        <label class="form-label">CVC</label>
                                         <div id="card-cvc-element"></div>
                                     </div>
                                 </div>
@@ -198,5 +198,5 @@
 {{ stripe_public_key|json_script:"id_stripe_public_key" }}
 {{ client_secret|json_script:"id_client_secret" }}
 <script src="https://js.stripe.com/v3/"></script>
-<script src="{% static 'js/stripe_elements.js' %}"></script>
+<script src="{% static 'js/stripe_elements.js' %}?v=2"></script>
 {% endblock %}
