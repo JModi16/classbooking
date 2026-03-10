@@ -109,8 +109,19 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-# Email settings for development
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Email settings
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', '1').strip().lower() in ('1', 'true', 'yes', 'on')
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', '0').strip().lower() in ('1', 'true', 'yes', 'on')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+
+_default_email_backend = 'django.core.mail.backends.smtp.EmailBackend'
+if DEBUG and not (EMAIL_HOST_USER and EMAIL_HOST_PASSWORD):
+    _default_email_backend = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', _default_email_backend)
 
 # Allauth settings
 ACCOUNT_EMAIL_VERIFICATION = 'none'
@@ -205,6 +216,7 @@ STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
 STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET', '')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'admin@servicebooking.com')
+SERVER_EMAIL = os.environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
 
 # Logging
 LOGGING = {
