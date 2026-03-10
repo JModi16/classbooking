@@ -20,6 +20,13 @@ class Command(BaseCommand):
         subject = options["subject"]
         from_email = settings.DEFAULT_FROM_EMAIL
 
+        if settings.EMAIL_BACKEND == "django.core.mail.backends.console.EmailBackend":
+            raise CommandError(
+                "EMAIL_BACKEND is set to console, so messages are only printed in terminal. "
+                "Set EMAIL_BACKEND to django.core.mail.backends.smtp.EmailBackend and configure "
+                "EMAIL_HOST_USER/EMAIL_HOST_PASSWORD."
+            )
+
         text_body = (
             "This is a direct SMTP test email from Service Booking Platform.\n\n"
             "If you received this message, your outbound email configuration is working."
