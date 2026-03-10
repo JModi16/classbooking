@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+import importlib.util
 import dj_database_url
 from pathlib import Path
 
@@ -73,6 +74,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if importlib.util.find_spec('allauth.account.middleware'):
+    auth_middleware = 'django.contrib.auth.middleware.AuthenticationMiddleware'
+    auth_index = MIDDLEWARE.index(auth_middleware)
+    MIDDLEWARE.insert(auth_index + 1, 'allauth.account.middleware.AccountMiddleware')
+
 ROOT_URLCONF = 'service_platform.urls'
 
 TEMPLATES = [
@@ -117,11 +123,9 @@ EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', '0').strip().lower() in ('1', 't
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 
-_default_email_backend = 'django.core.mail.backends.smtp.EmailBackend'
-if DEBUG and not (EMAIL_HOST_USER and EMAIL_HOST_PASSWORD):
-    _default_email_backend = 'django.core.mail.backends.console.EmailBackend'
-
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', _default_email_backend)
+# Default to SMTP so missing credentials fail loudly rather than silently writing
+# emails to console output.
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 
 # Allauth settings
 ACCOUNT_EMAIL_VERIFICATION = 'none'
@@ -215,7 +219,7 @@ STRIPE_CURRENCY = 'gbp'
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
 STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET', '')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'admin@servicebooking.com')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'admin@servicebooking.com')
 SERVER_EMAIL = os.environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
 
 # Logging
