@@ -44,6 +44,9 @@ def send_booking_confirmation_email(booking):
     if booking.confirmation_email_sent:
         return
 
+    if settings.EMAIL_BACKEND == 'django.core.mail.backends.console.EmailBackend':
+        logger.warning('EMAIL_BACKEND is console; confirmation email is printed to terminal and not delivered to inbox.')
+
     recipient = get_booking_recipient_email(booking)
     if not recipient:
         logger.warning(f'No recipient email available for booking {booking.booking_id}')
