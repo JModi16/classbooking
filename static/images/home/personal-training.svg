@@ -1,0 +1,22 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Personal Training Illustration</title>
+  <desc id="desc">Stylized personal training scene with weights and fitness elements.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e3f2fd"/>
+      <stop offset="100%" stop-color="#bbdefb"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <circle cx="200" cy="160" r="90" fill="#90caf9" opacity="0.45"/>
+  <circle cx="1000" cy="180" r="130" fill="#64b5f6" opacity="0.35"/>
+  <rect x="200" y="500" width="800" height="34" rx="17" fill="#0d47a1" opacity="0.2"/>
+  <rect x="270" y="450" width="660" height="34" rx="17" fill="#1565c0"/>
+  <circle cx="220" cy="467" r="65" fill="#0d47a1"/>
+  <circle cx="980" cy="467" r="65" fill="#0d47a1"/>
+  <rect x="530" y="260" width="140" height="220" rx="26" fill="#1e88e5"/>
+  <circle cx="600" cy="200" r="62" fill="#42a5f5"/>
+  <rect x="470" y="300" width="70" height="28" rx="14" fill="#1976d2"/>
+  <rect x="660" y="300" width="70" height="28" rx="14" fill="#1976d2"/>
+  <text x="600" y="720" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="58" font-weight="700" fill="#0d47a1">Personal Training</text>
+</svg>

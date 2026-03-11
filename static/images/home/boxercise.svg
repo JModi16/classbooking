@@ -1,0 +1,21 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Boxercise Illustration</title>
+  <desc id="desc">Stylized boxercise session with gloves and dynamic movement.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fce4ec"/>
+      <stop offset="100%" stop-color="#f8bbd0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <circle cx="210" cy="170" r="100" fill="#f06292" opacity="0.35"/>
+  <circle cx="960" cy="190" r="145" fill="#ec407a" opacity="0.28"/>
+  <ellipse cx="600" cy="590" rx="320" ry="70" fill="#ad1457" opacity="0.18"/>
+  <circle cx="600" cy="230" r="64" fill="#c2185b"/>
+  <rect x="540" y="290" width="120" height="220" rx="30" fill="#ad1457"/>
+  <circle cx="500" cy="390" r="58" fill="#e91e63"/>
+  <circle cx="700" cy="390" r="58" fill="#e91e63"/>
+  <rect x="470" y="500" width="80" height="130" rx="26" fill="#880e4f"/>
+  <rect x="650" y="500" width="80" height="130" rx="26" fill="#880e4f"/>
+  <text x="600" y="720" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="58" font-weight="700" fill="#880e4f">Boxercise</text>
+</svg>

@@ -1,0 +1,19 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Yoga Illustration</title>
+  <desc id="desc">Stylized yoga pose on a calming background.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8f5e9"/>
+      <stop offset="100%" stop-color="#c8e6c9"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <circle cx="250" cy="160" r="95" fill="#81c784" opacity="0.35"/>
+  <circle cx="930" cy="190" r="150" fill="#66bb6a" opacity="0.3"/>
+  <ellipse cx="600" cy="560" rx="300" ry="65" fill="#2e7d32" opacity="0.18"/>
+  <circle cx="600" cy="260" r="70" fill="#43a047"/>
+  <path d="M520 410 Q600 340 680 410 L640 520 H560 Z" fill="#2e7d32"/>
+  <path d="M560 520 Q600 560 640 520 Q720 560 790 620 L740 670 Q690 625 620 600 Q550 625 500 670 L450 620 Q520 560 560 520Z" fill="#1b5e20"/>
+  <rect x="430" y="600" width="340" height="38" rx="19" fill="#388e3c"/>
+  <text x="600" y="720" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="58" font-weight="700" fill="#1b5e20">Yoga Sessions</text>
+</svg>
