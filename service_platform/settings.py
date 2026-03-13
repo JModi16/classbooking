@@ -31,7 +31,13 @@ USE_AWS = os.environ.get('USE_AWS', '').strip().lower() in ('1', 'true', 'yes', 
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
+    'class-booking-ed512f961728.herokuapp.com',
 ]
+
+# Allow additional hosts via environment variable (comma-separated)
+_extra_hosts = os.environ.get('ALLOWED_HOSTS', '')
+if _extra_hosts:
+    ALLOWED_HOSTS += [h.strip() for h in _extra_hosts.split(',') if h.strip()]
 
 # Application definition
 INSTALLED_APPS = [
