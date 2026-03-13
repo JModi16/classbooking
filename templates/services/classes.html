@@ -74,6 +74,13 @@
                             {% for instructor in section.instructors %}
                                 <div class="col-md-6 col-lg-3 mb-3">
                                     <div class="border rounded p-3 h-100 bg-white">
+                                        {% if instructor.image_url %}
+                                            <img src="{{ instructor.image_url }}" alt="{{ instructor.name }}" class="img-fluid rounded mb-2" style="height: 150px; width: 100%; object-fit: cover;">
+                                        {% else %}
+                                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded mb-2" style="height: 150px;">
+                                                <span class="small">No Image</span>
+                                            </div>
+                                        {% endif %}
                                         <h6 class="mb-1">{{ instructor.name }}</h6>
                                         <p class="text-muted small mb-2">
                                             <i class="fas fa-map-marker-alt"></i> {{ instructor.location }}
@@ -108,6 +115,8 @@
                     <div class="card h-100">
                         {% if class.image %}
                             <img src="{{ class.image.url }}" class="card-img-top" alt="{{ class.name }}">
+                        {% elif class.instructor.image %}
+                            <img src="{{ class.instructor.image.url }}" class="card-img-top" alt="{{ class.instructor.get_display_name }}" style="height: 200px; object-fit: cover;">
                         {% else %}
                             <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
                                 <span>No Image</span>

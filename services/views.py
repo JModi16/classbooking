@@ -175,6 +175,7 @@ def all_classes(request):
                 'name': instructor_item.get_display_name(),
                 'location': instructor_item.get_location(),
                 'brief_description': brief_description,
+                'image_url': instructor_item.image.url if instructor_item.image else None,
             })
 
         # 5) Guarantee the requested number of cards even if data is incomplete
@@ -185,6 +186,7 @@ def all_classes(request):
                 'name': f'Instructor {slot_number}',
                 'location': 'Location to be updated',
                 'brief_description': 'Profile coming soon.',
+                'image_url': None,
             })
 
         category_instructor_sections.append({
