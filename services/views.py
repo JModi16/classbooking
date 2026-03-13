@@ -106,6 +106,7 @@ def all_classes(request):
 
     category_name_set = {name for name, _ in target_instructor_counts}
     selected_category = category if category in category_name_set else ''
+    is_category_filtered = bool(selected_category)
 
     if selected_category:
         filtered_target_instructor_counts = [
@@ -158,8 +159,8 @@ def all_classes(request):
                     selected_instructors.append(instructor_item)
                     selected_ids.add(instructor_item.id)
 
-        # 3) Fallback to other active instructors
-        if len(selected_instructors) < target_count:
+        # 4) Fallback to other active instructors (only when viewing all categories)
+        if not is_category_filtered and len(selected_instructors) < target_count:
             fallback_instructors = active_instructors.exclude(id__in=selected_ids)
             for instructor_item in fallback_instructors:
                 if len(selected_instructors) < target_count:
@@ -176,7 +177,7 @@ def all_classes(request):
                 'brief_description': brief_description,
             })
 
-        # 4) Guarantee the requested number of cards even if data is incomplete
+        # 5) Guarantee the requested number of cards even if data is incomplete
         while len(instructor_cards) < target_count:
             slot_number = len(instructor_cards) + 1
             instructor_cards.append({
