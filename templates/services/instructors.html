@@ -4,17 +4,7 @@
 {% block extra_title %}- Our Instructors{% endblock %}
 
 {% block extra_css %}
-<style>
-    .instructor-photo {
-        height: 280px;
-        object-fit: cover;
-        object-position: center;
-    }
-
-    .instructor-photo--top {
-        object-position: top center;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/instructors.css' %}">
 {% endblock %}
 
 {% block page_header %}
@@ -50,10 +40,9 @@
                         <!-- Instructor Image -->
                         {% if instructor.image %}
                             <img src="{{ instructor.image.url }}" alt="{{ instructor.get_display_name }}" 
-                                 class="card-img-top instructor-photo {% if instructor.user.first_name == 'John' and instructor.user.last_name == 'McGovern' or instructor.user.first_name == 'Priya' and instructor.user.last_name == 'Sharma' %}instructor-photo--top{% endif %}">
+                                 class="card-img-top instructor-photo {% if instructor.user.first_name == 'John' and instructor.user.last_name == 'McGovern' or instructor.user.first_name == 'Priya' and instructor.user.last_name == 'Sharma' or instructor.user.first_name == 'Neil' and instructor.user.last_name == 'Patel' %}instructor-photo--top{% endif %}">
                         {% else %}
-                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" 
-                                 style="height: 280px;">
+                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center instructor-photo-placeholder">
                                 <div class="text-center">
                                     <h1 class="mb-0">{{ instructor.user.first_name.0 }}{{ instructor.user.last_name.0 }}</h1>
                                 </div>

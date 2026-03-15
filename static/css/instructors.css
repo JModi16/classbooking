@@ -1,0 +1,13 @@
+.instructor-photo {
+    height: 280px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.instructor-photo--top {
+    object-position: top center;
+}
+
+.instructor-photo-placeholder {
+    height: 280px;
+}
