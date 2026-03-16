@@ -60,6 +60,31 @@
         </div>
     </div>
 
+    {% if selected_category == 'Pilates' %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Why Pilates?</h5>
+                    <div class="row g-3 align-items-stretch">
+                        <div class="col-md-6">
+                            <img src="{% static 'images/home/mattpilates.jpg' %}" alt="Pilates mat training" class="img-fluid rounded" style="height: 240px; width: 100%; object-fit: cover;">
+                        </div>
+                        <div class="col-md-6">
+                            <img src="{% static 'images/home/bandpilates.jpg' %}" alt="Pilates resistance band training" class="img-fluid rounded" style="height: 240px; width: 100%; object-fit: cover;">
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p class="mb-1">Pilates builds core strength to support better posture and reduce lower-back strain.</p>
+                        <p class="mb-1">It improves flexibility, balance, and body control through precise, low-impact movements.</p>
+                        <p class="mb-0">Regular practice also helps prevent injury and enhances performance in daily life and sport.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Instructors by Class Type -->
     <div class="row mb-4">
         <div class="col-12">
@@ -74,22 +99,12 @@
                             {% for instructor in section.instructors %}
                                 <div class="col-md-6 col-lg-3 mb-3">
                                     <div class="border rounded p-3 h-100 bg-white">
-                                        {% if section.category_name == 'Pilates' %}
-                                            {% if forloop.counter|divisibleby:2 %}
-                                                <img src="{% static 'images/home/bandpilates.jpg' %}" alt="Pilates class with resistance band" class="img-fluid rounded mb-2" style="height: 150px; width: 100%; object-fit: cover;">
-                                            {% else %}
-                                                <img src="{% static 'images/home/mattpilates.jpg' %}" alt="Pilates mat class" class="img-fluid rounded mb-2" style="height: 150px; width: 100%; object-fit: cover;">
-                                            {% endif %}
-                                        {% elif instructor.image_url %}
+                                        {% if instructor.image_url %}
                                             <img src="{{ instructor.image_url }}" alt="{{ instructor.name }}" class="img-fluid rounded mb-2" style="height: 150px; width: 100%; object-fit: cover;">
                                         {% else %}
                                             <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded mb-2" style="height: 150px;">
                                                 <span class="small">No Image</span>
                                             </div>
-                                        {% endif %}
-
-                                        {% if section.category_name == 'Pilates' %}
-                                            <p class="small text-muted mb-2">Pilates improves core strength, posture, and flexibility for better everyday movement and control.</p>
                                         {% endif %}
 
                                         <h6 class="mb-1">{{ instructor.name }}</h6>
@@ -124,26 +139,13 @@
             {% for class in classes %}
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card h-100">
-                        {% if class.category and class.category.name == 'Pilates' %}
-                            {% if 'Session 2' in class.name %}
-                                <img src="{% static 'images/home/bandpilates.jpg' %}" class="card-img-top" alt="Pilates class with resistance band" style="height: 200px; object-fit: cover;">
-                            {% else %}
-                                <img src="{% static 'images/home/mattpilates.jpg' %}" class="card-img-top" alt="Pilates mat class" style="height: 200px; object-fit: cover;">
-                            {% endif %}
-                        {% elif class.image %}
+                        {% if class.image %}
                             <img src="{{ class.image.url }}" class="card-img-top" alt="{{ class.name }}">
                         {% elif class.instructor.image %}
                             <img src="{{ class.instructor.image.url }}" class="card-img-top" alt="{{ class.instructor.get_display_name }}" style="height: 200px; object-fit: cover;">
                         {% else %}
                             <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
                                 <span>No Image</span>
-                            </div>
-                        {% endif %}
-
-                        {% if class.category and class.category.name == 'Pilates' %}
-                            <div class="px-3 pt-2 pb-0">
-                                <p class="small text-muted mb-1">Pilates strengthens your core, improves posture, and increases flexibility for daily movement.</p>
-                                <p class="small text-muted mb-0">Regular sessions also support better balance, controlled breathing, and lower injury risk.</p>
                             </div>
                         {% endif %}
 
