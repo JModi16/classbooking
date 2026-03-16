@@ -3,6 +3,10 @@
 
 {% block extra_title %}- Exercise Classes{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/classes.css' %}">
+{% endblock %}
+
 {% block page_header %}
 <div class="container header-container mt-3">
     <div class="row">
@@ -68,10 +72,14 @@
                     <h5 class="card-title mb-3">Why Pilates?</h5>
                     <div class="row g-3 align-items-stretch">
                         <div class="col-md-6">
-                            <img src="{% static 'images/home/mattpilates.jpg' %}" alt="Pilates mat training" class="img-fluid rounded" style="height: 240px; width: 100%; object-fit: cover;">
+                            <div class="pilates-benefit-image-wrap rounded">
+                                <img src="{% static 'images/home/mattpilates.jpg' %}" alt="Pilates mat training" class="pilates-benefit-image">
+                            </div>
                         </div>
                         <div class="col-md-6">
-                            <img src="{% static 'images/home/bandpilates.jpg' %}" alt="Pilates resistance band training" class="img-fluid rounded" style="height: 240px; width: 100%; object-fit: cover;">
+                            <div class="pilates-benefit-image-wrap rounded">
+                                <img src="{% static 'images/home/bandpilates.jpg' %}" alt="Pilates resistance band training" class="pilates-benefit-image">
+                            </div>
                         </div>
                     </div>
                     <div class="mt-3">
