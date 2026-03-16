@@ -74,13 +74,24 @@
                             {% for instructor in section.instructors %}
                                 <div class="col-md-6 col-lg-3 mb-3">
                                     <div class="border rounded p-3 h-100 bg-white">
-                                        {% if instructor.image_url %}
+                                        {% if section.category_name == 'Pilates' %}
+                                            {% if forloop.counter|divisibleby:2 %}
+                                                <img src="{% static 'images/home/bandpilates.jpg' %}" alt="Pilates class with resistance band" class="img-fluid rounded mb-2" style="height: 150px; width: 100%; object-fit: cover;">
+                                            {% else %}
+                                                <img src="{% static 'images/home/mattpilates.jpg' %}" alt="Pilates mat class" class="img-fluid rounded mb-2" style="height: 150px; width: 100%; object-fit: cover;">
+                                            {% endif %}
+                                        {% elif instructor.image_url %}
                                             <img src="{{ instructor.image_url }}" alt="{{ instructor.name }}" class="img-fluid rounded mb-2" style="height: 150px; width: 100%; object-fit: cover;">
                                         {% else %}
                                             <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded mb-2" style="height: 150px;">
                                                 <span class="small">No Image</span>
                                             </div>
                                         {% endif %}
+
+                                        {% if section.category_name == 'Pilates' %}
+                                            <p class="small text-muted mb-2">Pilates improves core strength, posture, and flexibility for better everyday movement and control.</p>
+                                        {% endif %}
+
                                         <h6 class="mb-1">{{ instructor.name }}</h6>
                                         <p class="text-muted small mb-2">
                                             <i class="fas fa-map-marker-alt"></i> {{ instructor.location }}
