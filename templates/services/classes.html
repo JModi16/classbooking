@@ -65,29 +65,21 @@
     </div>
 
     {% if selected_category == 'Pilates' %}
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Why Pilates?</h5>
-                    <div class="row g-3 align-items-stretch">
-                        <div class="col-md-6">
-                            <div class="pilates-benefit-image-wrap rounded">
-                                <img src="{% static 'images/home/mattpilates.jpg' %}" alt="Pilates mat training" class="pilates-benefit-image">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="pilates-benefit-image-wrap rounded">
-                                <img src="{% static 'images/home/bandpilates.jpg' %}" alt="Pilates resistance band training" class="pilates-benefit-image">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <p class="mb-1">Pilates builds core strength to support better posture and reduce lower-back strain.</p>
-                        <p class="mb-1">It improves flexibility, balance, and body control through precise, low-impact movements.</p>
-                        <p class="mb-0">Regular practice also helps prevent injury and enhances performance in daily life and sport.</p>
-                    </div>
+    <div class="pilates-banner mb-4">
+        <div class="pilates-banner-content">
+            <h2 class="pilates-banner-title">Why Pilates?</h2>
+            <div class="pilates-images-container">
+                <div class="pilates-image-item">
+                    <img src="{% static 'images/home/mattpilates.jpg' %}" alt="Pilates mat training" class="pilates-banner-image">
                 </div>
+                <div class="pilates-image-item">
+                    <img src="{% static 'images/home/bandpilates.jpg' %}" alt="Pilates resistance band training" class="pilates-banner-image">
+                </div>
+            </div>
+            <div class="pilates-banner-text">
+                <p>Pilates builds core strength to support better posture and reduce lower-back strain.</p>
+                <p>It improves flexibility, balance, and body control through precise, low-impact movements.</p>
+                <p>Regular practice also helps prevent injury and enhances performance in daily life and sport.</p>
             </div>
         </div>
     </div>
