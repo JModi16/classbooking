@@ -38,6 +38,26 @@
             </div>
         </div>
     </div>
+    {% elif selected_category == 'Yoga' %}
+    <div class="pilates-banner mb-4">
+        <div class="pilates-banner-content">
+            <h2 class="pilates-banner-title">Why Yoga?</h2>
+            <div class="pilates-images-container">
+                <div class="pilates-image-item">
+                    <img src="{% static 'images/home/reasons-image.jpg' %}" alt="Yoga balance and breathing practice" class="pilates-banner-image">
+                </div>
+                <div class="pilates-image-item pilates-image-item--band">
+                    <img src="{% static 'images/home/movementstretch.jpg' %}" alt="Yoga movement and stretch class" class="pilates-banner-image">
+                </div>
+            </div>
+            <div class="pilates-banner-text">
+                <p>Yoga helps reduce stress and improve focus through controlled breathing and mindful movement.</p>
+                <p>It increases flexibility, joint mobility, and full-body strength with low-impact practice.</p>
+                <p>Consistent sessions support better posture, balance, and recovery for everyday activity.</p>
+                <p><strong>Why practice yoga?</strong> Improved posture, balancing, flexibility, calmness and wellbeing.</p>
+            </div>
+        </div>
+    </div>
     {% endif %}
 
     <!-- Instructors by Class Type -->
