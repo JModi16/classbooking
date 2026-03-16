@@ -19,51 +19,6 @@
 
 {% block content %}
 <div class="container mt-4">
-    <!-- Filters -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Filters</h5>
-                    <form method="get" action="{% url 'classes' %}">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="category" class="form-label">Category</label>
-                                <select name="category" id="category" class="form-select">
-                                    <option value="">All Categories</option>
-                                    {% for category in categories %}
-                                        <option value="{{ category.name }}" {% if category.name == selected_category %}selected{% endif %}>{{ category.get_friendly_name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="difficulty" class="form-label">Difficulty</label>
-                                <select name="difficulty" id="difficulty" class="form-select">
-                                    <option value="">All Levels</option>
-                                    {% for value, label in difficulty_choices %}
-                                        <option value="{{ value }}" {% if value == selected_difficulty %}selected{% endif %}>{{ label }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="sort" class="form-label">Sort By</label>
-                                <select name="sort" id="sort" class="form-select">
-                                    <option value="date" {% if selected_sort == 'date' %}selected{% endif %}>Date</option>
-                                    <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-                                    <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-                                    <option value="rating" {% if selected_sort == 'rating' %}selected{% endif %}>Instructor Rating</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
     {% if selected_category == 'Pilates' %}
     <div class="pilates-banner mb-4">
         <div class="pilates-banner-content">
@@ -72,7 +27,7 @@
                 <div class="pilates-image-item">
                     <img src="{% static 'images/home/mattpilates.jpg' %}" alt="Pilates mat training" class="pilates-banner-image">
                 </div>
-                <div class="pilates-image-item">
+                <div class="pilates-image-item pilates-image-item--band">
                     <img src="{% static 'images/home/bandpilates.jpg' %}" alt="Pilates resistance band training" class="pilates-banner-image">
                 </div>
             </div>
