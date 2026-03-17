@@ -71,11 +71,33 @@ def all_classes(request):
         'boxercise': 'Boxercise',
         'personal trainer': 'Personal Trainer',
         'personal training': 'Personal Trainer',
+        'pt': 'Personal Trainer',
     }
+
+    def normalize_category_for_banner(value):
+        if not value:
+            return ''
+        normalized = value.strip().lower()
+        if normalized in category_aliases:
+            return category_aliases[normalized]
+        if 'yog' in normalized:
+            return 'Yoga'
+        if 'pilat' in normalized:
+            return 'Pilates'
+        if 'box' in normalized:
+            return 'Boxercise'
+        if 'personal' in normalized or 'trainer' in normalized:
+            return 'Personal Trainer'
+        return value.strip()
+
     category = raw_category.strip() if raw_category else ''
-    if category:
-        category = category_aliases.get(category.lower(), category)
-        classes = classes.filter(category__name=category)
+    banner_category = normalize_category_for_banner(category)
+
+    if banner_category:
+        if banner_category == 'Personal Trainer':
+            classes = classes.filter(category__name__in=['Personal Trainer', 'Personal Training'])
+        else:
+            classes = classes.filter(category__name__iexact=banner_category)
     
     # Filter by difficulty level
     difficulty = request.GET.get('difficulty')
@@ -114,7 +136,7 @@ def all_classes(request):
     ]
 
     category_name_set = {name for name, _ in target_instructor_counts}
-    selected_category = category if category in category_name_set else ''
+    selected_category = banner_category if banner_category in category_name_set else ''
     is_category_filtered = bool(selected_category)
 
     if selected_category:
@@ -211,6 +233,7 @@ def all_classes(request):
         'search_query': search_query,
         'category_instructor_sections': category_instructor_sections,
         'selected_category': selected_category,
+        'banner_category': selected_category,
         'selected_difficulty': difficulty or '',
         'selected_sort': sort or 'date',
     }
