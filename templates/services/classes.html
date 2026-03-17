@@ -104,6 +104,21 @@
     </div>
     {% endif %}
 
+    {% if selected_category == 'Yoga' %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="pilates-images-container pilates-images-container--compact">
+                <div class="pilates-image-item pilates-image-item--compact">
+                    <img src="{% static 'images/home/reasons-image.jpg' %}" alt="Yoga balance and breathing practice" class="pilates-banner-image">
+                </div>
+                <div class="pilates-image-item pilates-image-item--band pilates-image-item--compact-band">
+                    <img src="{% static 'images/home/movementstretch.jpg' %}" alt="Yoga movement and stretch class" class="pilates-banner-image">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Instructors by Class Type -->
     <div class="row mb-4">
         <div class="col-12">

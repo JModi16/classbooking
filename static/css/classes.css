@@ -36,6 +36,14 @@
     height: 500px;
 }
 
+.pilates-image-item--compact {
+    height: 300px;
+}
+
+.pilates-image-item--compact-band {
+    height: 360px;
+}
+
 .pilates-banner-image {
     width: 100%;
     height: 100%;
@@ -73,6 +81,14 @@
 
     .pilates-image-item--band {
         height: 380px;
+    }
+
+    .pilates-image-item--compact {
+        height: 220px;
+    }
+
+    .pilates-image-item--compact-band {
+        height: 260px;
     }
 
     .pilates-banner-title {
