@@ -20,7 +20,7 @@
 
 .pilates-images-container {
     display: grid;
-    grid-template-columns: 1fr 1.4fr;
+    grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
     margin-bottom: 2rem;
 }
@@ -33,15 +33,7 @@
 }
 
 .pilates-image-item--band {
-    height: 500px;
-}
-
-.pilates-image-item--compact {
-    height: 300px;
-}
-
-.pilates-image-item--compact-band {
-    height: 360px;
+    height: 400px;
 }
 
 .pilates-banner-image {
@@ -80,15 +72,7 @@
     }
 
     .pilates-image-item--band {
-        height: 380px;
-    }
-
-    .pilates-image-item--compact {
-        height: 220px;
-    }
-
-    .pilates-image-item--compact-band {
-        height: 260px;
+        height: 300px;
     }
 
     .pilates-banner-title {
