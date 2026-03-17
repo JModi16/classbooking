@@ -64,8 +64,17 @@ def all_classes(request):
         )
     
     # Filter by category
-    category = request.GET.get('category')
+    raw_category = request.GET.get('category')
+    category_aliases = {
+        'yoga': 'Yoga',
+        'pilates': 'Pilates',
+        'boxercise': 'Boxercise',
+        'personal trainer': 'Personal Trainer',
+        'personal training': 'Personal Trainer',
+    }
+    category = raw_category.strip() if raw_category else ''
     if category:
+        category = category_aliases.get(category.lower(), category)
         classes = classes.filter(category__name=category)
     
     # Filter by difficulty level
