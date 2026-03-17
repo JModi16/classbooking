@@ -62,6 +62,26 @@
             </div>
         </div>
     </div>
+    {% elif selected_category == 'Personal Trainer' or selected_category == 'Personal Training' %}
+    <div class="pilates-banner mb-4">
+        <div class="pilates-banner-content">
+            <h2 class="pilates-banner-title">Why Personal Training?</h2>
+            <div class="pilates-images-container">
+                <div class="pilates-image-item">
+                    <img src="{% static 'images/home/ptclass.jpg' %}" alt="Personal trainer guiding barbell workout" class="pilates-banner-image">
+                </div>
+                <div class="pilates-image-item pilates-image-item--band">
+                    <img src="{% static 'images/home/ptclass2.jpg' %}" alt="Personal trainer coaching dumbbell lunge technique" class="pilates-banner-image">
+                </div>
+            </div>
+            <div class="pilates-banner-text">
+                <p>Personal training gives you a tailored fitness plan based on your goals, level, and progress.</p>
+                <p>One-to-one coaching improves exercise technique, confidence, and results while reducing injury risk.</p>
+                <p>Regular sessions provide structure, accountability, and motivation to keep you consistent.</p>
+                <p><strong>Why practice personal training?</strong> Strength, confidence, technique, progression and wellbeing.</p>
+            </div>
+        </div>
+    </div>
     {% endif %}
 
     <!-- Instructors by Class Type -->
