@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     # Legacy services paths
     path('', views.all_services, name='services'),
+    path('search/', views.site_search, name='site_search'),
     path('<int:service_id>/', views.service_detail, name='service_detail'),
     
     # Exercise class paths
