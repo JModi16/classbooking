@@ -167,3 +167,26 @@ main {
 body {
     padding-bottom: 2rem;
 }
+
+.home-footer {
+    background: linear-gradient(135deg, #5b2a9d 0%, #7b3fbd 100%);
+    border: 1px solid #4d2287;
+}
+
+.home-footer h5 {
+    color: #ffffff;
+}
+
+.home-footer p {
+    color: #f1e9ff;
+}
+
+.home-footer .btn-outline-primary {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+.home-footer .btn-outline-primary:hover {
+    background-color: #ffffff;
+    color: #4d2287;
+}
