@@ -53,6 +53,35 @@
     {% block content %}
     {% endblock %}
 
+    <footer class="bg-primary text-white mt-5 pt-4 pb-3">
+        <div class="container">
+            <div class="row g-4 align-items-start">
+                <div class="col-12 col-md-4">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><a href="{% url 'classes' %}" class="link-light text-decoration-none">Classes</a></li>
+                        <li class="mb-2"><a href="{% url 'instructors' %}" class="link-light text-decoration-none">Instructors</a></li>
+                        <li><a href="{% url 'contact' %}" class="link-light text-decoration-none">Contact Us Form Page</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-4">
+                    <h5 class="mb-3">Contact</h5>
+                    <p class="mb-1"><strong>Email:</strong> support@classbooking.com</p>
+                    <p class="mb-0"><strong>Phone:</strong> +44 1234 567890</p>
+                </div>
+                <div class="col-12 col-md-4">
+                    <h5 class="mb-3">Follow Us</h5>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <a href="https://www.facebook.com" class="btn btn-outline-light btn-sm" target="_blank" rel="noopener noreferrer">Facebook</a>
+                        <a href="https://www.instagram.com" class="btn btn-outline-light btn-sm" target="_blank" rel="noopener noreferrer">Instagram</a>
+                        <a href="https://x.com/" class="btn btn-outline-light btn-sm" target="_blank" rel="noopener noreferrer">X</a>
+                    </div>
+                    <a href="{% url 'classes' %}" class="btn btn-light btn-sm text-primary fw-semibold">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     {% block postloadjs %}
     {% endblock %}
 </body>
