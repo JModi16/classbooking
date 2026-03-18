@@ -50,18 +50,16 @@ def all_classes(request):
     search_query = None
     
     # Search functionality
-    search = request.GET.get('search')
+    search = (request.GET.get('search') or request.GET.get('q') or '').strip()
     if search:
         search_query = search
         classes = classes.filter(
-            name__icontains=search
-        ) | classes.filter(
-            description__icontains=search
-        ) | classes.filter(
-            instructor__user__first_name__icontains=search
-        ) | classes.filter(
-            instructor__user__last_name__icontains=search
-        )
+            Q(name__icontains=search) |
+            Q(description__icontains=search) |
+            Q(instructor__user__first_name__icontains=search) |
+            Q(instructor__user__last_name__icontains=search) |
+            Q(category__name__icontains=search)
+        ).distinct()
     
     # Filter by category
     raw_category = request.GET.get('category')
@@ -291,8 +289,60 @@ def all_instructors(request):
     instructors = Instructor.objects.filter(
         is_active=True
     ).select_related('user').order_by('-is_verified', '-rating')
+
+    search_query = (request.GET.get('search') or request.GET.get('q') or '').strip()
+    if search_query:
+        instructors = instructors.filter(
+            Q(user__first_name__icontains=search_query) |
+            Q(user__last_name__icontains=search_query) |
+            Q(specialties__icontains=search_query) |
+            Q(class_type__icontains=search_query) |
+            Q(bio__icontains=search_query)
+        ).distinct()
     
     context = {
         'instructors': instructors,
+        'search_query': search_query,
     }
     return render(request, 'services/instructors.html', context)
+
+
+def site_search(request):
+    """Search across classes and instructors from one site-wide search bar."""
+    from profiles.models import Instructor
+
+    query = (request.GET.get('q') or '').strip()
+
+    class_results = ExerciseClass.objects.none()
+    instructor_results = Instructor.objects.none()
+
+    if query:
+        class_results = ExerciseClass.objects.filter(
+            start_datetime__gte=timezone.now(),
+            available=True,
+        ).select_related('instructor', 'category').filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(category__name__icontains=query) |
+            Q(instructor__user__first_name__icontains=query) |
+            Q(instructor__user__last_name__icontains=query)
+        ).distinct().order_by('start_datetime')
+
+        instructor_results = Instructor.objects.filter(
+            is_active=True
+        ).select_related('user').filter(
+            Q(user__first_name__icontains=query) |
+            Q(user__last_name__icontains=query) |
+            Q(specialties__icontains=query) |
+            Q(class_type__icontains=query) |
+            Q(bio__icontains=query)
+        ).distinct().order_by('-is_verified', '-rating')
+
+    context = {
+        'query': query,
+        'class_results': class_results,
+        'instructor_results': instructor_results,
+        'class_results_count': class_results.count() if query else 0,
+        'instructor_results_count': instructor_results.count() if query else 0,
+    }
+    return render(request, 'services/search_results.html', context)
