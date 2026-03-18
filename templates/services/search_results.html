@@ -12,6 +12,7 @@
                     Results for "<strong>{{ query }}</strong>" -
                     {{ class_results_count }} class(es), {{ instructor_results_count }} instructor(s)
                 </p>
+                <p class="text-muted small mt-1 mb-0">Tip: try a class type (Yoga, Pilates) or an instructor surname.</p>
             {% else %}
                 <p class="text-muted mb-0">Enter a search term to find classes and instructors.</p>
             {% endif %}
@@ -53,7 +54,10 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="alert alert-info">No matching classes found.</div>
+                <div class="alert alert-info">
+                    No matching classes found.
+                    <a class="alert-link" href="{% url 'classes' %}">Browse all classes</a>.
+                </div>
             {% endif %}
         </div>
 
@@ -82,10 +86,23 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="alert alert-info">No matching instructors found.</div>
+                <div class="alert alert-info">
+                    No matching instructors found.
+                    <a class="alert-link" href="{% url 'instructors' %}">Browse all instructors</a>.
+                </div>
             {% endif %}
         </div>
     </div>
+
+    {% if class_results_count == 0 and instructor_results_count == 0 %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-secondary">
+                <strong>No results yet.</strong> Try broader terms like "Yoga", "Pilates", "Boxercise", or an instructor surname.
+            </div>
+        </div>
+    </div>
+    {% endif %}
     {% endif %}
 </div>
 {% endblock %}
