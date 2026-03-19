@@ -25,6 +25,10 @@
     margin-bottom: 2rem;
 }
 
+.pilates-images-container--pilates {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+}
+
 .pilates-image-item {
     overflow: hidden;
     border-radius: 0.5rem;
@@ -32,11 +36,19 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.pilates-image-item--lead {
+    justify-self: stretch;
+}
+
 .pilates-banner-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+}
+
+.pilates-banner-image--left-focus {
+    object-position: left center;
 }
 
 .pilates-banner-text {
@@ -61,6 +73,10 @@
     .pilates-images-container {
         grid-template-columns: 1fr;
         gap: 1rem;
+    }
+
+    .pilates-images-container--pilates {
+        grid-template-columns: 1fr;
     }
 
     .pilates-image-item {
