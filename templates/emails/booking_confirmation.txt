@@ -23,4 +23,4 @@ Scheduled Class:
 If you need support, reply to this email or contact {{ support_email }}.
 
 Thank you,
-ClassBooking
+Service Booking Platform
