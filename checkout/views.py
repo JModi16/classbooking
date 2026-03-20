@@ -55,7 +55,7 @@ def send_booking_confirmation_email(booking):
     context = {
         'booking': booking,
         'line_items': booking.line_items.all(),
-        'support_email': settings.DEFAULT_FROM_EMAIL,
+        'support_email': settings.SUPPORT_EMAIL,
     }
 
     subject = f'Booking Confirmation - {booking.booking_id}'
