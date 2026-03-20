@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 import importlib.util
 import dj_database_url
+from email.utils import formataddr
 from pathlib import Path
 
 if os.path.isfile('env.py'):
@@ -129,6 +130,8 @@ EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', '1').strip().lower() in ('1', 't
 EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', '0').strip().lower() in ('1', 'true', 'yes', 'on')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_FROM_NAME = os.environ.get('EMAIL_FROM_NAME', 'Service Booking Platform').strip()
+SUPPORT_EMAIL = os.environ.get('SUPPORT_EMAIL', EMAIL_HOST_USER or 'mammas.cakes16@gmail.com').strip()
 
 # Default to SMTP so missing credentials fail loudly rather than silently writing
 # emails to console output.
@@ -229,8 +232,11 @@ STRIPE_CURRENCY = 'gbp'
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
 STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET', '')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'admin@servicebooking.com')
-SERVER_EMAIL = os.environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
+DEFAULT_FROM_EMAIL = os.environ.get(
+    'DEFAULT_FROM_EMAIL',
+    formataddr((EMAIL_FROM_NAME, SUPPORT_EMAIL))
+)
+SERVER_EMAIL = os.environ.get('SERVER_EMAIL', SUPPORT_EMAIL)
 
 # Logging
 LOGGING = {
