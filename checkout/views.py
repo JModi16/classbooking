@@ -260,24 +260,31 @@ def stripe_webhook(request):
     """Handle Stripe webhook events"""
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-    event = None
+    wh_secret = settings.STRIPE_WH_SECRET
+
+    if not wh_secret:
+        logger.error('STRIPE_WH_SECRET is not configured')
+        return HttpResponse('Webhook secret not configured', status=500)
 
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_WH_SECRET
+            payload, sig_header, wh_secret
         )
-    except ValueError:
-        # Invalid payload
+    except ValueError as e:
+        logger.warning(f'Stripe webhook invalid payload: {e}')
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError:
-        # Invalid signature
+    except (stripe.error.SignatureVerificationError, stripe.SignatureVerificationError) as e:
+        logger.warning(f'Stripe webhook invalid signature: {e}')
+        return HttpResponse(status=400)
+    except Exception as e:
+        logger.error(f'Stripe webhook construct_event failed: {type(e).__name__}: {e}')
         return HttpResponse(status=400)
 
     # Handle the event
     if event['type'] == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
         handle_payment_intent_succeeded(payment_intent)
-    
+
     elif event['type'] == 'payment_intent.payment_failed':
         payment_intent = event['data']['object']
         handle_payment_intent_failed(payment_intent)
@@ -288,24 +295,18 @@ def stripe_webhook(request):
 def handle_payment_intent_succeeded(payment_intent):
     """Handle successful payment - update booking status"""
     pid = payment_intent.id
-    
+
     try:
-        # Find booking by stripe_pid
         booking = ClassBooking.objects.get(stripe_pid=pid)
-        
-        # Update booking status
         booking.status = 'confirmed'
         booking.payment_status = 'paid'
         booking.save()
-
         send_booking_confirmation_email(booking)
-        
-        print(f"✅ Booking {booking.booking_id} confirmed via webhook")
-        
+        logger.info(f'Booking {booking.booking_id} confirmed via webhook')
     except ClassBooking.DoesNotExist:
-        print(f"❌ No booking found for payment {pid}")
+        logger.warning(f'No booking found for payment intent {pid}')
     except Exception as e:
-        print(f"❌ Error updating booking: {e}")
+        logger.error(f'Error updating booking for payment intent {pid}: {type(e).__name__}: {e}', exc_info=True)
 
 
 def handle_payment_intent_failed(payment_intent):
