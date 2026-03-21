@@ -244,6 +244,7 @@ def class_detail(request, class_id):
     available_spots = exercise_class.get_available_spots()
     is_full = exercise_class.is_full()
     is_upcoming = exercise_class.is_upcoming()
+    schedule_options = exercise_class.get_schedule_options()
     
     # Get instructor profile
     instructor = exercise_class.instructor
@@ -254,6 +255,7 @@ def class_detail(request, class_id):
         'available_spots': available_spots,
         'is_full': is_full,
         'is_upcoming': is_upcoming,
+        'schedule_options': schedule_options,
     }
     return render(request, 'services/class_detail.html', context)
 
