@@ -15,9 +15,11 @@ Items:
 
 {% if booking.course %}
 Scheduled Class:
-- {{ booking.course.name }}
-- {{ booking.course.start_datetime|date:"l, F d, Y" }}
-- {{ booking.course.start_datetime|date:"g:i A" }} to {{ booking.course.end_datetime|date:"g:i A" }}
+- Class Name: {{ booking.course.name }}
+- Class Type: {% if booking.course.category %}{{ booking.course.category.get_friendly_name|default:booking.course.category.name }}{% else %}General{% endif %}
+- Instructor: {{ booking.course.instructor.get_display_name }}
+- Class Date: {{ booking.course.start_datetime|date:"l, F d, Y" }}
+- Class Time: {{ booking.course.start_datetime|date:"g:i A" }} to {{ booking.course.end_datetime|date:"g:i A" }}
 {% endif %}
 
 If you need support, reply to this email or contact {{ support_email }}.
