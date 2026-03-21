@@ -88,6 +88,35 @@
                 </div>
             </div>
 
+            {% if schedule_options|length > 1 %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-3 text-muted">Choose Your Preferred Date &amp; Time</h6>
+                        <div class="list-group">
+                            {% for scheduled_class in schedule_options %}
+                                <a href="{% url 'class_detail' scheduled_class.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start {% if scheduled_class.id == exercise_class.id %}active{% endif %}">
+                                    <div class="me-3">
+                                        <div class="fw-semibold">{{ scheduled_class.start_datetime|date:"l, F d, Y" }}</div>
+                                        <div class="small {% if scheduled_class.id == exercise_class.id %}text-white-50{% else %}text-muted{% endif %}">
+                                            {{ scheduled_class.start_datetime|date:"g:i A" }} - {{ scheduled_class.end_datetime|date:"g:i A" }}
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        {% if scheduled_class.is_full %}
+                                            <span class="badge bg-danger">Full</span>
+                                        {% elif scheduled_class.id == exercise_class.id %}
+                                            <span class="badge bg-light text-dark">Selected</span>
+                                        {% else %}
+                                            <span class="badge bg-primary">Select</span>
+                                        {% endif %}
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <!-- Price and Availability -->
             <div class="card mb-3">
                 <div class="card-body">
