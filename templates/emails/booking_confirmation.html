@@ -24,9 +24,16 @@
 
     {% if booking.course %}
         <h4>Scheduled Class</h4>
-        <p>{{ booking.course.name }}<br>
-        {{ booking.course.start_datetime|date:"l, F d, Y" }}<br>
-        {{ booking.course.start_datetime|date:"g:i A" }} to {{ booking.course.end_datetime|date:"g:i A" }}</p>
+        <p><strong>Class Name:</strong> {{ booking.course.name }}<br>
+        <strong>Class Type:</strong>
+        {% if booking.course.category %}
+            {{ booking.course.category.get_friendly_name|default:booking.course.category.name }}
+        {% else %}
+            General
+        {% endif %}<br>
+        <strong>Instructor:</strong> {{ booking.course.instructor.get_display_name }}<br>
+        <strong>Class Date:</strong> {{ booking.course.start_datetime|date:"l, F d, Y" }}<br>
+        <strong>Class Time:</strong> {{ booking.course.start_datetime|date:"g:i A" }} to {{ booking.course.end_datetime|date:"g:i A" }}</p>
     {% endif %}
 
     <p>If you need support, contact {{ support_email }}.</p>
