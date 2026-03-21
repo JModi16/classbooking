@@ -79,6 +79,25 @@ class ExerciseClass(models.Model):
         """Check if class is in the future"""
         return self.start_datetime > timezone.now()
 
+    def get_schedule_options(self):
+        """Return upcoming sessions for the same class/instructor combination."""
+        schedule_options = ExerciseClass.objects.filter(
+            instructor=self.instructor,
+            name=self.name,
+            start_datetime__gte=timezone.now(),
+        )
+
+        if self.category_id:
+            schedule_options = schedule_options.filter(category=self.category)
+        else:
+            schedule_options = schedule_options.filter(category__isnull=True)
+
+        return schedule_options.select_related('category', 'instructor').order_by('start_datetime')
+
+    def get_schedule_label(self):
+        """Return a readable schedule label for template display."""
+        return self.start_datetime.strftime('%A, %B %d, %Y at %I:%M %p')
+
     def clean(self):
         """Validate that end_datetime is after start_datetime"""
         if self.end_datetime <= self.start_datetime:
