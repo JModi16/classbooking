@@ -275,10 +275,16 @@ def instructor_profile(request, instructor_id):
 
     next_bookable_class = classes.first()
     
+    # Calculate per-session rates for packages
+    package_5_per_session = instructor.package_5_rate / 5 if instructor.package_5_rate else None
+    package_10_per_session = instructor.package_10_rate / 10 if instructor.package_10_rate else None
+    
     context = {
         'instructor': instructor,
         'classes': classes,
         'next_bookable_class': next_bookable_class,
+        'package_5_per_session': package_5_per_session,
+        'package_10_per_session': package_10_per_session,
     }
     return render(request, 'services/instructor_profile.html', context)
 
