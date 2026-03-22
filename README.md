@@ -67,4 +67,46 @@ Class-Booking is my forth milestone project for Code Institute's Level 5 Diploma
 * Add/Edit/Delete class descriptions
 * Add/Edit/Remove class rates and packages
 * Access payments received by Stripe using webhooks from my stripe portal
-* Update Adhoc site content and data. 
+* Update Adhoc site content and data.
+
+* ## Structure
+
+ ### Database Schema
+The database was designed using DpDiagram.io. There are 5 tables within this relational database: User, Cake, Customer, Order and OrderItem.
+<details><summary>ERD</summary>
+<img src="static/images/erdcakes.png">
+</details>
+
+
+## Skeleton
+   ### Wireframes
+
+<details><summary>Home Page</summary>
+<img src="static/images/home/mammashomewf.png">
+</details>
+<details><summary>Templates</summary>
+<img src="static/images/home/mammastemplateswf.png">
+</details>
+<details><summary>Account Creation</summary>
+<img src="static/images/mammasregisterwf.png">
+</details>
+<details><summary>Login</summary>
+<img src="static/images/mammasloginwf.png">
+</details>
+<details><summary>Order Confirm</summary>
+<img src="static/images/orderconfirmwf.png">
+</details>
+
+## Surface
+
+### **Colour** 
+The Colour palette is a mixture of 3 colours. Dark blue for the header, white colour for the main body and light blue for the footer.The buttons consists of blue colours too.
+ 
+
+### **Typography** 
+
+Fonts were imported from [Google Fonts](https://fonts.google.com/). 
+
+I selected  "Arial"  as the primary font for the main body and Sans-Serif as the Secondary font . I found the Aerial font is a simple, user-friendly, outstanding and clean typeface that contributes the design. 
+I selected light blue, white as the main body colors and purple for the footer.
+
