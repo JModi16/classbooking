@@ -88,10 +88,10 @@ The database was designed using DpDiagram.io. There are 5 tables within this rel
 <img src="static/images/home/typeofclass.png">
 </details>
 <details><summary>Class Description</summary>
-<img src="static/images/classdescription.png">
+<img src="static/images/home/classdescription.png">
 </details>
 <details><summary>Card payment Template</summary>
-<img src="static/images/cardconfirmation.png">
+<img src="static/images/home/cardconfirmation.png">
 </details>
 
 ## Surface
