@@ -35,3 +35,36 @@ Class-Booking is my forth milestone project for Code Institute's Level 5 Diploma
 * [Future Enhancements](#Future-Enhancements)
 * [Deployment](#deployment)
 * [Credits](#credits)
+
+## Strategy
+
+### User stories
+
+1. As a first time user, I want to; 
+
+* Search for classes by class type of class from the navigation menu
+* Search for a class for unified search input
+* Search for classes I am interested in  
+* Look for various class instructors, from the Instructors page
+* Register my profile as a student
+* Login as a student enabling me to create a class booking
+* Book  a class according to my schedule and date instructor is available 
+* Make a secure payment for a class 
+* Receive a class booking confirmation mail
+
+2. A a regular student, I want to;
+
+* Login to view my bookings
+* Login to make further class bookings with ease
+* Acess the site from various devices with response, clear appearance and functionality
+* All the above as the first time user
+ 
+3. As a Site Administrator: I want to 
+
+* Update Class Instructors
+* Update class types
+* Update photos of class instructors
+* Add/Edit/Delete class descriptions
+* Add/Edit/Remove class rates and packages
+* Access payments received by Stripe using webhooks from my stripe portal
+* Update Adhoc site content and data. 
