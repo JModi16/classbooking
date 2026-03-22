@@ -128,7 +128,7 @@
                                     <td><strong>5 Session Package</strong></td>
                                     <td>Great for short-term commitment</td>
                                     <td class="text-end">£{{ instructor.package_5_rate }}</td>
-                                    <td class="text-end">£{{ instructor.package_5_rate|widthratio:5:1|floatformat:2 }}</td>
+                                    <td class="text-end">£{{ package_5_per_session|floatformat:2 }}</td>
                                     <td class="text-end">
                                         {% if user.is_authenticated %}
                                             <button class="btn btn-sm btn-outline-primary add-package-btn" data-add-url="{% url 'add_package_to_cart' instructor.id 'pack5' %}">Add to Cart</button>
@@ -144,7 +144,7 @@
                                     <td><strong>10 Session Package</strong> <span class="badge bg-success">Best Value</span></td>
                                     <td>Most popular - save more per session</td>
                                     <td class="text-end">£{{ instructor.package_10_rate }}</td>
-                                    <td class="text-end">£{{ instructor.package_10_rate|widthratio:10:1|floatformat:2 }}</td>
+                                    <td class="text-end">£{{ package_10_per_session|floatformat:2 }}</td>
                                     <td class="text-end">
                                         {% if user.is_authenticated %}
                                             <button class="btn btn-sm btn-outline-success add-package-btn" data-add-url="{% url 'add_package_to_cart' instructor.id 'pack10' %}">Add to Cart</button>
