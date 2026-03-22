@@ -61,6 +61,15 @@
                                             <i class="far fa-calendar me-1"></i>{{ booking.course.start_datetime|date:"D, M d, Y" }}<br>
                                             <i class="far fa-clock me-1"></i>{{ booking.course.start_datetime|date:"g:i A" }} - {{ booking.course.end_datetime|date:"g:i A" }}
                                         </p>
+                                    {% elif booking.instructor %}
+                                        <p class="card-text small text-muted mb-2">
+                                            <strong>Instructor:</strong> {{ booking.instructor.get_display_name }}
+                                        </p>
+                                        {% if booking.instructor.specialties %}
+                                        <p class="card-text small text-muted mb-2">
+                                            <strong>Class Type:</strong> {{ booking.instructor.specialties }}
+                                        </p>
+                                        {% endif %}
                                     {% endif %}
                                     <p class="card-text">
                                         {% if booking.status == 'confirmed' %}
@@ -122,7 +131,10 @@
                                     </div>
                                 {% endif %}
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title">{{ booking.course.name }}</h5>
+                                    <h5 class="card-title">
+                                        {% if booking.course %}{{ booking.course.name }}{% else %}{{ booking.line_items.first.description|default:'Package Booking' }}{% endif %}
+                                    </h5>
+                                    {% if booking.course %}
                                     <p class="card-text small text-muted mb-2">
                                         <strong>Instructor:</strong> {{ booking.course.instructor.get_display_name }}
                                     </p>
@@ -130,6 +142,16 @@
                                         <i class="far fa-calendar me-1"></i>{{ booking.course.start_datetime|date:"D, M d, Y" }}<br>
                                         <i class="far fa-clock me-1"></i>{{ booking.course.start_datetime|date:"g:i A" }}
                                     </p>
+                                    {% elif booking.instructor %}
+                                    <p class="card-text small text-muted mb-2">
+                                        <strong>Instructor:</strong> {{ booking.instructor.get_display_name }}
+                                    </p>
+                                    {% if booking.instructor.specialties %}
+                                    <p class="card-text small text-muted mb-2">
+                                        <strong>Class Type:</strong> {{ booking.instructor.specialties }}
+                                    </p>
+                                    {% endif %}
+                                    {% endif %}
                                     <p class="card-text">
                                         {% if booking.status == 'completed' %}
                                             <span class="badge bg-primary">Completed</span>
