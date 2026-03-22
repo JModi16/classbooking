@@ -23,7 +23,7 @@ Scheduled Class:
 {% elif booking.instructor %}
 Package Details:
 - Instructor: {{ booking.instructor.get_display_name }}
-{% if booking.instructor.specialties %}- Specialties: {{ booking.instructor.specialties }}
+{% if booking.instructor.specialties %}- Class Type: {{ booking.instructor.specialties }}
 {% endif %}- Valid for: 3 months from purchase date
 {% endif %}
 
