@@ -197,11 +197,20 @@ def cache_checkout_data(request):
         first_class_item = next((item for item in cart_items if item['item_type'] == 'class'), None)
         course = first_class_item['exercise_class'] if first_class_item else None
 
+        # For package-only carts, capture the instructor from the first package item
+        first_package_item = next((item for item in cart_items if item['item_type'] == 'package'), None)
+        booking_instructor = None
+        if course:
+            booking_instructor = course.instructor
+        elif first_package_item:
+            booking_instructor = first_package_item['instructor']
+
         # Create booking with pending status
         booking = ClassBooking.objects.create(
             booking_id=uuid.uuid4().hex,
             user=request.user,
             course=course,
+            instructor=booking_instructor,
             full_name=request.user.get_full_name() or request.user.username,
             email=request.user.email,
             status='pending',
