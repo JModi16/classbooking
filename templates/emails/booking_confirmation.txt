@@ -20,6 +20,11 @@ Scheduled Class:
 - Instructor: {{ booking.course.instructor.get_display_name }}
 - Class Date: {{ booking.course.start_datetime|date:"l, F d, Y" }}
 - Class Time: {{ booking.course.start_datetime|date:"g:i A" }} to {{ booking.course.end_datetime|date:"g:i A" }}
+{% elif booking.instructor %}
+Package Details:
+- Instructor: {{ booking.instructor.get_display_name }}
+{% if booking.instructor.specialties %}- Specialties: {{ booking.instructor.specialties }}
+{% endif %}- Valid for: 3 months from purchase date
 {% endif %}
 
 If you need support, reply to this email or contact {{ support_email }}.
