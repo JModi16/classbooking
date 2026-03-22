@@ -38,7 +38,7 @@
         <h4>Package Details</h4>
         <p><strong>Instructor:</strong> {{ booking.instructor.get_display_name }}<br>
         {% if booking.instructor.specialties %}
-        <strong>Specialties:</strong> {{ booking.instructor.specialties }}<br>
+        <strong>Class Type:</strong> {{ booking.instructor.specialties }}<br>
         {% endif %}
         <strong>Valid for:</strong> 3 months from purchase date</p>
     {% endif %}
