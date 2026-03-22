@@ -24,6 +24,9 @@ class InstructorAdmin(admin.ModelAdmin):
         ('Rating & Reviews', {
             'fields': ('rating', 'total_reviews')
         }),
+        ('Rates & Packages', {
+            'fields': ('hourly_rate', 'package_single_rate', 'package_5_rate', 'package_10_rate', 'package_monthly_rate')
+        }),
         ('Media & Contact', {
             'fields': ('image', 'phone', 'instagram')
         }),
