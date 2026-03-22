@@ -61,6 +61,7 @@ class ClassBooking(models.Model):
     
     # Booking details
     course = models.ForeignKey(ExerciseClass, on_delete=models.PROTECT, related_name='bookings', null=True, blank=True)
+    instructor = models.ForeignKey('profiles.Instructor', on_delete=models.SET_NULL, null=True, blank=True, related_name='package_bookings')
     
     # Participant info
     full_name = models.CharField(max_length=254)
