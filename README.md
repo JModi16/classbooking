@@ -82,19 +82,16 @@ The database was designed using DpDiagram.io. There are 5 tables within this rel
    ### Wireframes
 
 <details><summary>Home Page</summary>
-<img src="static/images/home/mammashomewf.png">
+<img src="static/images/home/homepage.png">
 </details>
-<details><summary>Templates</summary>
-<img src="static/images/home/mammastemplateswf.png">
+<details><summary>Type of Class</summary>
+<img src="static/images/home/typeofclass.png">
 </details>
-<details><summary>Account Creation</summary>
-<img src="static/images/mammasregisterwf.png">
+<details><summary>Class Description</summary>
+<img src="static/images/classdescription.png">
 </details>
-<details><summary>Login</summary>
-<img src="static/images/mammasloginwf.png">
-</details>
-<details><summary>Order Confirm</summary>
-<img src="static/images/orderconfirmwf.png">
+<details><summary>Card payment Template</summary>
+<img src="static/images/cardconfirmation.png">
 </details>
 
 ## Surface
