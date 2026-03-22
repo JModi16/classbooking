@@ -34,6 +34,13 @@
         <strong>Instructor:</strong> {{ booking.course.instructor.get_display_name }}<br>
         <strong>Class Date:</strong> {{ booking.course.start_datetime|date:"l, F d, Y" }}<br>
         <strong>Class Time:</strong> {{ booking.course.start_datetime|date:"g:i A" }} to {{ booking.course.end_datetime|date:"g:i A" }}</p>
+    {% elif booking.instructor %}
+        <h4>Package Details</h4>
+        <p><strong>Instructor:</strong> {{ booking.instructor.get_display_name }}<br>
+        {% if booking.instructor.specialties %}
+        <strong>Specialties:</strong> {{ booking.instructor.specialties }}<br>
+        {% endif %}
+        <strong>Valid for:</strong> 3 months from purchase date</p>
     {% endif %}
 
     <p>If you need support, contact {{ support_email }}.</p>
