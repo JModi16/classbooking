@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_title %}- Login{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-shell {
+        min-height: calc(100vh - 220px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+        background:
+            radial-gradient(circle at 15% 20%, rgba(0, 123, 255, 0.10), transparent 35%),
+            radial-gradient(circle at 85% 80%, rgba(13, 110, 253, 0.08), transparent 35%),
+            #f2f5fa;
+    }
+
+    .auth-card {
+        width: 100%;
+        max-width: 760px;
+        border: 1px solid #d8dee9;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 14px 32px rgba(22, 35, 68, 0.08);
+        overflow: hidden;
+    }
+
+    .auth-card-header {
+        text-align: center;
+        border-bottom: 1px solid #e9edf3;
+        padding: 1.5rem 1.25rem;
+    }
+
+    .auth-card-header h1 {
+        margin: 0;
+        font-size: clamp(1.65rem, 2.7vw, 2.25rem);
+        font-weight: 700;
+        color: #1d2b44;
+    }
+
+    .auth-card-body {
+        padding: 1.6rem;
+    }
+
+    .auth-field {
+        margin-bottom: 1rem;
+    }
+
+    .auth-field label {
+        display: block;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.45rem;
+    }
+
+    .auth-field input {
+        width: 100%;
+        border: 1px solid #c9d3e2;
+        border-radius: 8px;
+        padding: 0.62rem 0.75rem;
+        font-size: 1rem;
+    }
+
+    .auth-field input:focus {
+        outline: none;
+        border-color: #1f6feb;
+        box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.14);
+    }
+
+    .auth-submit {
+        width: 100%;
+        border: 0;
+        border-radius: 8px;
+        padding: 0.72rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #ffffff;
+        background: linear-gradient(90deg, #1f6feb, #2f81f7);
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .auth-submit:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 16px rgba(31, 111, 235, 0.24);
+    }
+
+    .auth-links {
+        text-align: center;
+        margin-top: 1.2rem;
+    }
+
+    .auth-links p {
+        margin-bottom: 0.8rem;
+        color: #334155;
+    }
+
+    .auth-links a {
+        color: #1f6feb;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .auth-links a:hover {
+        text-decoration: underline;
+    }
+
+    .auth-errors {
+        margin-bottom: 1rem;
+    }
+
+    .auth-errors ul {
+        margin: 0;
+        padding-left: 1.1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+    <section class="auth-card" aria-labelledby="login-title">
+        <header class="auth-card-header">
+            <h1 id="login-title">{% trans "Login to Your Account" %}</h1>
+        </header>
+        <div class="auth-card-body">
+            <form method="post" action="{% url 'account_login' %}">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger auth-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    {% if field.name != 'remember' %}
+                        <div class="auth-field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <button class="auth-submit" type="submit">{% trans "Login" %}</button>
+
+                <div class="auth-links">
+                    <p><a href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a></p>
+                    <p>{% trans "Don't have an account?" %} <a href="{% url 'account_signup' %}">{% trans "Sign up here" %}</a></p>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock %}
