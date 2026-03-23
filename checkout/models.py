@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+from django.utils import timezone
 from services.models import Service, ExerciseClass
 import uuid
 
@@ -108,15 +111,27 @@ class ClassBooking(models.Model):
 
     def get_instructor(self):
         """Get the instructor for this booking"""
-        if not self.course:
-            return None
-        return self.course.instructor
+        if self.course:
+            return self.course.instructor
+        return self.instructor
 
     def get_class_date(self):
         """Get the class date"""
         if not self.course:
             return None
         return self.course.start_datetime.date()
+
+    def get_cancellation_deadline(self):
+        """Return the last time a class booking can be cancelled."""
+        if not self.course:
+            return None
+        return self.course.start_datetime - timedelta(hours=24)
+
+    def can_cancel(self):
+        """Allow cancellation only for scheduled classes more than 24 hours away."""
+        if not self.course or self.status != 'confirmed':
+            return False
+        return timezone.now() < self.get_cancellation_deadline()
 
 
 class ClassBookingLineItem(models.Model):
