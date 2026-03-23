@@ -115,42 +115,48 @@ I selected light blue, white as the main body colors and purple for the footer.
 
 <details><summary>Home Page</summary>
 Site is opened on this page
-<img src="static/images/classhome.png">
+<img src="static/images/home/classhome.png">
 </details>
 <details><summary>Classes Type</summary>
 Students can view a range class types offfered on this platform from the classes page.Clicking on 'Browse Classes' directs you to the same page too.
-<img src="static/images/classtype.png">
+<img src="static/images/home/classtype.png">
 </details>
 <details><summary>Instructors</summary>
 Students can view a range of Instructors on this page.
-<img src="static/images/instructors.png">
+<img src="static/images/home/instructors.png">
 </details>
 <details><summary>Login</summary>
-<img src="static/images/classlogin.png">
+<img src="static/images/home/classlogin.png">
 </details> Customer are required to register and login before booking a class
-<details><summary> Instructor profile and Book class</summary>
-<img src="static/image/viewbook.png">
-</details>Students can view any Instructors profile, view rates and packages information and book a class
-<details><summary>Scheduled Class</summary>
-<img src="static/images/schedule.png">
-</details>students can book an upcoming scheduled class with their instructor
-<details><summary>Class Packages</summary>
-<img src="static/images/packages.png">
-</details>Students have the option of selecting a package of classes to purchase
-<details><summary>Order History</summary>
-<img src="static/images/cakesorderhistory.png">
-</details> Customer can view their orders whilst logged in to their profile
-<details><summary>Registration</summary>
-<img src="static/images/register.png">
-</details> It's mandatory for customers to register, if they already heavent to place an orde
 <details><summary>Password Reset</summary>
 <img src="static/images/passwordreset.png">
-</details> Customers can request a password reset should they forget their login details. Entering an email address registered on our system will enable them to receive a password reset link to reset their password.
-<details><summary>Contact Us</summary>
-<img src="static/images/contactus.png">
-</details> Customer can contact the firm about any query via the form
-<details><summary>Contact Mail Confirmation</summary>
-<img src="static/images/contactrequestmail.png">
-</details> Confirmation the business has received a contact request query
+</details> Students can request a password reset should they forget their login details. Entering an email address registered on our system will enable them to receive a password reset link to reset their password.
+<details><summary> Instructor profile and Book class</summary> 
+<img src="static/image/home/viewbook.png">
+</details>Students can view any Instructors profile, view rates and packages information and book a class
+<details><summary>Scheduled Class</summary>
+<img src="static/images/home/schedule.png">
+</details>students can book an upcoming scheduled class with their instructor
+<details><summary>Class Packages</summary>
+<img src="static/images/home/packages.png">
+</details>Students have the option of selecting a package of classes to purchase
+<details><summary>Booking Cart</summary>
+<img src="static/images/home/cart.png">
+</details> Students can view their booking cart displaying class bookings, boooking summary with total cost with the option of proceeding to checkout page, editing a class by removing or going back to classes to view and book a different class type.
+<details><summary>Edit Cart</summary>
+<img src="static/images/home/editcart.png">
+</details> Students can remove a class from the booking cart page
+<details><summary>Checkout</summary>
+<img src="static/images/home/checkout.png">
+</details> At the checkout page, students are presented to enter their card details and complete order. The site is in test mode so only default test card number can be accepted
+<details><summary>Confirmation</summary>
+<img src="static/images/home/confirmed.png">
+</details> Confirmation window that your card details have been accepted
+<details><summary>Email Class Booking Confirmation</summary>
+<img src="static/images/home/mailconfirm.png">
+</details> Confirmation the student has received class booking confirmation
+<details><summary>Stripe Transaction Summary</summary>
+<img src="static/images/home/stripesuccess.png">
+</details> Stripe Dashboard in the Events and Logs show payment has succeeded
 
 
