@@ -97,13 +97,60 @@ The database was designed using DpDiagram.io. There are 5 tables within this rel
 ## Surface
 
 ### **Colour** 
-The Colour palette is a mixture of 3 colours. Dark blue for the header, white colour for the main body and light blue for the footer.The buttons consists of blue colours too.
+The Colour palette is a mixture of 3 colours. Dark blue for the header, white colour for the main body and Purple for the footer.The buttons consists of red and blue colours.
  
 
 ### **Typography** 
 
 Fonts were imported from [Google Fonts](https://fonts.google.com/). 
 
-I selected  "Arial"  as the primary font for the main body and Sans-Serif as the Secondary font . I found the Aerial font is a simple, user-friendly, outstanding and clean typeface that contributes the design. 
-I selected light blue, white as the main body colors and purple for the footer.
+I selected  "Arial"  as the primary font for the main body and Sans-Serif as the Secondary font . I found the Aerial font is a simple, user-friendly, outstanding and clean typeface that contributes the design. I have used Arial has the primary for my previous 3 projects and wanted to main the font typography.
+I selected light blue, white as the main body colors and purple for the footer. 
+
+# Features
+
+## Home Page
+
+## User Functionality
+
+<details><summary>Home Page</summary>
+Site is opened on this page
+<img src="static/images/classhome.png">
+</details>
+<details><summary>Classes Type</summary>
+Students can view a range class types offfered on this platform from the classes page.Clicking on 'Browse Classes' directs you to the same page too.
+<img src="static/images/classtype.png">
+</details>
+<details><summary>Instructors</summary>
+Students can view a range of Instructors on this page.
+<img src="static/images/instructors.png">
+</details>
+<details><summary>Login</summary>
+<img src="static/images/classlogin.png">
+</details> Customer are required to register and login before booking a class
+<details><summary> Instructor profile and Book class</summary>
+<img src="static/image/viewbook.png">
+</details>Students can view any Instructors profile, view rates and packages information and book a class
+<details><summary>Scheduled Class</summary>
+<img src="static/images/schedule.png">
+</details>students can book an upcoming scheduled class with their instructor
+<details><summary>Class Packages</summary>
+<img src="static/images/packages.png">
+</details>Students have the option of selecting a package of classes to purchase
+<details><summary>Order History</summary>
+<img src="static/images/cakesorderhistory.png">
+</details> Customer can view their orders whilst logged in to their profile
+<details><summary>Registration</summary>
+<img src="static/images/register.png">
+</details> It's mandatory for customers to register, if they already heavent to place an orde
+<details><summary>Password Reset</summary>
+<img src="static/images/passwordreset.png">
+</details> Customers can request a password reset should they forget their login details. Entering an email address registered on our system will enable them to receive a password reset link to reset their password.
+<details><summary>Contact Us</summary>
+<img src="static/images/contactus.png">
+</details> Customer can contact the firm about any query via the form
+<details><summary>Contact Mail Confirmation</summary>
+<img src="static/images/contactrequestmail.png">
+</details> Confirmation the business has received a contact request query
+
 
