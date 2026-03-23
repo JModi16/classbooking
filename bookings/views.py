@@ -9,7 +9,9 @@ from checkout.models import ClassBooking
 @login_required
 def my_bookings(request):
     """Display user's class bookings"""
-    bookings = ClassBooking.objects.filter(user=request.user).select_related('course', 'course__instructor').prefetch_related('line_items').order_by('-created_at')
+    bookings = ClassBooking.objects.filter(user=request.user).select_related(
+        'course', 'course__instructor', 'instructor'
+    ).prefetch_related('line_items').order_by('-created_at')
     
     # Separate into upcoming and past bookings
     now = timezone.now()
@@ -44,10 +46,9 @@ def cancel_booking(request, booking_id):
     if not booking.course:
         messages.error(request, 'This booking does not have a scheduled class to cancel.')
         return redirect('booking_detail', booking_id=booking_id)
-    
-    # Check if class hasn't started yet
-    if booking.course and booking.course.start_datetime <= timezone.now():
-        messages.error(request, 'Cannot cancel a booking for a class that has already started.')
+
+    if not booking.can_cancel():
+        messages.error(request, 'Classes can only be cancelled more than 24 hours before the scheduled start time.')
         return redirect('booking_detail', booking_id=booking_id)
     
     if request.method == 'POST':
