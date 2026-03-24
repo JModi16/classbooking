@@ -44,14 +44,14 @@
                         {% else %}
                             <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center instructor-photo-placeholder">
                                 <div class="text-center">
-                                    <h1 class="mb-0">{{ instructor.user.first_name.0 }}{{ instructor.user.last_name.0 }}</h1>
+                                    <span class="mb-0 display-4 fw-bold" aria-hidden="true">{{ instructor.user.first_name.0 }}{{ instructor.user.last_name.0 }}</span>
                                 </div>
                             </div>
                         {% endif %}
                         
                         <div class="card-body d-flex flex-column">
                             <!-- Name and Badge -->
-                            <h5 class="card-title">{{ instructor.get_display_name }}</h5>
+                            <h2 class="card-title h5">{{ instructor.get_display_name }}</h2>
                             
                             {% if instructor.is_verified %}
                                 <span class="badge bg-success mb-2 w-fit">
@@ -102,7 +102,7 @@
         {% else %}
             <div class="col-12">
                 <div class="alert alert-info text-center">
-                    <h5>No instructors available</h5>
+                    <h2 class="h5">No instructors available</h2>
                     <p class="mb-0">Check back soon for our team of expert instructors.</p>
                 </div>
             </div>
