@@ -194,7 +194,30 @@ Site Administrators only have priveleges to modify the site such as;  add / remo
 5. Under 'Object Ownership' select 'ACLs enabled' and leave the Object Ownership as Bucket owner preferred 
 6. Uncheck the 'Block all public access' checkbox and check the warning box to acknowledge that the bucket will be made public, then click create bucket 
 7. Once created, click the bucket's name and navigate to the properties tab. Scroll to the bottom and under 'Static website hosting' click 'edit' and change the Static website hosting option to 'enabled'. Copy the default values for the index and error documents and click 'save changes'
-8. Now navigate to the permissions tab, scroll down to the Cross-origin resource sharing (CORS) section, click edit and paste in the following code:  
+8. Now navigate to the permissions tab, scroll down to the Cross-origin resource sharing (CORS) section, click edit and paste in the following code:
+    ```
+   [
+        {
+            "AllowedHeaders": [
+            "Authorization"
+            ],
+            "AllowedMethods": [
+            "GET"
+            ],
+            "AllowedOrigins": [
+            "*"
+            ],
+            "ExposeHeaders": []
+        }
+    ]
+    ```
+9. Then scroll back up to the 'Bucket Policy' section. Click 'edit' and then 'Policy generator'. This should open the AWS policy generator page
+10. Under the 'select type of policy' dropdown menu, select 'S3 Bucket Policy', and inside 'Principle' allow all principals by typing a '*'
+11. From the 'Actions dropdown menu select 'Get object'. Then head back to the previous tab and locate the Bucket ARN number. Copy that, return to the policy generator and paste it in the field labelled Amazon Resource Name (ARN)
+12. Once that's completed click 'Add statement', then 'Generate Policy'. Copy the policy that's been generated and paste it into the bucket policy editor
+13. Before you click save, add a '/*' at the end of your resource key. This is to allow access to all resources in this bucket
+14. Once those changes are saved, scroll down to the Access control list (ACL) section and click 'edit'
+15. Next to 'Everyone (public access)', check the 'list' checkbox. This will pop up a warning box that you will also have to check. Once that's done click 'save'
 
  
 
