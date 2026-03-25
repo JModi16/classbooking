@@ -257,39 +257,105 @@ When your bucket is ready you need to create a user to access it.
 
 ### Connect AWS to django
 
-After creating a S3 bucket you need to connect it to django
-
-1. Install two packages, Boto3 and Django storages, by running these commands:  
-    ```
-    pip3 install boto3
-    pip3 install django-storages
-    ```
-    And remember to freeze the requirements with:  
-    ```
-    pip3 freeze > requirements.txt
-    ```
-2. Add 'storages' to your installed apps section inside your settings.py file
-3. Next, in your setting.py file on the bottom, add an if statement to check if there is an environment variable called USE_AWS. This variable does not exist yet but we will add it later. Inside the if statement, write the following settings so it looks like this:  
-    ```
-    if 'USE_AWS' in os.environ:
-        AWS_STORAGE_BUCKET_NAME = 'insert-your-bucket-name-here'
-        AWS_S3_REGION_NAME = 'insert-your-region-here'
-        AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    ```
-4. Next, go back to heroku and in the settings tab, under config vars, add keys with values that were downloaded earlier in the CSV file.
-5. Add the key USE_AWS, and set the value to True.
-6. Remove now the DISABLE_COLLECTSTAIC variable, since django should now collect static files automatically and upload them to S3.
-7. Now head back to the settings.py file in your django project to the if statement you wrote earlier and inside the statement add this line setting:  
-    ```
+1. Install boto3 and django storages and freeze them to the requirements.txt file.
+```
+pip3 install boto3
+pip3 install django-storages
+pip3 freeze > requirements.txt
+```
+2. In settings.py add `'storages',` to installed apps
+3. To use our bucket if we are using the deployed site, in settings.py add the following:
+```
+if 'USE_AWS' in os.environ:
+    AWS_S3_OBJECT_PARAMETERS = {
+        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+        'CacheControl': 'max-age=9460800',
+    }
+    
+    AWS_STORAGE_BUCKET_NAME = 'enter your bucket name here'
+    AWS_S3_REGION_NAME = 'enter the region you selected here'
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-    ```
-    This will tell django where your static files will be coming from in production.
-8. Next in the root directory of your project create a file called 'custom_storages.py'. Inside this file import your settings as well as the s3boto3 storage class. Insert this code at the top of the file:
+```
+4. Update Heroku config vars(see Heroku deployment section), remove the DISABLE_COLLECTSTATIC variable.
+5. Create a file called custom_storages.py in the root, add imports and custom classes. These will tell the app the location to store static and media files:
+```
+from django.conf import settings
+from storages.backends.s3boto3 import S3Boto3Storage
 
 
- 
+class StaticStorage(S3Boto3Storage):
+    location = settings.STATICFILES_LOCATION
 
 
+class MediaStorage(S3Boto3Storage):
+    location = settings.MEDIAFILES_LOCATION
+```
 
+6. To let the app know where to store static and media files, and to override the static and media URLs in production, add to settings.py: 
+```
+STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+STATICFILES_LOCATION = 'static'
+DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+MEDIAFILES_LOCATION = 'media'
 
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
+```
+7. Save, add, commit and push these changes to make a deployment to Heroku. In the build log you will see that the static files were collected, and in our S3 bucket we can see the static folder with all the static files in it.
+8. Navigate to S3 and open the bucket. Create folder and name it 'media', to store all the media files for the site. Add media files for site by clicking upload and choosing the relevant files.
+
+#### Correct settings.py configuration
+1. Ensure the following final setup within the settings.py file looks like this:
+```
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+if 'USE_AWS' in os.environ:
+     # Cache control
+    AWS_S3_OBJECT_PARAMETERS = {
+        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+        'CacheControl': 'max-age=94608000',
+    }
+    
+    # Bucket Config
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'eu-north-1')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
+
+    # Static and media files
+    STATICFILES_LOCATION = 'static'
+    MEDIAFILES_LOCATION = 'media'
+
+    # Override static and media URLs in production
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Stripe
+STRIPE_CURRENCY = 'gbp'
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
+STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
+
+# Email settings
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', '1').strip().lower() in ('1', 'true', 'yes', 'on')
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', '0').strip().lower() in ('1', 'true', 'yes', 'on')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_FROM_NAME = os.environ.get('EMAIL_FROM_NAME', 'Service Booking Platform').strip()
+SUPPORT_EMAIL = os.environ.get('SUPPORT_EMAIL', EMAIL_HOST_USER or 'mammas.cakes16@gmail.com').strip()
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+```
