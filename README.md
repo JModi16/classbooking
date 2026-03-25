@@ -184,6 +184,18 @@ Site Administrators only have priveleges to modify the site such as;  add / remo
 <img src="static/images/scheduledclasses.png">
 </details>Admins can view upcoming scheduled and past scheduled classes booked by students and past classes in Checkout, Class bookings
 
+
+### Set Up AWS to store static and media files
+
+1. Sign up to AWS [here](https://aws.amazon.com/).
+2. Created an account and logged in, under the All Services>Storage menu, click the link that says S3.
+3. On the S3 page create a new bucket. Click the orange button that says 'Create Bucket'
+4. Name the bucket and select the closest region to you
+5. Under 'Object Ownership' select 'ACLs enabled' and leave the Object Ownership as Bucket owner preferred 
+6. Uncheck the 'Block all public access' checkbox and check the warning box to acknowledge that the bucket will be made public, then click create bucket 
+7. Once created, click the bucket's name and navigate to the properties tab. Scroll to the bottom and under 'Static website hosting' click 'edit' and change the Static website hosting option to 'enabled'. Copy the default values for the index and error documents and click 'save changes'
+8. Now navigate to the permissions tab, scroll down to the Cross-origin resource sharing (CORS) section, click edit and paste in the following code:  
+
  
 
 
