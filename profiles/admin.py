@@ -10,16 +10,16 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 
 class InstructorAdmin(admin.ModelAdmin):
-    list_display = ('get_name', 'is_verified', 'years_experience', 'rating', 'total_reviews', 'is_active')
+    list_display = ('get_name', 'class_type', 'is_verified', 'years_experience', 'rating', 'total_reviews', 'is_active')
     list_filter = ('is_verified', 'is_active', 'created_at', 'years_experience')
-    search_fields = ('user__first_name', 'user__last_name', 'user__email', 'specialties')
+    search_fields = ('user__first_name', 'user__last_name', 'user__email', 'specialties', 'class_type')
     readonly_fields = ('created_at', 'updated_at')
     fieldsets = (
         ('User Info', {
             'fields': ('user',)
         }),
         ('Professional Info', {
-            'fields': ('bio', 'specialties', 'certifications', 'years_experience')
+            'fields': ('bio', 'class_type', 'specialties', 'certifications', 'years_experience')
         }),
         ('Rating & Reviews', {
             'fields': ('rating', 'total_reviews')
