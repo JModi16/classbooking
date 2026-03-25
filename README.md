@@ -255,6 +255,38 @@ When your bucket is ready you need to create a user to access it.
 13. Select your group that has the policy attached and click 'Next: Tags', 'Next: Review', then 'Create user'
 14. On the next page, download the CSV file. This contains the user's access key and secret access key for later use
 
+### Connect AWS to django
+
+After creating a S3 bucket you need to connect it to django
+
+1. Install two packages, Boto3 and Django storages, by running these commands:  
+    ```
+    pip3 install boto3
+    pip3 install django-storages
+    ```
+    And remember to freeze the requirements with:  
+    ```
+    pip3 freeze > requirements.txt
+    ```
+2. Add 'storages' to your installed apps section inside your settings.py file
+3. Next, in your setting.py file on the bottom, add an if statement to check if there is an environment variable called USE_AWS. This variable does not exist yet but we will add it later. Inside the if statement, write the following settings so it looks like this:  
+    ```
+    if 'USE_AWS' in os.environ:
+        AWS_STORAGE_BUCKET_NAME = 'insert-your-bucket-name-here'
+        AWS_S3_REGION_NAME = 'insert-your-region-here'
+        AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    ```
+4. Next, go back to heroku and in the settings tab, under config vars, add keys with values that were downloaded earlier in the CSV file.
+5. Add the key USE_AWS, and set the value to True.
+6. Remove now the DISABLE_COLLECTSTAIC variable, since django should now collect static files automatically and upload them to S3.
+7. Now head back to the settings.py file in your django project to the if statement you wrote earlier and inside the statement add this line setting:  
+    ```
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    ```
+    This will tell django where your static files will be coming from in production.
+8. Next in the root directory of your project create a file called 'custom_storages.py'. Inside this file import your settings as well as the s3boto3 storage class. Insert this code at the top of the file:
+
 
  
 
