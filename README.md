@@ -219,6 +219,43 @@ Site Administrators only have priveleges to modify the site such as;  add / remo
 14. Once those changes are saved, scroll down to the Access control list (ACL) section and click 'edit'
 15. Next to 'Everyone (public access)', check the 'list' checkbox. This will pop up a warning box that you will also have to check. Once that's done click 'save'
 
+### IAM
+When your bucket is ready you need to create a user to access it.
+
+1. In the top of the window search for IAM and select it.
+2. Once on the IAM page, click 'User Groups' from the side bar, then click 'Create group'
+3. Name the group 'manage-*your-project-name*' and click 'Create group' at the bottom of the page
+4. From the sidebar click 'Policies', then 'Create policy'
+5. Go to the JSON tab and click 'import managed policy'. Search for 'S3' and select 'AmazonS3FullAccess' and click import
+6. Once this is imported you need to make small changes. Go back to your bucket and copy your ARN number. Head back to this policy and update the Resource key to include your ARN, and another line with your ARN followed by a /*. It should look like this: 
+    ```
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:*",
+                    "s3-object-lambda:*"
+                ],
+                "Resource": [
+                    "YOUR-ARN-NO-HERE",
+                    "YOUR-ARN-NO-HERE/*"
+                ]
+            }
+        ]
+    }
+    ```
+7. Click 'Next: Tags', 'Next: Review', and on this page give the policy a name, and description, and click 'Create policy'
+8. This will take you back to the policy page where you should be able to see your newly created policy. Now you need to attach it to the group you created before 
+9. Click 'User groups', and click the your group. Go to the permissions tab and click 'Add permission' and from the dropdown click 'Attach policies'
+10. Find the policy you just created, select it and click 'Add permissions'.
+11. Finally you need to create a user to put in the group. Select users from the sidebar and click 'Add user' 
+12. Give your user a user name, check 'Programmatic Access', then click 'Next: Permissions'
+13. Select your group that has the policy attached and click 'Next: Tags', 'Next: Review', then 'Create user'
+14. On the next page, download the CSV file. This contains the user's access key and secret access key for later use
+
+
  
 
 
