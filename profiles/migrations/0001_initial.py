@@ -16,46 +16,145 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Instructor',
+            name="Instructor",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('bio', models.TextField(blank=True, help_text='Professional biography')),
-                ('specialties', models.CharField(blank=True, help_text='Comma-separated specialties (e.g., Yoga, Pilates, HIIT)', max_length=500)),
-                ('certifications', models.TextField(blank=True, help_text='Professional certifications and qualifications')),
-                ('years_experience', models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)])),
-                ('rating', models.DecimalField(blank=True, decimal_places=2, help_text='Average rating (0-5 stars)', max_digits=3, null=True, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(5)])),
-                ('total_reviews', models.IntegerField(default=0)),
-                ('image', models.ImageField(blank=True, help_text='Professional photo', null=True, upload_to='')),
-                ('phone', models.CharField(blank=True, max_length=20)),
-                ('instagram', models.URLField(blank=True, help_text='Instagram profile URL')),
-                ('is_active', models.BooleanField(default=True)),
-                ('is_verified', models.BooleanField(default=False, help_text='Admin verified instructor')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='instructor_profile', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "bio",
+                    models.TextField(
+                        blank=True, help_text="Professional biography"
+                    ),
+                ),
+                (
+                    "specialties",
+                    models.CharField(
+                        blank=True,
+                        help_text=(
+                            "Comma-separated specialties (e.g., "
+                            "Yoga, Pilates, HIIT)"
+                        ),
+                        max_length=500,
+                    ),
+                ),
+                (
+                    "certifications",
+                    models.TextField(
+                        blank=True,
+                        help_text=(
+                            "Professional certifications and "
+                            "qualifications"
+                        ),
+                    ),
+                ),
+                (
+                    "years_experience",
+                    models.IntegerField(
+                        default=0,
+                        validators=[
+                            django.core.validators.MinValueValidator(0)
+                        ],
+                    ),
+                ),
+                (
+                    "rating",
+                    models.DecimalField(
+                        blank=True,
+                        decimal_places=2,
+                        help_text="Average rating (0-5 stars)",
+                        max_digits=3,
+                        null=True,
+                        validators=[
+                            django.core.validators.MinValueValidator(0),
+                            django.core.validators.MaxValueValidator(5),
+                        ],
+                    ),
+                ),
+                ("total_reviews", models.IntegerField(default=0)),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True,
+                        help_text="Professional photo",
+                        null=True,
+                        upload_to="",
+                    ),
+                ),
+                ("phone", models.CharField(blank=True, max_length=20)),
+                (
+                    "instagram",
+                    models.URLField(
+                        blank=True, help_text="Instagram profile URL"
+                    ),
+                ),
+                ("is_active", models.BooleanField(default=True)),
+                (
+                    "is_verified",
+                    models.BooleanField(
+                        default=False, help_text="Admin verified instructor"
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="instructor_profile",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-is_verified', '-rating'],
+                "ordering": ["-is_verified", "-rating"],
             },
         ),
         migrations.CreateModel(
-            name='UserProfile',
+            name="UserProfile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('phone_number', models.CharField(blank=True, max_length=20)),
-                ('street_address1', models.CharField(blank=True, max_length=80)),
-                ('street_address2', models.CharField(blank=True, max_length=80)),
-                ('town_or_city', models.CharField(blank=True, max_length=40)),
-                ('county', models.CharField(blank=True, max_length=80)),
-                ('postcode', models.CharField(blank=True, max_length=20)),
-                ('country', models.CharField(blank=True, max_length=40)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='userprofile', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("phone_number", models.CharField(blank=True, max_length=20)),
+                (
+                    "street_address1",
+                    models.CharField(blank=True, max_length=80),
+                ),
+                (
+                    "street_address2",
+                    models.CharField(blank=True, max_length=80),
+                ),
+                ("town_or_city", models.CharField(blank=True, max_length=40)),
+                ("county", models.CharField(blank=True, max_length=80)),
+                ("postcode", models.CharField(blank=True, max_length=20)),
+                ("country", models.CharField(blank=True, max_length=40)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="userprofile",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'User Profile',
-                'verbose_name_plural': 'User Profiles',
+                "verbose_name": "User Profile",
+                "verbose_name_plural": "User Profiles",
             },
         ),
     ]

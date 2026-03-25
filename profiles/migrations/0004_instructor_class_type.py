@@ -6,13 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('profiles', '0003_instructor_lesson_description_and_more'),
+        ("profiles", "0003_instructor_lesson_description_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='instructor',
-            name='class_type',
-            field=models.CharField(blank=True, help_text='Primary class type (e.g., Personal Trainer, Yoga, Pilates, Boxercise)', max_length=100),
+            model_name="instructor",
+            name="class_type",
+            field=models.CharField(
+                blank=True,
+                help_text=(
+                    "Primary class type (e.g., Personal Trainer, "
+                    "Yoga, Pilates, Boxercise)"
+                ),
+                max_length=100,
+            ),
         ),
     ]

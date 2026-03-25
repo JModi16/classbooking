@@ -7,13 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('profiles', '0001_initial'),
+        ("profiles", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='instructor',
-            name='hourly_rate',
-            field=models.DecimalField(blank=True, decimal_places=2, help_text='Hourly rate in GBP for private sessions', max_digits=6, null=True, validators=[django.core.validators.MinValueValidator(0)]),
+            model_name="instructor",
+            name="hourly_rate",
+            field=models.DecimalField(
+                blank=True,
+                decimal_places=2,
+                help_text="Hourly rate in GBP for private sessions",
+                max_digits=6,
+                null=True,
+                validators=[django.core.validators.MinValueValidator(0)],
+            ),
         ),
     ]
