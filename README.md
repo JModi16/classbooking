@@ -182,7 +182,142 @@ Site Administrators only have priveleges to modify the site such as;  add / remo
 </details>Admins can view upcoming scheduled classes and past classes in Services, Exercise classes.
 <details><summary>  Email   </summary>
 <img src="static/images/scheduledclasses.png">
-</details>Admins can view upcoming scheduled and past scheduled classes booked by students and past classes in Checkout, Class bookings
+</details>Admins can view upcoming scheduled and past scheduled classes booked by students and past classes in Checkout, Class bookings.
+
+## Deployment
+
+-   ### Version Control
+
+This website was created using the CI full template (https://github.com/Code-Institute-Org/ci-full-template)
+
+#### Database creation
+
+To create the database:
+1. Navigate to the CI Database Maker(https://dbs.ci-dbs.net/) which creates a new PostgreSQL database.
+2. Type in your email address into the input field as directed and click submit
+3. You will receive an email with the new PostgreSQL instance. Keep these details safe, they will be used shortly.
+
+#### Heroku
+To deploy Little Pont to Heroku, take the following steps:
+1. Create a requirements.txt file using the terminal command `pip freeze > requirements.txt`
+2. Create a Procfile with the terminal command `echo web: python app.py > Procfile`. Ensure you use a capital 'P' for this file.
+3. `git add` and `git commit` these changes and `git push` to GitHub repository
+4. Go to the Heroku website and login. Create a new app by clicking the "New" button in your dashboard.
+5. Give the app and name and set the region to Europe(or your closest region)
+6. From the heroku dashboard of the new app, click on "Deploy" > "Deployment method" and select Github
+7. Confirm the link to the correct GitHub repository
+8. In the heroku dashboard for the application. click on the "settings" > "Reveal Config Vars"
+9. Ensure these config vars in the final setup:
+
+| Key                   | Value             |
+|-----------------------|-------------------|
+| AWS_ACCESS_KEY_ID     | 'AWS_ID'          |
+| AWS_SECRET_ACCESS_KEY | 'AWS_SECRET'      |
+| DATABASE_URL          | 'DB_URL'          |
+| EMAIL_HOST_PASSWORD   | 'EMAIL_HOST_PASS' |
+| EMAIL_HOST_USER       | 'EMAIL_HOST_USER' |
+| SECRET_KEY            | 'SECRET_KEY'      |
+| STRIPE_PUBLIC_KEY     | 'STRIPE_PUBLIC'   |
+| STRIPE_SECRET_KEY     | 'STRIPE_SECRET'   |
+| STRIPE_WH_SECRET      | 'WH_SECRET'       |
+| USE_AWS               | True              |
+
+(this is an example, actual env variable not disclosed to maintain security. To get the db url follow [CI PosgreSQL](https://dbs.ci-dbs.net/))
+
+10. In the Heroku dashboard, click "Deploy"
+11. In the "Manual Deployment" section, ensure the main branch is selected then click "Deploy Branch"
+
+
+#### Connect new DB to Heroku app
+1. In the terminal, install dj_database_url and psycopg2, both of these are needed to connect to your external database.
+
+2. pip3 install dj_database_url==0.5.0 psycopg2
+3. Update your requirements.txt file with the newly installed packages
+
+4. pip freeze > requirements.txt
+5. In your settings.py file, import dj_database_url underneath the import for os
+```
+ import os
+ import dj_database_url
+```
+6. Scroll to the DATABASES section and update it to the following code, so that the original connection to sqlite3 is __commented out__ and we connect to the new database instead. Paste in the database URL from your PostgreSQL from Code Institute email as below (do not commit these changes)
+```
+#DATABASES = {
+#     'default': {
+#          'ENGINE': 'django.db.backends.sqlite3',
+#          'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#      }
+#  }
+     
+ DATABASES = {
+     'default': dj_database_url.parse('your-database-url-here')
+ }
+``` 
+7. In the terminal, run the show migrations command to confirm you are connected to the external database
+```
+python3 manage.py showmigrations
+```
+you should see a list of all migrations
+8. Migrate your database models to your new database
+```
+ python3 manage.py migrate
+```
+9. Create a superuser- follow the steps after entering the following command
+```
+ python3 manage.py createsuperuser
+```
+10. Revert changes made in step 8.
+11. Update code in settings.py as follows:
+```
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+```
+12. Install gunicorn and add to requirements:
+```
+pip3 install gunicorn
+pip3 freeze > requirements.txt
+```
+13. Within the Procfile add `web: gunicorn app-name.wsgi:application` (add app name where indicated), this tells Heroku to create a web dyno and serve our django app.
+14. Go to local CLI and login to Heroku using `heroku login -i` and enter heroku login details (email and password from Required Authentications within the Applications section). 
+15. temporarily disable collect static. This tells Heroku not to collect static files when we deploy:
+```
+heroku config:set DISABLE_COLLECTSTATIC=1 --app heroku-app-name-here
+```
+16. Add the Heroku app and localhost (which will allow GitPod to still work) to ALLOWED_HOSTS = [] in settings.py:
+```
+ALLOWED_HOSTS = ['heroku deployed site URL here', 'localhost' ]
+```
+
+17. Initialise Heroku git remote to app by typing the following command:
+```
+heroku git:remote -a <name_of_your_app>
+```
+18. Then push to heroku
+```
+git push heroku
+```
+19. Save, add, commit and push the changes to GitHub. You can then also initialize the Heroku git remote in the terminal and push to Heroku with:
+```
+heroku git:remote -a {app name here}
+git push heroku main
+```
+You should now be able to see the deployed site (without any static files as we haven't set these up yet).
+20. Set app up to automatically deploy when we push to github. Go to Heroku and click 'Deploy' tab. Click Github option and search for github repo in input field. Once found, click connect. Now click 'Enable automatic deploys'
+21. Generate a Django secret key using a secret key generator. Add this in config vars in Heroku.
+22. Add changes to settings.py:
+```
+SECRET_KEY = os.environ.get('SECRET_KEY', '')
+DEBUG = 'DEVELOPMENT' in os.environ
+```
 
 
 ### Set Up AWS to store static and media files
@@ -358,4 +493,16 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 EMAIL_FROM_NAME = os.environ.get('EMAIL_FROM_NAME', 'Service Booking Platform').strip()
 SUPPORT_EMAIL = os.environ.get('SUPPORT_EMAIL', EMAIL_HOST_USER or 'mammas.cakes16@gmail.com').strip()
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+
+### Set up Stripe Payments
+
+1. Log in to Stripe, click on the developers tab and API keys copy the API key and set them in Heroku as config variables in the following:
+
+- STRIPE_PUBLIC_KEY: Stripe publishable key goes here
+- STRIPE_SECRET_KEY: Stripe secret key goes here
+
+2. Back in Stripe set up a new webhook for your deployed site by clicking on webhooks, click on 'add endpoint' and paste in your deployed site's URL followed by /checkout/wh/ and set it to listen for all events.
+3. Click on your newly set up webhook and click on 'Signing Secret' at the top to reveal the secret value. Copy it and set it as a new config variable in Heroku:
+- STRIPE_WH_SECRET: Signing secret from new webhook.
+
 ```
