@@ -2,8 +2,16 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.checkout, name='checkout'),
-    path('cache_checkout_data/', views.cache_checkout_data, name='cache_checkout_data'),
-    path('success/<str:booking_id>/', views.checkout_success, name='checkout_success'),
-    path('webhook/', views.stripe_webhook, name='stripe_webhook'),
+    path("", views.checkout, name="checkout"),
+    path(
+        "cache_checkout_data/",
+        views.cache_checkout_data,
+        name="cache_checkout_data",
+    ),
+    path(
+        "success/<str:booking_id>/",
+        views.checkout_success,
+        name="checkout_success",
+    ),
+    path("webhook/", views.stripe_webhook, name="stripe_webhook"),
 ]

@@ -7,14 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('checkout', '0003_classbooking_confirmation_email_fields'),
-        ('profiles', '0004_instructor_class_type'),
+        ("checkout", "0003_classbooking_confirmation_email_fields"),
+        ("profiles", "0004_instructor_class_type"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='classbooking',
-            name='instructor',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='package_bookings', to='profiles.instructor'),
+            model_name="classbooking",
+            name="instructor",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="package_bookings",
+                to="profiles.instructor",
+            ),
         ),
     ]
