@@ -1,4 +1,4 @@
-"""
+﻿"""
 Create 10 unique instructors, each assigned to exactly one class type.
 Distribution: Personal Trainer (3), Yoga (3), Pilates (2), Boxercise (2)
 
@@ -8,6 +8,9 @@ Safe mode behavior:
 - Existing non-blank Admin values are never overwritten.
 """
 
+from django.core.files.base import ContentFile
+from profiles.models import Instructor, UserProfile
+from django.contrib.auth.models import User
 import os
 import sys
 import django
@@ -18,9 +21,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'service_platform.settings')
 sys.path.insert(0, os.path.dirname(__file__))
 django.setup()
 
-from django.contrib.auth.models import User
-from profiles.models import Instructor, UserProfile
-from django.core.files.base import ContentFile
 
 # 10 instructors with exclusive class type assignments
 INSTRUCTORS = [
@@ -31,10 +31,10 @@ INSTRUCTORS = [
         'last_name': 'McGovern',
         'email': 'john.mcgovern@classbooking.com',
         'class_type': 'Personal Trainer',
-        'specialties': 'Strength Training, HIIT, Weight Loss, Functional Fitness',
-        'bio': 'John is a certified personal trainer with 6 years of experience specializing in strength training and HIIT workouts. He has helped clients achieve dramatic transformations through personalized training programs.',
-        'lesson_description': 'Customized personal training sessions focused on your specific goals. Each session includes warm-up, targeted strength/cardio work, and proper cool-down. Perfect for weight loss, muscle building, or overall fitness improvement.',
-        'certifications': 'NASM Certified Personal Trainer, CPR/AED, Nutrition Specialist',
+        'specialties': 'Strength Training, HIIT, Weight Loss, Functional Fitness',  # noqa: E501
+        'bio': 'John is a certified personal trainer with 6 years of experience specializing in strength training and HIIT workouts. He has helped clients achieve dramatic transformations through personalized training programs.',  # noqa: E501
+        'lesson_description': 'Customized personal training sessions focused on your specific goals. Each session includes warm-up, targeted strength/cardio work, and proper cool-down. Perfect for weight loss, muscle building, or overall fitness improvement.',  # noqa: E501
+        'certifications': 'NASM Certified Personal Trainer, CPR/AED, Nutrition Specialist',  # noqa: E501
         'years_experience': 6,
         'hourly_rate': 55.00,
         'package_single_rate': 25.00,
@@ -55,9 +55,9 @@ INSTRUCTORS = [
         'email': 'mike.anderson@classbooking.com',
         'class_type': 'Personal Trainer',
         'specialties': 'Boxing Training, Fitness Boxing, Athletic Performance',
-        'bio': 'Mike is a professional boxing coach with 10 years of competitive and coaching experience. He specializes in athletic performance training that combines boxing techniques with strength and conditioning.',
-        'lesson_description': 'High-performance training that blends boxing skills with strength and conditioning. Sessions emphasize explosive power, speed development, and functional fitness through boxing-based workouts.',
-        'certifications': 'Professional Boxing Coach, ISSA Elite Trainer, Sports Performance Specialist',
+        'bio': 'Mike is a professional boxing coach with 10 years of competitive and coaching experience. He specializes in athletic performance training that combines boxing techniques with strength and conditioning.',  # noqa: E501
+        'lesson_description': 'High-performance training that blends boxing skills with strength and conditioning. Sessions emphasize explosive power, speed development, and functional fitness through boxing-based workouts.',  # noqa: E501
+        'certifications': 'Professional Boxing Coach, ISSA Elite Trainer, Sports Performance Specialist',  # noqa: E501
         'years_experience': 10,
         'hourly_rate': 60.00,
         'package_single_rate': 28.00,
@@ -77,10 +77,10 @@ INSTRUCTORS = [
         'last_name': 'Foster',
         'email': 'nina.foster@classbooking.com',
         'class_type': 'Personal Trainer',
-        'specialties': 'Weight Management, Metabolic Training, Body Transformation',
-        'bio': 'Nina is a transformation specialist with 5 years of experience helping clients achieve sustainable weight loss and body composition changes through evidence-based training and lifestyle coaching.',
-        'lesson_description': 'Results-driven personal training focused on fat loss and metabolic health. Combines resistance training, cardio intervals, and accountability coaching to help you achieve lasting transformation.',
-        'certifications': 'ACE Personal Trainer, Precision Nutrition L1, Behavior Change Specialist',
+        'specialties': 'Weight Management, Metabolic Training, Body Transformation',  # noqa: E501
+        'bio': 'Nina is a transformation specialist with 5 years of experience helping clients achieve sustainable weight loss and body composition changes through evidence-based training and lifestyle coaching.',  # noqa: E501
+        'lesson_description': 'Results-driven personal training focused on fat loss and metabolic health. Combines resistance training, cardio intervals, and accountability coaching to help you achieve lasting transformation.',  # noqa: E501
+        'certifications': 'ACE Personal Trainer, Precision Nutrition L1, Behavior Change Specialist',  # noqa: E501
         'years_experience': 5,
         'hourly_rate': 50.00,
         'package_single_rate': 23.00,
@@ -94,7 +94,7 @@ INSTRUCTORS = [
         'is_verified': True,
         'color': (255, 165, 0),  # Light Orange
     },
-    
+
     # Yoga (3)
     {
         'username': 'sheena_shah',
@@ -102,10 +102,10 @@ INSTRUCTORS = [
         'last_name': 'Shah',
         'email': 'sheena.shah@classbooking.com',
         'class_type': 'Yoga',
-        'specialties': 'Hatha Yoga, Vinyasa Flow, Flexibility Training, Mindfulness',
-        'bio': 'Sheena is a certified Hatha Yoga instructor with 8 years of experience teaching in London. She specializes in beginner-friendly classes that focus on flexibility and mindfulness, helping students discover the transformative power of yoga.',
-        'lesson_description': 'Traditional Hatha yoga combined with modern flexibility training. Each session includes warm-up poses, main asana practice, breathing techniques, and deep relaxation. Perfect for all levels.',
-        'certifications': 'Yoga Alliance 200-Hour RYT, Certified Yoga Instructor, CPR/First Aid',
+        'specialties': 'Hatha Yoga, Vinyasa Flow, Flexibility Training, Mindfulness',  # noqa: E501
+        'bio': 'Sheena is a certified Hatha Yoga instructor with 8 years of experience teaching in London. She specializes in beginner-friendly classes that focus on flexibility and mindfulness, helping students discover the transformative power of yoga.',  # noqa: E501
+        'lesson_description': 'Traditional Hatha yoga combined with modern flexibility training. Each session includes warm-up poses, main asana practice, breathing techniques, and deep relaxation. Perfect for all levels.',  # noqa: E501
+        'certifications': 'Yoga Alliance 200-Hour RYT, Certified Yoga Instructor, CPR/First Aid',  # noqa: E501
         'years_experience': 8,
         'hourly_rate': 45.00,
         'package_single_rate': 18.00,
@@ -126,9 +126,9 @@ INSTRUCTORS = [
         'email': 'priya.sharma@classbooking.com',
         'class_type': 'Yoga',
         'specialties': 'Ashtanga Yoga, Power Yoga, Advanced Vinyasa',
-        'bio': 'Priya brings 10 years of intensive yoga practice and 6 years of teaching experience. Trained in India, she specializes in Ashtanga and Power Yoga for those seeking a more challenging physical practice.',
-        'lesson_description': 'Dynamic and challenging yoga flows for intermediate to advanced practitioners. Build strength, stamina, and focus through traditional Ashtanga sequences and powerful vinyasa movements.',
-        'certifications': 'Yoga Alliance 500-Hour RYT, Ashtanga Authorization, Yoga Therapy Foundation',
+        'bio': 'Priya brings 10 years of intensive yoga practice and 6 years of teaching experience. Trained in India, she specializes in Ashtanga and Power Yoga for those seeking a more challenging physical practice.',  # noqa: E501
+        'lesson_description': 'Dynamic and challenging yoga flows for intermediate to advanced practitioners. Build strength, stamina, and focus through traditional Ashtanga sequences and powerful vinyasa movements.',  # noqa: E501
+        'certifications': 'Yoga Alliance 500-Hour RYT, Ashtanga Authorization, Yoga Therapy Foundation',  # noqa: E501
         'years_experience': 6,
         'hourly_rate': 48.00,
         'package_single_rate': 20.00,
@@ -149,9 +149,9 @@ INSTRUCTORS = [
         'email': 'neil.patel@classbooking.com',
         'class_type': 'Yoga',
         'specialties': 'Yin Yoga, Restorative Yoga, Meditation, Stress Relief',
-        'bio': 'Neil specializes in gentle yoga styles with 7 years of teaching experience. His focus is on relaxation, flexibility, and stress reduction through slow, mindful practices.',
-        'lesson_description': 'Gentle restorative and yin yoga classes designed to release tension, improve flexibility, and calm the mind. Each pose is held longer to allow deep relaxation and healing. Perfect for stress relief.',
-        'certifications': 'Yoga Alliance 200-Hour RYT, Yin Yoga Certified, Meditation Teacher',
+        'bio': 'Neil specializes in gentle yoga styles with 7 years of teaching experience. His focus is on relaxation, flexibility, and stress reduction through slow, mindful practices.',  # noqa: E501
+        'lesson_description': 'Gentle restorative and yin yoga classes designed to release tension, improve flexibility, and calm the mind. Each pose is held longer to allow deep relaxation and healing. Perfect for stress relief.',  # noqa: E501
+        'certifications': 'Yoga Alliance 200-Hour RYT, Yin Yoga Certified, Meditation Teacher',  # noqa: E501
         'years_experience': 7,
         'hourly_rate': 42.00,
         'package_single_rate': 17.00,
@@ -165,7 +165,7 @@ INSTRUCTORS = [
         'is_verified': True,
         'color': (150, 200, 240),  # Light Blue
     },
-    
+
     # Pilates (2)
     {
         'username': 'emma_watson',
@@ -173,10 +173,10 @@ INSTRUCTORS = [
         'last_name': 'Watson',
         'email': 'emma.watson@classbooking.com',
         'class_type': 'Pilates',
-        'specialties': 'Pilates Mat, Pilates Apparatus, Core Strength, Posture Correction',
-        'bio': 'Emma is a certified Pilates instructor with 5 years of teaching experience, trained at the London Pilates Academy. She specializes in both mat and apparatus-based Pilates, helping clients build core strength and improve posture.',
-        'lesson_description': 'Core-focused Pilates using controlled, precise movements. Sessions include breathing techniques, flexibility work, and targeted muscle engagement for improved strength, flexibility, and body alignment.',
-        'certifications': 'CIMSPA Pilates Instructor, Mat Pilates Certified, Yoga Foundation',
+        'specialties': 'Pilates Mat, Pilates Apparatus, Core Strength, Posture Correction',  # noqa: E501
+        'bio': 'Emma is a certified Pilates instructor with 5 years of teaching experience, trained at the London Pilates Academy. She specializes in both mat and apparatus-based Pilates, helping clients build core strength and improve posture.',  # noqa: E501
+        'lesson_description': 'Core-focused Pilates using controlled, precise movements. Sessions include breathing techniques, flexibility work, and targeted muscle engagement for improved strength, flexibility, and body alignment.',  # noqa: E501
+        'certifications': 'CIMSPA Pilates Instructor, Mat Pilates Certified, Yoga Foundation',  # noqa: E501
         'years_experience': 5,
         'hourly_rate': 40.00,
         'package_single_rate': 16.00,
@@ -197,9 +197,9 @@ INSTRUCTORS = [
         'email': 'daniel.sullivan@classbooking.com',
         'class_type': 'Pilates',
         'specialties': 'Reformer Pilates, Clinical Pilates, Rehabilitation',
-        'bio': 'Daniel combines 6 years of Pilates instruction with clinical training to help clients recover from injuries and prevent future issues. He specializes in reformer Pilates and therapeutic movement.',
-        'lesson_description': 'Clinical Pilates sessions using reformer apparatus and mat work. Ideal for injury recovery, chronic pain management, and building functional strength through safe, controlled movements.',
-        'certifications': 'STOTT Pilates Certified, Clinical Pilates, Physical Therapy Assistant',
+        'bio': 'Daniel combines 6 years of Pilates instruction with clinical training to help clients recover from injuries and prevent future issues. He specializes in reformer Pilates and therapeutic movement.',  # noqa: E501
+        'lesson_description': 'Clinical Pilates sessions using reformer apparatus and mat work. Ideal for injury recovery, chronic pain management, and building functional strength through safe, controlled movements.',  # noqa: E501
+        'certifications': 'STOTT Pilates Certified, Clinical Pilates, Physical Therapy Assistant',  # noqa: E501
         'years_experience': 6,
         'hourly_rate': 45.00,
         'package_single_rate': 18.00,
@@ -213,7 +213,7 @@ INSTRUCTORS = [
         'is_verified': True,
         'color': (180, 120, 200),  # Light Purple
     },
-    
+
     # Boxercise (2)
     {
         'username': 'tyler_jones',
@@ -222,9 +222,9 @@ INSTRUCTORS = [
         'email': 'tyler.jones@classbooking.com',
         'class_type': 'Boxercise',
         'specialties': 'Kickboxing, Cardio Boxing, Combat Fitness',
-        'bio': 'Tyler is a kickboxing and cardio boxing specialist with 7 years of experience. His energetic classes focus on fitness, stress relief, and basic self-defense techniques through boxing and kickboxing movements.',
-        'lesson_description': 'Fast-paced cardio boxing and kickboxing sessions that burn calories and build confidence. Learn proper striking technique while getting an intense full-body workout. No experience needed.',
-        'certifications': 'ISKA Kickboxing Instructor, Cardio Boxing Certified, Self-Defense Instructor',
+        'bio': 'Tyler is a kickboxing and cardio boxing specialist with 7 years of experience. His energetic classes focus on fitness, stress relief, and basic self-defense techniques through boxing and kickboxing movements.',  # noqa: E501
+        'lesson_description': 'Fast-paced cardio boxing and kickboxing sessions that burn calories and build confidence. Learn proper striking technique while getting an intense full-body workout. No experience needed.',  # noqa: E501
+        'certifications': 'ISKA Kickboxing Instructor, Cardio Boxing Certified, Self-Defense Instructor',  # noqa: E501
         'years_experience': 7,
         'hourly_rate': 48.00,
         'package_single_rate': 19.00,
@@ -244,10 +244,10 @@ INSTRUCTORS = [
         'last_name': 'Taylor',
         'email': 'james.taylor@classbooking.com',
         'class_type': 'Boxercise',
-        'specialties': 'Boxing Training, Fitness Boxing, Self-Defense, Competitive Boxing',
-        'bio': 'James is a professional boxing coach with 6 years of competitive and coaching experience. He trains both fitness enthusiasts and competitive boxers, combining traditional boxing drills with modern fitness coaching.',
-        'lesson_description': 'High-energy boxing classes that blend technical skills with cardiovascular training. Includes pad work, heavy bag training, footwork drills, and combinations for an incredible full-body workout.',
-        'certifications': 'Professional Boxing Coach, Amateur Boxing Association, NASM Certified',
+        'specialties': 'Boxing Training, Fitness Boxing, Self-Defense, Competitive Boxing',  # noqa: E501
+        'bio': 'James is a professional boxing coach with 6 years of competitive and coaching experience. He trains both fitness enthusiasts and competitive boxers, combining traditional boxing drills with modern fitness coaching.',  # noqa: E501
+        'lesson_description': 'High-energy boxing classes that blend technical skills with cardiovascular training. Includes pad work, heavy bag training, footwork drills, and combinations for an incredible full-body workout.',  # noqa: E501
+        'certifications': 'Professional Boxing Coach, Amateur Boxing Association, NASM Certified',  # noqa: E501
         'years_experience': 6,
         'hourly_rate': 50.00,
         'package_single_rate': 20.00,
@@ -269,40 +269,42 @@ def generate_instructor_image(first_name, last_name, bg_color):
     img_size = 400
     img = Image.new('RGB', (img_size, img_size), bg_color)
     draw = ImageDraw.Draw(img)
-    
+
     # Draw circle
     circle_size = 280
     circle_pos = [(img_size - circle_size) // 2, (img_size - circle_size) // 2,
                   (img_size + circle_size) // 2, (img_size + circle_size) // 2]
-    draw.ellipse(circle_pos, fill=(240, 240, 240), outline=(200, 200, 200), width=2)
-    
+    draw.ellipse(circle_pos, fill=(240, 240, 240),
+                 outline=(200, 200, 200), width=2)
+
     # Draw initials
     initials = f"{first_name[0]}{last_name[0]}".upper()
     try:
         font = ImageFont.truetype("arial.ttf", 120)
-    except:
+    except BaseException:
         font = ImageFont.load_default()
-    
+
     text_bbox = draw.textbbox((0, 0), initials, font=font)
     text_width = text_bbox[2] - text_bbox[0]
     text_height = text_bbox[3] - text_bbox[1]
     x = (img_size - text_width) // 2
     y = (img_size - text_height) // 2 - 20
-    
+
     draw.text((x, y), initials, fill=bg_color, font=font)
-    
+
     # Add name at bottom
     try:
         name_font = ImageFont.truetype("arial.ttf", 24)
-    except:
+    except BaseException:
         name_font = ImageFont.load_default()
-    
+
     name_text = f"{first_name} {last_name}"
     name_bbox = draw.textbbox((0, 0), name_text, font=name_font)
     name_width = name_bbox[2] - name_bbox[0]
     name_x = (img_size - name_width) // 2
-    draw.text((name_x, img_size - 60), name_text, fill=(255, 255, 255), font=name_font)
-    
+    draw.text((name_x, img_size - 60), name_text,
+              fill=(255, 255, 255), font=name_font)
+
     img_io = BytesIO()
     img.save(img_io, format='PNG')
     img_io.seek(0)
@@ -319,22 +321,27 @@ def set_if_blank(instance, field_name, value):
 
 
 def create_10_instructors():
-    """Create 10 unique instructors with safe-mode updates for existing records."""
-    
-    print("\n" + "="*80)
+    """Create 10 unique instructors with safe-mode updates for existing records."""  # noqa: E501
+
+    print("\n" + "=" * 80)
     print("CREATING 10 INSTRUCTORS WITH EXCLUSIVE CLASS TYPE ASSIGNMENTS")
-    print("="*80 + "\n")
-    print("Distribution: Personal Trainer (3), Yoga (3), Pilates (2), Boxercise (2)")
+    print("=" * 80 + "\n")
+    print("Distribution: Personal Trainer (3), Yoga (3), Pilates (2), Boxercise (2)")  # noqa: E501
     print("Each instructor assigned to ONE class type only\n")
-    
+
     created_count = 0
     updated_count = 0
     unchanged_count = 0
-    
+
     for data in INSTRUCTORS:
         username = data['username']
-        print(f"Processing: {data['first_name']} {data['last_name']} ({data['class_type']})...", end=" ")
-        
+        print(
+            f"Processing: {
+                data['first_name']} {
+                data['last_name']} ({
+                data['class_type']})...",
+            end=" ")
+
         # Get or create user
         user, user_created = User.objects.get_or_create(
             username=username,
@@ -355,17 +362,20 @@ def create_10_instructors():
             user_changed_fields.append('last_name')
         if user_changed_fields:
             user.save(update_fields=user_changed_fields)
-        
+
         # Update user profile with location
         user_profile, _ = UserProfile.objects.get_or_create(user=user)
         profile_changed_fields = []
-        if set_if_blank(user_profile, 'town_or_city', data['location']['city']):
+        if set_if_blank(
+            user_profile,
+            'town_or_city',
+                data['location']['city']):
             profile_changed_fields.append('town_or_city')
         if set_if_blank(user_profile, 'country', data['location']['country']):
             profile_changed_fields.append('country')
         if profile_changed_fields:
             user_profile.save(update_fields=profile_changed_fields)
-        
+
         # Get or create instructor profile
         instructor, created = Instructor.objects.get_or_create(user=user)
 
@@ -388,13 +398,15 @@ def create_10_instructors():
             instructor.is_verified = data['is_verified']
             instructor.is_active = True
 
-            img_io = generate_instructor_image(data['first_name'], data['last_name'], data['color'])
+            img_io = generate_instructor_image(
+                data['first_name'], data['last_name'], data['color'])
             image_name = f"instructor_{username}.png"
-            instructor.image.save(image_name, ContentFile(img_io.read()), save=False)
+            instructor.image.save(
+                image_name, ContentFile(img_io.read()), save=False)
             instructor.save()
 
             created_count += 1
-            print("✅ Created")
+            print("âœ… Created")
         else:
             # Existing records: fill blank fields only
             changed_fields = []
@@ -418,42 +430,48 @@ def create_10_instructors():
                     changed_fields.append(field_name)
 
             if not instructor.image:
-                img_io = generate_instructor_image(data['first_name'], data['last_name'], data['color'])
+                img_io = generate_instructor_image(
+                    data['first_name'], data['last_name'], data['color'])
                 image_name = f"instructor_{username}.png"
-                instructor.image.save(image_name, ContentFile(img_io.read()), save=False)
+                instructor.image.save(
+                    image_name, ContentFile(img_io.read()), save=False)
                 changed_fields.append('image')
 
             if changed_fields:
                 instructor.save(update_fields=changed_fields)
                 updated_count += 1
-                print("✅ Updated (blank fields only)")
+                print("âœ… Updated (blank fields only)")
             else:
                 unchanged_count += 1
-                print("✅ No changes (existing values preserved)")
-        
-        print(f"   → Class Type: {data['class_type']}")
-        print(f"   → Location: {data['location']['city']}, {data['location']['country']}")
-        print(f"   → Specialties: {data['specialties']}")
+                print("âœ… No changes (existing values preserved)")
+
+        print(f"   â†’ Class Type: {data['class_type']}")
+        print(
+            f"   â†’ Location: {
+                data['location']['city']}, {
+                data['location']['country']}")
+        print(f"   â†’ Specialties: {data['specialties']}")
         print()
-    
-    print("="*80)
-    print(f"✅ COMPLETED: {created_count} created, {updated_count} updated, {unchanged_count} unchanged")
-    print("="*80)
-    print("\n📊 Distribution Summary:")
-    print("   • Personal Trainer: 3 instructors")
-    print("   • Yoga: 3 instructors")
-    print("   • Pilates: 2 instructors")
-    print("   • Boxercise: 2 instructors")
-    print("   • TOTAL: 10 instructors\n")
+
+    print("=" * 80)
+    print(
+        f"âœ… COMPLETED: {created_count} created, {updated_count} updated, {unchanged_count} unchanged")  # noqa: E501
+    print("=" * 80)
+    print("\nðŸ“Š Distribution Summary:")
+    print("   â€¢ Personal Trainer: 3 instructors")
+    print("   â€¢ Yoga: 3 instructors")
+    print("   â€¢ Pilates: 2 instructors")
+    print("   â€¢ Boxercise: 2 instructors")
+    print("   â€¢ TOTAL: 10 instructors\n")
     print("View instructors:")
-    print("  • Classes page: http://127.0.0.1:8000/services/classes/")
-    print("  • Admin panel: http://127.0.0.1:8000/admin/profiles/instructor/")
+    print("  â€¢ Classes page: http://127.0.0.1:8000/services/classes/")
+    print("  â€¢ Admin panel: http://127.0.0.1:8000/admin/profiles/instructor/")  # noqa: E501
 
 
 if __name__ == '__main__':
     try:
         create_10_instructors()
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\nâŒ Error: {e}")
         import traceback
         traceback.print_exc()
