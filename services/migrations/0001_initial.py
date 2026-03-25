@@ -9,61 +9,156 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('profiles', '0001_initial'),
+        ("profiles", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=254)),
-                ('friendly_name', models.CharField(blank=True, max_length=254, null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=254)),
+                (
+                    "friendly_name",
+                    models.CharField(blank=True, max_length=254, null=True),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Categories',
+                "verbose_name_plural": "Categories",
             },
         ),
         migrations.CreateModel(
-            name='Service',
+            name="Service",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('sku', models.CharField(blank=True, max_length=254, null=True)),
-                ('name', models.CharField(max_length=254)),
-                ('description', models.TextField()),
-                ('duration_minutes', models.IntegerField(default=60)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=6)),
-                ('rating', models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True)),
-                ('image_url', models.URLField(blank=True, max_length=1024, null=True)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='')),
-                ('available', models.BooleanField(default=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='services.category')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "sku",
+                    models.CharField(blank=True, max_length=254, null=True),
+                ),
+                ("name", models.CharField(max_length=254)),
+                ("description", models.TextField()),
+                ("duration_minutes", models.IntegerField(default=60)),
+                ("price", models.DecimalField(decimal_places=2, max_digits=6)),
+                (
+                    "rating",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=6, null=True
+                    ),
+                ),
+                (
+                    "image_url",
+                    models.URLField(blank=True, max_length=1024, null=True),
+                ),
+                (
+                    "image",
+                    models.ImageField(blank=True, null=True, upload_to=""),
+                ),
+                ("available", models.BooleanField(default=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="services.category",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ExerciseClass',
+            name="ExerciseClass",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=254)),
-                ('description', models.TextField()),
-                ('difficulty_level', models.CharField(choices=[('beginner', 'Beginner'), ('intermediate', 'Intermediate'), ('advanced', 'Advanced')], default='intermediate', max_length=20)),
-                ('start_datetime', models.DateTimeField()),
-                ('end_datetime', models.DateTimeField()),
-                ('max_participants', models.IntegerField(default=1)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=6)),
-                ('image_url', models.URLField(blank=True, max_length=1024, null=True)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='')),
-                ('available', models.BooleanField(default=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='exercise_classes', to='services.category')),
-                ('instructor', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='classes', to='profiles.instructor')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=254)),
+                ("description", models.TextField()),
+                (
+                    "difficulty_level",
+                    models.CharField(
+                        choices=[
+                            ("beginner", "Beginner"),
+                            ("intermediate", "Intermediate"),
+                            ("advanced", "Advanced"),
+                        ],
+                        default="intermediate",
+                        max_length=20,
+                    ),
+                ),
+                ("start_datetime", models.DateTimeField()),
+                ("end_datetime", models.DateTimeField()),
+                ("max_participants", models.IntegerField(default=1)),
+                ("price", models.DecimalField(decimal_places=2, max_digits=6)),
+                (
+                    "image_url",
+                    models.URLField(blank=True, max_length=1024, null=True),
+                ),
+                (
+                    "image",
+                    models.ImageField(blank=True, null=True, upload_to=""),
+                ),
+                ("available", models.BooleanField(default=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="exercise_classes",
+                        to="services.category",
+                    ),
+                ),
+                (
+                    "instructor",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="classes",
+                        to="profiles.instructor",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['start_datetime'],
-                'indexes': [models.Index(fields=['start_datetime'], name='services_ex_start_d_7412b9_idx'), models.Index(fields=['instructor'], name='services_ex_instruc_a3481b_idx'), models.Index(fields=['category'], name='services_ex_categor_e17f72_idx')],
+                "ordering": ["start_datetime"],
+                "indexes": [
+                    models.Index(
+                        fields=["start_datetime"],
+                        name="services_ex_start_d_7412b9_idx",
+                    ),
+                    models.Index(
+                        fields=["instructor"],
+                        name="services_ex_instruc_a3481b_idx",
+                    ),
+                    models.Index(
+                        fields=["category"],
+                        name="services_ex_categor_e17f72_idx",
+                    ),
+                ],
             },
         ),
     ]

@@ -8,33 +8,33 @@ def all_services(request):
     """Display all services with filtering and sorting (legacy)"""
     services = Service.objects.all()
     categories = Category.objects.all()
-    
-    category = request.GET.get('category')
+
+    category = request.GET.get("category")
     if category:
         services = services.filter(category__name=category)
-    
-    sort = request.GET.get('sort')
-    if sort == 'price_asc':
-        services = services.order_by('price')
-    elif sort == 'price_desc':
-        services = services.order_by('-price')
-    elif sort == 'rating':
-        services = services.order_by('-rating')
-    
+
+    sort = request.GET.get("sort")
+    if sort == "price_asc":
+        services = services.order_by("price")
+    elif sort == "price_desc":
+        services = services.order_by("-price")
+    elif sort == "rating":
+        services = services.order_by("-rating")
+
     context = {
-        'services': services,
-        'categories': categories,
+        "services": services,
+        "categories": categories,
     }
-    return render(request, 'services/services.html', context)
+    return render(request, "services/services.html", context)
 
 
 def service_detail(request, service_id):
     """Display service details (legacy)"""
     service = Service.objects.get(id=service_id)
     context = {
-        'service': service,
+        "service": service,
     }
-    return render(request, 'services/service_detail.html', context)
+    return render(request, "services/service_detail.html", context)
 
 
 # Exercise Class Views
@@ -42,111 +42,118 @@ def all_classes(request):
     """Display all upcoming exercise classes with filtering and sorting"""
     # Only show future classes
     classes = ExerciseClass.objects.filter(
-        start_datetime__gte=timezone.now(),
-        available=True
-    ).select_related('instructor', 'category')
-    
+        start_datetime__gte=timezone.now(), available=True
+    ).select_related("instructor", "category")
+
     categories = Category.objects.all()
     search_query = None
-    
+
     # Search functionality
-    search = (request.GET.get('search') or request.GET.get('q') or '').strip()
+    search = (request.GET.get("search") or request.GET.get("q") or "").strip()
     if search:
         search_query = search
         classes = classes.filter(
-            Q(name__icontains=search) |
-            Q(description__icontains=search) |
-            Q(instructor__user__first_name__icontains=search) |
-            Q(instructor__user__last_name__icontains=search) |
-            Q(category__name__icontains=search)
+            Q(name__icontains=search)
+            | Q(description__icontains=search)
+            | Q(instructor__user__first_name__icontains=search)
+            | Q(instructor__user__last_name__icontains=search)
+            | Q(category__name__icontains=search)
         ).distinct()
-    
+
     # Filter by category
-    raw_category = request.GET.get('category')
+    raw_category = request.GET.get("category")
     category_aliases = {
-        'yoga': 'Yoga',
-        'pilates': 'Pilates',
-        'boxercise': 'Boxercise',
-        'personal trainer': 'Personal Trainer',
-        'personal training': 'Personal Trainer',
-        'pt': 'Personal Trainer',
+        "yoga": "Yoga",
+        "pilates": "Pilates",
+        "boxercise": "Boxercise",
+        "personal trainer": "Personal Trainer",
+        "personal training": "Personal Trainer",
+        "pt": "Personal Trainer",
     }
 
     def normalize_category_for_banner(value):
         if not value:
-            return ''
+            return ""
         normalized = value.strip().lower()
         if normalized in category_aliases:
             return category_aliases[normalized]
-        if 'yog' in normalized:
-            return 'Yoga'
-        if 'pilat' in normalized:
-            return 'Pilates'
-        if 'box' in normalized:
-            return 'Boxercise'
-        if 'personal' in normalized or 'trainer' in normalized:
-            return 'Personal Trainer'
+        if "yog" in normalized:
+            return "Yoga"
+        if "pilat" in normalized:
+            return "Pilates"
+        if "box" in normalized:
+            return "Boxercise"
+        if "personal" in normalized or "trainer" in normalized:
+            return "Personal Trainer"
         return value.strip()
 
-    category = raw_category.strip() if raw_category else ''
+    category = raw_category.strip() if raw_category else ""
     banner_category = normalize_category_for_banner(category)
 
     if banner_category:
-        if banner_category == 'Personal Trainer':
-            classes = classes.filter(category__name__in=['Personal Trainer', 'Personal Training'])
+        if banner_category == "Personal Trainer":
+            classes = classes.filter(
+                category__name__in=["Personal Trainer", "Personal Training"]
+            )
         else:
             classes = classes.filter(category__name__iexact=banner_category)
-    
+
     # Filter by difficulty level
-    difficulty = request.GET.get('difficulty')
+    difficulty = request.GET.get("difficulty")
     if difficulty:
         classes = classes.filter(difficulty_level=difficulty)
-    
+
     # Filter by instructor
-    instructor = request.GET.get('instructor')
+    instructor = request.GET.get("instructor")
     if instructor:
         classes = classes.filter(instructor__id=instructor)
-    
+
     # Sorting
-    sort = request.GET.get('sort')
-    if sort == 'price_asc':
-        classes = classes.order_by('price')
-    elif sort == 'price_desc':
-        classes = classes.order_by('-price')
-    elif sort == 'rating':
-        classes = classes.order_by('-instructor__rating')
-    elif sort == 'date':
-        classes = classes.order_by('start_datetime')
+    sort = request.GET.get("sort")
+    if sort == "price_asc":
+        classes = classes.order_by("price")
+    elif sort == "price_desc":
+        classes = classes.order_by("-price")
+    elif sort == "rating":
+        classes = classes.order_by("-instructor__rating")
+    elif sort == "date":
+        classes = classes.order_by("start_datetime")
     else:
         # Default: sort by start time
-        classes = classes.order_by('start_datetime')
-    
+        classes = classes.order_by("start_datetime")
+
     difficulty_choices = ExerciseClass.DIFFICULTY_CHOICES
-    
+
     # Instructor directory grouped by class type with required display counts
     from profiles.models import Instructor
 
     target_instructor_counts = [
-        ('Personal Trainer', 3),
-        ('Yoga', 3),
-        ('Pilates', 2),
-        ('Boxercise', 2),
+        ("Personal Trainer", 3),
+        ("Yoga", 3),
+        ("Pilates", 2),
+        ("Boxercise", 2),
     ]
 
     category_name_set = {name for name, _ in target_instructor_counts}
-    selected_category = banner_category if banner_category in category_name_set else ''
+    selected_category = (
+        banner_category if banner_category in category_name_set else ""
+    )
     is_category_filtered = bool(selected_category)
 
     if selected_category:
         filtered_target_instructor_counts = [
-            (name, count) for name, count in target_instructor_counts if name == selected_category
+            (name, count)
+            for name, count in target_instructor_counts
+            if name == selected_category
         ]
     else:
         filtered_target_instructor_counts = target_instructor_counts
 
-    active_instructors = Instructor.objects.filter(
-        is_active=True
-    ).select_related('user').order_by('-is_verified', '-rating')
+    active_instructors = (
+        Instructor.objects.filter(is_active=True)
+        .select_related("user")
+        .order_by("-is_verified", "-rating")
+    )
 
     category_instructor_sections = []
     for category_name, target_count in filtered_target_instructor_counts:
@@ -160,17 +167,25 @@ def all_classes(request):
             class_type=category_name
         ).distinct()
         for instructor_item in class_type_instructors:
-            if instructor_item.id not in selected_ids and len(selected_instructors) < target_count:
+            if (
+                instructor_item.id not in selected_ids
+                and len(selected_instructors) < target_count
+            ):
                 selected_instructors.append(instructor_item)
                 selected_ids.add(instructor_item.id)
 
-        # 2) Next, instructors with upcoming classes in this category (if still slots available)
+        # 2) Next, instructors with upcoming classes in this category (if still
+        # slots available)
         if len(selected_instructors) < target_count and category_obj:
-            class_instructors = active_instructors.filter(
-                classes__category=category_obj,
-                classes__start_datetime__gte=timezone.now(),
-                classes__available=True,
-            ).exclude(id__in=selected_ids).distinct()
+            class_instructors = (
+                active_instructors.filter(
+                    classes__category=category_obj,
+                    classes__start_datetime__gte=timezone.now(),
+                    classes__available=True,
+                )
+                .exclude(id__in=selected_ids)
+                .distinct()
+            )
             for instructor_item in class_instructors:
                 if len(selected_instructors) < target_count:
                     selected_instructors.append(instructor_item)
@@ -178,19 +193,29 @@ def all_classes(request):
 
         # 3) Fallback: instructors whose specialties mention the category
         if len(selected_instructors) < target_count:
-            specialty_instructors = active_instructors.filter(
-                Q(specialties__icontains=category_name) |
-                Q(specialties__icontains=category_name.replace(' ', ''))
-            ).exclude(id__in=selected_ids).distinct()
+            specialty_instructors = (
+                active_instructors.filter(
+                    Q(specialties__icontains=category_name)
+                    | Q(specialties__icontains=category_name.replace(" ", ""))
+                )
+                .exclude(id__in=selected_ids)
+                .distinct()
+            )
 
             for instructor_item in specialty_instructors:
                 if len(selected_instructors) < target_count:
                     selected_instructors.append(instructor_item)
                     selected_ids.add(instructor_item.id)
 
-        # 4) Fallback to other active instructors (only when viewing all categories)
-        if not is_category_filtered and len(selected_instructors) < target_count:
-            fallback_instructors = active_instructors.exclude(id__in=selected_ids)
+        # 4) Fallback to other active instructors (only when viewing all
+        # categories)
+        if (
+            not is_category_filtered
+            and len(selected_instructors) < target_count
+        ):
+            fallback_instructors = active_instructors.exclude(
+                id__in=selected_ids
+            )
             for instructor_item in fallback_instructors:
                 if len(selected_instructors) < target_count:
                     selected_instructors.append(instructor_item)
@@ -198,44 +223,58 @@ def all_classes(request):
 
         instructor_cards = []
         for instructor_item in selected_instructors:
-            brief_description = instructor_item.bio or instructor_item.lesson_description or 'Instructor profile coming soon.'
-            instructor_cards.append({
-                'id': instructor_item.id,
-                'name': instructor_item.get_display_name(),
-                'location': instructor_item.get_location(),
-                'brief_description': brief_description,
-                'image_url': instructor_item.image.url if instructor_item.image else None,
-            })
+            brief_description = (
+                instructor_item.bio
+                or instructor_item.lesson_description
+                or "Instructor profile coming soon."
+            )
+            instructor_cards.append(
+                {
+                    "id": instructor_item.id,
+                    "name": instructor_item.get_display_name(),
+                    "location": instructor_item.get_location(),
+                    "brief_description": brief_description,
+                    "image_url": (
+                        instructor_item.image.url
+                        if instructor_item.image
+                        else None
+                    ),
+                }
+            )
 
         # 5) Guarantee the requested number of cards even if data is incomplete
         while len(instructor_cards) < target_count:
             slot_number = len(instructor_cards) + 1
-            instructor_cards.append({
-                'id': None,
-                'name': f'Instructor {slot_number}',
-                'location': 'Location to be updated',
-                'brief_description': 'Profile coming soon.',
-                'image_url': None,
-            })
+            instructor_cards.append(
+                {
+                    "id": None,
+                    "name": f"Instructor {slot_number}",
+                    "location": "Location to be updated",
+                    "brief_description": "Profile coming soon.",
+                    "image_url": None,
+                }
+            )
 
-        category_instructor_sections.append({
-            'category_name': category_name,
-            'target_count': target_count,
-            'instructors': instructor_cards,
-        })
+        category_instructor_sections.append(
+            {
+                "category_name": category_name,
+                "target_count": target_count,
+                "instructors": instructor_cards,
+            }
+        )
 
     context = {
-        'classes': classes,
-        'categories': categories,
-        'difficulty_choices': difficulty_choices,
-        'search_query': search_query,
-        'category_instructor_sections': category_instructor_sections,
-        'selected_category': selected_category,
-        'banner_category': selected_category,
-        'selected_difficulty': difficulty or '',
-        'selected_sort': sort or 'date',
+        "classes": classes,
+        "categories": categories,
+        "difficulty_choices": difficulty_choices,
+        "search_query": search_query,
+        "category_instructor_sections": category_instructor_sections,
+        "selected_category": selected_category,
+        "banner_category": selected_category,
+        "selected_difficulty": difficulty or "",
+        "selected_sort": sort or "date",
     }
-    return render(request, 'services/classes.html', context)
+    return render(request, "services/classes.html", context)
 
 
 def class_detail(request, class_id):
@@ -245,112 +284,130 @@ def class_detail(request, class_id):
     is_full = exercise_class.is_full()
     is_upcoming = exercise_class.is_upcoming()
     schedule_options = exercise_class.get_schedule_options()
-    
+
     # Get instructor profile
     instructor = exercise_class.instructor
-    
+
     context = {
-        'exercise_class': exercise_class,
-        'instructor': instructor,
-        'available_spots': available_spots,
-        'is_full': is_full,
-        'is_upcoming': is_upcoming,
-        'schedule_options': schedule_options,
+        "exercise_class": exercise_class,
+        "instructor": instructor,
+        "available_spots": available_spots,
+        "is_full": is_full,
+        "is_upcoming": is_upcoming,
+        "schedule_options": schedule_options,
     }
-    return render(request, 'services/class_detail.html', context)
+    return render(request, "services/class_detail.html", context)
 
 
 def instructor_profile(request, instructor_id):
     """Display instructor profile and their classes"""
     from profiles.models import Instructor
-    
+
     instructor = get_object_or_404(Instructor, id=instructor_id)
-    
+
     # Get instructor's upcoming classes
     classes = ExerciseClass.objects.filter(
         instructor=instructor,
         start_datetime__gte=timezone.now(),
-        available=True
-    ).order_by('start_datetime')
+        available=True,
+    ).order_by("start_datetime")
 
     next_bookable_class = classes.first()
-    
+
     # Calculate per-session rates for packages
-    package_5_per_session = instructor.package_5_rate / 5 if instructor.package_5_rate else None
-    package_10_per_session = instructor.package_10_rate / 10 if instructor.package_10_rate else None
-    
+    package_5_per_session = (
+        instructor.package_5_rate / 5 if instructor.package_5_rate else None
+    )
+    package_10_per_session = (
+        instructor.package_10_rate / 10 if instructor.package_10_rate else None
+    )
+
     context = {
-        'instructor': instructor,
-        'classes': classes,
-        'next_bookable_class': next_bookable_class,
-        'package_5_per_session': package_5_per_session,
-        'package_10_per_session': package_10_per_session,
+        "instructor": instructor,
+        "classes": classes,
+        "next_bookable_class": next_bookable_class,
+        "package_5_per_session": package_5_per_session,
+        "package_10_per_session": package_10_per_session,
     }
-    return render(request, 'services/instructor_profile.html', context)
+    return render(request, "services/instructor_profile.html", context)
 
 
 def all_instructors(request):
     """Display all active instructors (each instructor once)"""
     from profiles.models import Instructor
-    
-    # Get all active instructors, ordered by verification and rating
-    instructors = Instructor.objects.filter(
-        is_active=True
-    ).select_related('user').order_by('-is_verified', '-rating')
 
-    search_query = (request.GET.get('search') or request.GET.get('q') or '').strip()
+    # Get all active instructors, ordered by verification and rating
+    instructors = (
+        Instructor.objects.filter(is_active=True)
+        .select_related("user")
+        .order_by("-is_verified", "-rating")
+    )
+
+    search_query = (
+        request.GET.get("search") or request.GET.get("q") or ""
+    ).strip()
     if search_query:
         instructors = instructors.filter(
-            Q(user__first_name__icontains=search_query) |
-            Q(user__last_name__icontains=search_query) |
-            Q(specialties__icontains=search_query) |
-            Q(class_type__icontains=search_query) |
-            Q(bio__icontains=search_query)
+            Q(user__first_name__icontains=search_query)
+            | Q(user__last_name__icontains=search_query)
+            | Q(specialties__icontains=search_query)
+            | Q(class_type__icontains=search_query)
+            | Q(bio__icontains=search_query)
         ).distinct()
-    
+
     context = {
-        'instructors': instructors,
-        'search_query': search_query,
+        "instructors": instructors,
+        "search_query": search_query,
     }
-    return render(request, 'services/instructors.html', context)
+    return render(request, "services/instructors.html", context)
 
 
 def site_search(request):
     """Search across classes and instructors from one site-wide search bar."""
     from profiles.models import Instructor
 
-    query = (request.GET.get('q') or '').strip()
+    query = (request.GET.get("q") or "").strip()
 
     class_results = ExerciseClass.objects.none()
     instructor_results = Instructor.objects.none()
 
     if query:
-        class_results = ExerciseClass.objects.filter(
-            start_datetime__gte=timezone.now(),
-            available=True,
-        ).select_related('instructor', 'category').filter(
-            Q(name__icontains=query) |
-            Q(description__icontains=query) |
-            Q(category__name__icontains=query) |
-            Q(instructor__user__first_name__icontains=query) |
-            Q(instructor__user__last_name__icontains=query)
-        ).distinct().order_by('start_datetime')
+        class_results = (
+            ExerciseClass.objects.filter(
+                start_datetime__gte=timezone.now(),
+                available=True,
+            )
+            .select_related("instructor", "category")
+            .filter(
+                Q(name__icontains=query)
+                | Q(description__icontains=query)
+                | Q(category__name__icontains=query)
+                | Q(instructor__user__first_name__icontains=query)
+                | Q(instructor__user__last_name__icontains=query)
+            )
+            .distinct()
+            .order_by("start_datetime")
+        )
 
-        instructor_results = Instructor.objects.filter(
-            is_active=True
-        ).select_related('user').filter(
-            Q(user__first_name__icontains=query) |
-            Q(user__last_name__icontains=query) |
-            Q(specialties__icontains=query) |
-            Q(class_type__icontains=query) |
-            Q(bio__icontains=query)
-        ).distinct().order_by('-is_verified', '-rating')
+        instructor_results = (
+            Instructor.objects.filter(is_active=True)
+            .select_related("user")
+            .filter(
+                Q(user__first_name__icontains=query)
+                | Q(user__last_name__icontains=query)
+                | Q(specialties__icontains=query)
+                | Q(class_type__icontains=query)
+                | Q(bio__icontains=query)
+            )
+            .distinct()
+            .order_by("-is_verified", "-rating")
+        )
 
     context = {
-        'query': query,
-        'class_results': class_results,
-        'instructor_results': instructor_results,
-        'class_results_count': class_results.count() if query else 0,
-        'instructor_results_count': instructor_results.count() if query else 0,
+        "query": query,
+        "class_results": class_results,
+        "instructor_results": instructor_results,
+        "class_results_count": class_results.count() if query else 0,
+        "instructor_results_count": instructor_results.count() if query else 0,
     }
-    return render(request, 'services/search_results.html', context)
+    return render(request, "services/search_results.html", context)
