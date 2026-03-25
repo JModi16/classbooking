@@ -170,16 +170,19 @@ Site Administrators only have priveleges to modify the site such as;  add / remo
 </details> Administrators can use this section to add / remove classes in categories, add, remove or modify class instructors, student profiles, email addresses, add, remove and edit scheduled exercise classes
 <details><summary>Instructors Admin/summary>
 <img src="static/images/addremoveinstructors.png">
-</details> Administrators can add and remove class Instructors from this section
+</details> Administrators can add and remove class Instructors from this Profiles, Instructors
 <details><summary>Class Categories</summary>
 <img src="static/images/categories.png">
-</details> Administrators can add and remove type of classes from Categories section
+</details> Administrators can add and remove type of classes from Services, Categories
 <details><summary>Add a class </summary>
 <img src="static/images/addclass.png">
 </details>Admins can add / edit or remove a scheduled class
-<details><summary> User Profiles </summary>
-<img src="static/images/addclass.png">
-</details>Admins can add / edit or remove a scheduled classes
+<details><summary>  Classes Scheduled  </summary>
+<img src="static/images/scheduledclasses.png">
+</details>Admins can view upcoming scheduled classes and past classes in Services, Exercise classes.
+<details><summary>  Email   </summary>
+<img src="static/images/scheduledclasses.png">
+</details>Admins can view upcoming scheduled and past scheduled classes booked by students and past classes in Checkout, Class bookings
 
  
 
