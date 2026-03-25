@@ -159,4 +159,30 @@ Students can view a range of Instructors on this page.
 <img src="static/images/home/stripesuccess.png">
 </details> Stripe Dashboard in the Events and Logs show payment has succeeded
 
+ ## Site Admin 
+Site Administrators only have priveleges to modify the site such as;  add / remove classes in categories, add, remove or modify class instructors, student profiles, email addresses, add, remove and edit scheduled exercise classes using super user login credentials. Please see below
+
+<details><summary>Admin Site Login</summary>
+<img src="static/images/adminlogin.png">
+</details> Administrators can login via the site home page using their super user credentials.
+<details><summary>Site Administration</summary>
+<img src="static/images/classadmin.png">
+</details> Administrators can use this section to add / remove classes in categories, add, remove or modify class instructors, student profiles, email addresses, add, remove and edit scheduled exercise classes
+<details><summary>Instructors Admin/summary>
+<img src="static/images/addremoveinstructors.png">
+</details> Administrators can add and remove class Instructors from this section
+<details><summary>Class Categories</summary>
+<img src="static/images/categories.png">
+</details> Administrators can add and remove type of classes from Categories section
+<details><summary>Add a class </summary>
+<img src="static/images/addclass.png">
+</details>Admins can add / edit or remove a scheduled class
+<details><summary> User Profiles </summary>
+<img src="static/images/addclass.png">
+</details>Admins can add / edit or remove a scheduled classes
+
+ 
+
+
+
 
