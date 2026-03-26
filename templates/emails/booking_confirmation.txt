@@ -27,6 +27,9 @@ Package Details:
 {% endif %}- Valid for: 3 months from purchase date
 {% endif %}
 
+Location:
+- Address: {{ booking_location_address }}
+
 If you need support, reply to this email or contact {{ support_email }}.
 
 Thank you,

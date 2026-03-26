@@ -18,6 +18,10 @@ from cart.utils import build_cart_items
 
 logger = logging.getLogger(__name__)
 
+BOOKING_LOCATION_ADDRESS = (
+    "Stanmore Place Fitness Studio, Howard Road, Edgware, HA8 1FA"
+)
+
 
 def get_booking_recipient_email(booking):
     """Get recipient email, prioritizing allauth primary verified address."""
@@ -66,6 +70,7 @@ def send_booking_confirmation_email(booking):
         "booking": booking,
         "line_items": booking.line_items.all(),
         "support_email": settings.SUPPORT_EMAIL,
+        "booking_location_address": BOOKING_LOCATION_ADDRESS,
     }
 
     subject = f"Booking Confirmation - {booking.booking_id}"
