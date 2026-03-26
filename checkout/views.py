@@ -318,6 +318,7 @@ def checkout_success(request, booking_id):
 
     context = {
         "booking": booking,
+        "booking_location_address": BOOKING_LOCATION_ADDRESS,
     }
     return render(request, "checkout/checkout_success.html", context)
 

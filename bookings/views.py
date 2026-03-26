@@ -5,6 +5,10 @@ from django.contrib import messages
 from django.db.models import Q
 from checkout.models import ClassBooking
 
+BOOKING_LOCATION_ADDRESS = (
+    "Stanmore Place Fitness Studio, Howard Road, Edgware, HA8 1FA"
+)
+
 
 @login_required
 def my_bookings(request):
@@ -27,6 +31,7 @@ def my_bookings(request):
         "bookings": bookings,
         "upcoming_bookings": upcoming_bookings,
         "past_bookings": past_bookings,
+        "booking_location_address": BOOKING_LOCATION_ADDRESS,
     }
     return render(request, "bookings/my_bookings.html", context)
 
@@ -41,6 +46,7 @@ def booking_detail(request, booking_id):
     context = {
         "booking": booking,
         "now": timezone.now(),
+        "booking_location_address": BOOKING_LOCATION_ADDRESS,
     }
     return render(request, "bookings/booking_detail.html", context)
 

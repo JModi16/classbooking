@@ -91,6 +91,9 @@
                                     <p class="card-text">
                                         <strong>Total: £{{ booking.total_amount }}</strong>
                                     </p>
+                                    <p class="card-text small text-muted mb-2">
+                                        <strong>Location:</strong> {{ booking_location_address }}
+                                    </p>
                                     <p class="card-text small text-muted">
                                         Booking ID: {{ booking.booking_id|slice:":8" }}
                                     </p>
@@ -165,6 +168,9 @@
                                     </p>
                                     <p class="card-text">
                                         <strong>£{{ booking.total_amount }}</strong>
+                                    </p>
+                                    <p class="card-text small text-muted mb-2">
+                                        <strong>Location:</strong> {{ booking_location_address }}
                                     </p>
                                     <div class="mt-auto">
                                         <a href="{% url 'booking_detail' booking.booking_id %}" class="btn btn-outline-secondary btn-sm w-100">
