@@ -34,7 +34,6 @@ class ExerciseClassAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "category",
-        "difficulty_level",
         "available",
         "instructor",
         "start_datetime",
@@ -56,7 +55,6 @@ class ExerciseClassAdmin(admin.ModelAdmin):
                     "description",
                     "category",
                     "instructor",
-                    "difficulty_level",
                 )
             },
         ),

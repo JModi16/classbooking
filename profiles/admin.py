@@ -45,7 +45,6 @@ class InstructorAdmin(admin.ModelAdmin):
         "class_type",
         "is_verified",
         "years_experience",
-        "rating",
         "total_reviews",
         "is_active",
     )
@@ -77,7 +76,7 @@ class InstructorAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ("Rating & Reviews", {"fields": ("rating", "total_reviews")}),
+        ("Rating & Reviews", {"fields": ("total_reviews",)}),
         (
             "Rates & Packages",
             {
