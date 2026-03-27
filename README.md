@@ -94,6 +94,17 @@ The database was designed using DpDiagram.io. There are 5 tables within this rel
 <img src="static/images/home/cardconfirmation.png">
 </details>
 
+-   ### Database Schema
+* The database was designed using dbdiagram.io(see credits). 
+<details><summary>ERD</summary>
+There are 7 tables within this relational database:  auth_user, services_category, profiles_userprofile, profiles_instructor, service_exerciseclass, checkout_classbooking and checkout_classbookinglineitem. Instructor has a one-to-many relationship with the Course model. User Profile has a one-to-many relationship with BookingEnquiry. 
+<img src="static/images/home/dbclass1.png">
+</details>
+
+
+    
+- - - 
+
 ## Surface
 
 ### **Colour** 
@@ -163,25 +174,25 @@ Students can view a range of Instructors on this page.
 Site Administrators only have priveleges to modify the site such as;  add / remove classes in categories, add, remove or modify class instructors, student profiles, email addresses, add, remove and edit scheduled exercise classes using super user login credentials. Please see below
 
 <details><summary>Admin Site Login</summary>
-<img src="static/images/adminlogin.png">
+<img src="static/images/home/adminlogin.png">
 </details> Administrators can login via the site home page using their super user credentials.
 <details><summary>Site Administration</summary>
-<img src="static/images/classadmin.png">
+<img src="static/images/home/classadmin.png">
 </details> Administrators can use this section to add / remove classes in categories, add, remove or modify class instructors, student profiles, email addresses, add, remove and edit scheduled exercise classes
 <details><summary>Instructors Admin/summary>
-<img src="static/images/addremoveinstructors.png">
+<img src="static/images/home/addremoveinstructors.png">
 </details> Administrators can add and remove class Instructors from this Profiles, Instructors
 <details><summary>Class Categories</summary>
-<img src="static/images/categories.png">
+<img src="static/images/home/categories.png">
 </details> Administrators can add and remove type of classes from Services, Categories
 <details><summary>Add a class </summary>
-<img src="static/images/addclass.png">
+<img src="static/images/home/addclass.png">
 </details>Admins can add / edit or remove a scheduled class
 <details><summary>  Classes Scheduled  </summary>
-<img src="static/images/scheduledclasses.png">
+<img src="static/images/home/scheduledclasses.png">
 </details>Admins can view upcoming scheduled classes and past classes in Services, Exercise classes.
 <details><summary>  Email   </summary>
-<img src="static/images/scheduledclasses.png">
+<img src="static/images/home/scheduledclasses.png">
 </details>Admins can view upcoming scheduled and past scheduled classes booked by students and past classes in Checkout, Class bookings.
 
 ## Deployment
