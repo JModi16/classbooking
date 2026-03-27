@@ -95,12 +95,12 @@ The database was designed using DpDiagram.io. There are 5 tables within this rel
 </details>
 
 -   ### Database Schema
-  * The database was designed using dbdiagram.io(see credits). 
-   <details><summary>ERD</summary>
-   <img src="static/images/home/dbclassbooking.pdf">
-   </details>
+* The database was designed using dbdiagram.io(see credits). 
+<details><summary>ERD</summary>
+<img src="static/images/home/dbclass1.png">
+</details>
 
-   * There are 7 tables within this relational database:  auth_user, services_category, profiles_userprofile, profiles_instructor, service_exerciseclass, checkout_classbooking and checkout_classbookinglineitem. Instructor has a one-to-many relationship with the Course model. User Profile has a one-to-many relationship with BookingEnquiry. 
+* There are 7 tables within this relational database:  auth_user, services_category, profiles_userprofile, profiles_instructor, service_exerciseclass, checkout_classbooking and checkout_classbookinglineitem. Instructor has a one-to-many relationship with the Course model. User Profile has a one-to-many relationship with BookingEnquiry. 
     
 - - - 
 
