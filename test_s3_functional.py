@@ -38,7 +38,10 @@ try:
     print(f"   Content: {downloaded_content.decode()}")
     # Verify content
     if downloaded_content == test_content:
-        success_msg = "\n✅ Content verification successful - S3 is working perfectly!"
+        success_msg = (
+            "\n✅ \nContent verification successful - "
+            "S3 is working perfectly!"
+        )
         print(success_msg)
     else:
         fail_msg = (
