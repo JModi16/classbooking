@@ -13,7 +13,10 @@ from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
 # Setup Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'service_platform.settings')
+os.environ.setdefault(
+    'DJANGO_SETTINGS_MODULE',
+    'service_platform.settings',
+)
 sys.path.insert(0, os.path.dirname(__file__))
 django.setup()
 
@@ -24,10 +27,29 @@ INSTRUCTORS_DATA = [
         'first_name': 'Sarah',
         'last_name': 'Smith',
         'email': 'sarah@example.com',
-        'bio': 'Sarah is a certified Hatha Yoga instructor with 8 years of experience teaching in London. She specializes in beginner-friendly classes that focus on flexibility and mindfulness. Sarah completed her 200-hour yoga teacher training at Yoga Alliance and has helped hundreds of students discover the transformative power of yoga.',  # noqa: E501
-        'lesson_description': 'My yoga classes combine traditional Hatha techniques with modern flexibility training. Each session includes warm-up poses, main asana practice, and a deep relaxation period. I focus on proper alignment and breathing techniques to help you build strength while reducing stress. Perfect for all levels, from complete beginners to experienced practitioners.',  # noqa: E501
-        'specialties': 'Hatha Yoga, Vinyasa Flow, Yoga for Flexibility, Mindfulness',  # noqa: E501
-        'certifications': 'Yoga Alliance 200-Hour RYT, Certified Yoga Instructor, CPR/First Aid',  # noqa: E501
+        'bio': (
+            'Sarah is a certified Hatha Yoga instructor with 8 years of '
+            'experience teaching in London. She specializes in beginner-'
+            'friendly classes that focus on flexibility and mindfulness. '
+            'Sarah completed her 200-hour yoga teacher training at Yoga '
+            'Alliance and has helped hundreds of students discover the '
+            'transformative power of yoga.'
+        ),
+        'lesson_description': (
+            'My yoga classes combine traditional Hatha techniques with '
+            'modern flexibility training. Each session includes warm-up '
+            'poses, main asana practice, and a deep relaxation period. I '
+            'focus on proper alignment and breathing techniques to help you '
+            'build strength while reducing stress. Perfect for all levels, '
+            'from complete beginners to experienced practitioners.'
+        ),
+        'specialties': (
+            'Hatha Yoga, Vinyasa Flow, Yoga for Flexibility, Mindfulness'
+        ),
+        'certifications': (
+            'Yoga Alliance 200-Hour RYT, Certified Yoga Instructor, '
+            'CPR/First Aid'
+        ),
         'years_experience': 8,
         'hourly_rate': 45.00,
         'package_single_rate': 18.00,
@@ -44,10 +66,28 @@ INSTRUCTORS_DATA = [
         'first_name': 'James',
         'last_name': 'Taylor',
         'email': 'james@example.com',
-        'bio': 'James is a certified personal trainer and fitness coach with 6 years of professional experience. He specializes in strength training, HIIT workouts, and functional fitness. James has worked with clients ranging from beginners to competitive athletes, helping them achieve their fitness goals through personalized training programs.',  # noqa: E501
-        'lesson_description': 'My personal training sessions are tailored to your specific goals and fitness level. Whether you want to build strength, lose weight, or improve overall fitness, I create customized workout plans that keep you motivated and challenged. Sessions include warm-up, strength/cardio training, and cool-down stretching.',  # noqa: E501
-        'specialties': 'Strength Training, HIIT, Weight Loss, Functional Fitness',  # noqa: E501
-        'certifications': 'NASM Certified Personal Trainer, CPR/AED, Nutrition Specialist',  # noqa: E501
+        'bio': (
+            'James is a certified personal trainer and fitness coach with 6 '
+            'years of professional experience. He specializes in strength '
+            'training, HIIT workouts, and functional fitness. James has '
+            'worked with clients ranging from beginners to competitive '
+            'athletes, helping them achieve their fitness goals through '
+            'personalized training programs.'
+        ),
+        'lesson_description': (
+            'My personal training sessions are tailored to your specific '
+            'goals and fitness level. Whether you want to build strength, '
+            'lose weight, or improve overall fitness, I create customized '
+            'workout plans that keep you motivated and challenged. Sessions '
+            'include warm-up, strength/cardio training, and cool-down '
+            'stretching.'
+        ),
+        'specialties': (
+            'Strength Training, HIIT, Weight Loss, Functional Fitness'
+        ),
+        'certifications': (
+            'NASM Certified Personal Trainer, CPR/AED, Nutrition Specialist'
+        ),
         'years_experience': 6,
         'hourly_rate': 55.00,
         'package_single_rate': 25.00,
@@ -64,10 +104,30 @@ INSTRUCTORS_DATA = [
         'first_name': 'Emma',
         'last_name': 'Watson',
         'email': 'emma@example.com',
-        'bio': 'Emma is a certified Pilates instructor with 5 years of teaching experience. She trained at the London Pilates Academy and specializes in both mat and apparatus-based Pilates. Emma is passionate about helping her clients build core strength, improve posture, and achieve better body awareness through controlled movements.',  # noqa: E501
-        'lesson_description': 'My Pilates classes focus on core strengthening through controlled, precise movements. Each session includes breathing techniques, flexibility work, and targeted muscle engagement. Whether you\'re new to Pilates or looking to deepen your practice, my classes are designed to improve your strength, flexibility, and body alignment.',  # noqa: E501
-        'specialties': 'Pilates Mat, Pilates Apparatus, Core Strength, Posture Correction',  # noqa: E501
-        'certifications': 'CIMSPA Pilates Instructor, Mat Pilates Certified, Yoga Foundation',  # noqa: E501
+        'bio': (
+            'Emma is a certified Pilates instructor with 5 years of '
+            'teaching experience. She trained at the London Pilates Academy '
+            'and specializes in both mat and apparatus-based Pilates. Emma '
+            'is passionate about helping her clients build core strength, '
+            'improve posture, and achieve better body awareness through '
+            'controlled movements.'
+        ),
+        'lesson_description': (
+            'My Pilates classes focus on core strengthening through '
+            'controlled, precise movements. Each session includes breathing '
+            'techniques, flexibility work, and targeted muscle engagement. '
+            'Whether you\'re new to Pilates or looking to deepen your '
+            'practice, my classes are designed to improve your strength, '
+            'flexibility, and body alignment.'
+        ),
+        'specialties': (
+            'Pilates Mat, Pilates Apparatus, Core Strength, Posture '
+            'Correction'
+        ),
+        'certifications': (
+            'CIMSPA Pilates Instructor, Mat Pilates Certified, Yoga '
+            'Foundation'
+        ),
         'years_experience': 5,
         'hourly_rate': 40.00,
         'package_single_rate': 16.00,
@@ -84,10 +144,30 @@ INSTRUCTORS_DATA = [
         'first_name': 'Mike',
         'last_name': 'Anderson',
         'email': 'mike@example.com',
-        'bio': 'Mike is a professional boxing coach with 10 years of competitive and coaching experience. He\'s trained multiple amateur and semi-professional boxers and specializes in teaching both fitness boxing and competitive technique. Mike combines traditional boxing drills with modern fitness coaching to deliver high-energy, effective workouts.',  # noqa: E501
-        'lesson_description': 'My boxing classes blend technical boxing skills with intense cardiovascular training. Each session includes pad work, heavy bag training, footwork drills, and combinations. Whether you\'re training for fitness or competition, my classes deliver an incredible full-body workout while teaching proper boxing technique and self-defense skills.',  # noqa: E501
-        'specialties': 'Boxing Training, Fitness Boxing, Self-Defense, Competitive Boxing',  # noqa: E501
-        'certifications': 'Professional Boxing Coach, Amateur Boxing Association, First Aid Certified',  # noqa: E501
+        'bio': (
+            'Mike is a professional boxing coach with 10 years of '
+            'competitive and coaching experience. He\'s trained multiple '
+            'amateur and semi-professional boxers and specializes in '
+            'teaching both fitness boxing and competitive technique. Mike '
+            'combines traditional boxing drills with modern fitness coaching '
+            'to deliver high-energy, effective workouts.'
+        ),
+        'lesson_description': (
+            'My boxing classes blend technical boxing skills with intense '
+            'cardiovascular training. Each session includes pad work, heavy '
+            'bag training, footwork drills, and combinations. Whether '
+            'you\'re training for fitness or competition, my classes '
+            'deliver an incredible full-body workout while teaching proper '
+            'boxing technique and self-defense skills.'
+        ),
+        'specialties': (
+            'Boxing Training, Fitness Boxing, Self-Defense, Competitive '
+            'Boxing'
+        ),
+        'certifications': (
+            'Professional Boxing Coach, Amateur Boxing Association, First '
+            'Aid Certified'
+        ),
         'years_experience': 10,
         'hourly_rate': 50.00,
         'package_single_rate': 20.00,
@@ -144,7 +224,7 @@ def generate_placeholder_image(first_name, last_name, color_scheme=None):
         # Try to use a larger font
         font_size = 120
         font = ImageFont.truetype("arial.ttf", font_size)
-    except:
+    except OSError:
         # Fallback to default font
         font = ImageFont.load_default()
 
@@ -160,7 +240,7 @@ def generate_placeholder_image(first_name, last_name, color_scheme=None):
     # Add name at bottom
     try:
         name_font = ImageFont.truetype("arial.ttf", 24)
-    except:
+    except OSError:
         name_font = ImageFont.load_default()
 
     name_text = f"{first_name} {last_name}"
