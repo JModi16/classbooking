@@ -1,13 +1,12 @@
 import os
 import django
 from io import BytesIO
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'service_platform.settings')
-django.setup()
-
 from django.core.files.base import ContentFile
 from django.conf import settings
 import boto3
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'service_platform.settings')
+django.setup()
 
 print("=== AWS S3 FUNCTIONAL TEST ===\n")
 
