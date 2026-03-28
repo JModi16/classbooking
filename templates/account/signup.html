@@ -6,10 +6,8 @@
 {% block extra_css %}
 <style>
     .auth-shell {
-        min-height: calc(100vh - 300px);
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
+        min-height: auto;
+        display: block;
         padding: 1.5rem 1rem 2rem;
         background:
             radial-gradient(circle at 15% 20%, rgba(0, 123, 255, 0.10), transparent 35%),
@@ -20,7 +18,7 @@
     .auth-card {
         width: 100%;
         max-width: 760px;
-        margin-bottom: 0.75rem;
+        margin: 0 auto 1.25rem;
         border: 1px solid #d8dee9;
         border-radius: 12px;
         background: #ffffff;
