@@ -69,9 +69,9 @@
                         <a href="{% url 'instructor_profile' instructor.id %}" class="list-group-item list-group-item-action">
                             <div class="d-flex align-items-start gap-3">
                                 {% if instructor.image %}
-                                    <img src="{{ instructor.image.url }}" alt="{{ instructor.get_display_name }}" class="rounded" style="width: 56px; height: 56px; object-fit: cover;">
+                                    <img src="{{ instructor.image.url }}" alt="{{ instructor.get_display_name }}" class="rounded avatar-56 media-cover">
                                 {% else %}
-                                    <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                                    <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center avatar-56">
                                         {{ instructor.user.first_name.0 }}{{ instructor.user.last_name.0 }}
                                     </div>
                                 {% endif %}

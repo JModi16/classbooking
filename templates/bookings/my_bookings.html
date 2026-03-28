@@ -43,7 +43,7 @@
                                 {% elif booking.get_instructor and booking.get_instructor.image %}
                                     <img src="{{ booking.get_instructor.image.url }}" class="card-img-top" alt="{{ booking.get_instructor.get_display_name }}">
                                 {% else %}
-                                    <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 150px;">
+                                    <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center media-thumb-150">
                                         <span>{% if booking.course %}No Image{% else %}Package Booking{% endif %}</span>
                                     </div>
                                 {% endif %}
@@ -133,7 +133,7 @@
                                 {% elif booking.get_instructor and booking.get_instructor.image %}
                                     <img src="{{ booking.get_instructor.image.url }}" class="card-img-top" alt="{{ booking.get_instructor.get_display_name }}">
                                 {% else %}
-                                    <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 150px;">
+                                    <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center media-thumb-150">
                                         <span>No Image</span>
                                     </div>
                                 {% endif %}

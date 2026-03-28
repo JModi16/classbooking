@@ -29,7 +29,7 @@
             {% elif instructor.image %}
                 <img src="{{ instructor.image.url }}" class="img-fluid rounded" alt="{{ instructor.get_display_name }}">
             {% else %}
-                <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 400px;">
+                <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded media-thumb-400">
                     <span class="h3">No Image Available</span>
                 </div>
             {% endif %}
@@ -53,7 +53,7 @@
                     <h6 class="card-subtitle mb-2 text-muted">Instructor</h6>
                     <div class="d-flex align-items-center">
                         {% if instructor.image %}
-                            <img src="{{ instructor.image.url }}" alt="{{ instructor.get_display_name }}" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                            <img src="{{ instructor.image.url }}" alt="{{ instructor.get_display_name }}" class="rounded-circle me-3 avatar-60 media-cover">
                         {% endif %}
                         <div>
                             <h5 class="mb-0">

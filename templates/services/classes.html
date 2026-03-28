@@ -120,9 +120,9 @@
                                 <div class="col-md-6 col-lg-3 mb-3">
                                     <div class="border rounded p-3 h-100 bg-white">
                                         {% if instructor.image_url %}
-                                            <img src="{{ instructor.image_url }}" alt="{{ instructor.name }}" class="img-fluid rounded mb-2" style="height: 150px; width: 100%; object-fit: cover;">
+                                            <img src="{{ instructor.image_url }}" alt="{{ instructor.name }}" class="img-fluid rounded mb-2 media-thumb-150 media-cover w-100">
                                         {% else %}
-                                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded mb-2" style="height: 150px;">
+                                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded mb-2 media-thumb-150">
                                                 <span class="small">No Image</span>
                                             </div>
                                         {% endif %}
@@ -162,9 +162,9 @@
                         {% if class.image %}
                             <img src="{{ class.image.url }}" class="card-img-top" alt="{{ class.name }}">
                         {% elif class.instructor.image %}
-                            <img src="{{ class.instructor.image.url }}" class="card-img-top" alt="{{ class.instructor.get_display_name }}" style="height: 200px; object-fit: cover;">
+                            <img src="{{ class.instructor.image.url }}" class="card-img-top media-thumb-200 media-cover" alt="{{ class.instructor.get_display_name }}">
                         {% else %}
-                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center media-thumb-200">
                                 <span>No Image</span>
                             </div>
                         {% endif %}

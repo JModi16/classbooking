@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top shadow-sm">
     <div class="container-fluid">
         <!-- Brand/Logo -->
         <a class="navbar-brand fw-bold" href="{% url 'home' %}">
@@ -40,7 +40,7 @@
             </ul>
 
             <!-- Center - Search Bar -->
-            <form class="d-flex mx-auto" role="search" action="{% url 'site_search' %}" method="get" style="width: 320px;">
+            <form class="d-flex mx-auto nav-search-form" role="search" action="{% url 'site_search' %}" method="get">
                 <div class="input-group">
                     <input class="form-control form-control-sm" type="search" name="q" placeholder="Search classes or instructors..." aria-label="Search" value="{{ nav_search_query }}">
                     <button class="btn btn-outline-light btn-sm" type="submit">

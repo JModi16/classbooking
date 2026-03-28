@@ -33,12 +33,12 @@
                                         {% elif item.class.instructor.image %}
                                             <img src="{{ item.class.instructor.image.url }}" class="img-fluid rounded" alt="{{ item.class.instructor.get_display_name }}">
                                         {% else %}
-                                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 100px;">
+                                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded media-thumb-100">
                                                 <span>No Image</span>
                                             </div>
                                         {% endif %}
                                     {% else %}
-                                        <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded" style="height: 100px;">
+                                        <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded media-thumb-100">
                                             <span><i class="fas fa-tags me-2"></i>Package</span>
                                         </div>
                                     {% endif %}

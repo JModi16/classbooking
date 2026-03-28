@@ -25,11 +25,10 @@
     <div class="row mb-4">
         <div class="col-md-3 text-center">
             {% if instructor.image %}
-                <img src="{{ instructor.image.url }}" alt="{{ instructor.get_display_name }}" 
-                     class="img-fluid rounded-circle mb-3 shadow" style="width: 200px; height: 200px; object-fit: cover;">
+                 <img src="{{ instructor.image.url }}" alt="{{ instructor.get_display_name }}" 
+                     class="img-fluid rounded-circle mb-3 shadow avatar-200 media-cover">
             {% else %}
-                <div class="bg-secondary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow" 
-                     style="width: 200px; height: 200px;">
+                 <div class="bg-secondary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow avatar-200">
                     <span class="h1">{{ instructor.user.first_name.0 }}{{ instructor.user.last_name.0 }}</span>
                 </div>
             {% endif %}
@@ -232,7 +231,7 @@
                         {% if class.image %}
                             <img src="{{ class.image.url }}" class="card-img-top" alt="{{ class.name }}">
                         {% else %}
-                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center media-thumb-200">
                                 <span>No Image</span>
                             </div>
                         {% endif %}
