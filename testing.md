@@ -3,24 +3,23 @@
 ![Responsive Mockup](documentation/readme/images/mockup.png)
 
 
-## Contents
-* [Manual Testing](#testing)
-  * [Testing User Stories](#testing-user-stories)
-  * [Testing Site Functionality](#testing-site-functionality)
-  * [Further Testing](#further-testing)
-* [Automated testing](#automated-testing)
-  * [HTML validation](#html-validation)
-  * [CSS validation](#css-validation)
-  * [Javascript validation](#javascript-validation)
-  * [Python validation](#python-validation)
-  * [WAVE Testing](#wave-testing)
-  * [Lighthouse](#lighthouse)
-* [Bugs](#bugs)
-  * [Fixed Bugs](#fixed-bugs)
- 
- -   ### Testing User Stories
+# Table of content
 
-    -   #### Viewing and Navigation
+* [Validation](#validation)
+    * [HTML Validation](#html-validation)
+    * [CSS Validation](#css-validation)
+    * [JavaScript Linting](#javascript-linting)
+    * [Python Linting](#python-linting)
+    * [Lighthouse Testing](#lighthouse-testing)
+    * [Wave Testing](#wave-testing)
+* [Responsiveness](#responsiveness)
+* [Manual Testing](#manual-testing)
+* [User Stories Testing](#user-stories-testing)
+* [Bugs, Issues and Solutions](#bugs-issues-and-solutions)
+ 
+### Testing User Stories
+
+  #### Viewing and Navigation
 
         1. As a site user, i want to be able to view the website on a range of device sizes and it needs to be aesthetic and functional
         - Site is responsive on devices from 280px
