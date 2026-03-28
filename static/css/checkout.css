@@ -78,3 +78,63 @@ select option[value=""] {
     margin: 0;
     height: 100%;
 }
+
+.submit-button .btn {
+    min-width: 170px;
+}
+
+#card-number-element,
+#card-expiry-element,
+#card-cvc-element {
+    min-height: 40px;
+    padding: 10px 12px;
+    background-color: #fff;
+}
+
+@media (max-width: 991.98px) {
+    .submit-button {
+        margin-top: 2rem !important;
+    }
+
+    .submit-button .btn {
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    #payment-form .alert-info code {
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .submit-button {
+        text-align: left !important;
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .submit-button .btn {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .submit-button p {
+        margin-top: 0.25rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .StripeElement,
+    .stripe-style-input,
+    #card-number-element,
+    #card-expiry-element,
+    #card-cvc-element {
+        height: auto;
+        min-height: 44px;
+        padding: 12px;
+    }
+
+    #payment-form .form-label {
+        font-size: 0.95rem;
+    }
+}
