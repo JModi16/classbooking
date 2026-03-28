@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.shortcuts import redirect, render
 import logging
 
@@ -48,13 +48,14 @@ def contact(request):
             )
 
             try:
-                send_mail(
+                contact_email = EmailMessage(
                     subject=subject,
-                    message=message,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[settings.CONTACT_RECIPIENT_EMAIL],
-                    fail_silently=False,
+                    body=message,
+                    from_email=form_data['email'],
+                    to=[settings.CONTACT_RECIPIENT_EMAIL],
+                    reply_to=[form_data['email']],
                 )
+                contact_email.send(fail_silently=False)
                 messages.success(
                     request,
                     'Thanks for your message. We will contact you shortly.',
