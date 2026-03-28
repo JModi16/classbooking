@@ -155,6 +155,9 @@ EMAIL_FROM_NAME = os.environ.get(
 SUPPORT_EMAIL = os.environ.get(
     "SUPPORT_EMAIL", EMAIL_HOST_USER or "mammas.cakes16@gmail.com"
 ).strip()
+CONTACT_RECIPIENT_EMAIL = os.environ.get(
+    "CONTACT_RECIPIENT_EMAIL", "mammas.cakes16@gmail.com"
+).strip()
 EMAIL_BACKEND = os.environ.get(
     "EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend"
 )
