@@ -16,7 +16,34 @@
 * [Manual Testing](#manual-testing)
 * [User Stories Testing](#user-stories-testing)
 * [Bugs, Issues and Solutions](#bugs-issues-and-solutions)
- 
+
+# Validation 
+## HTML Validation
+The initial test of the page validated by URL using [W3C HTML Validator](https://validator.w3.org/#validate_by_uri) showed couple of errors but were fixed:
+
+ | Page on site              | Error                                                                                                                                                                                              | Fixed |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| Classes/ Personal Trainer | Bad Value for attribute href on element Illegal character in query. Space is not allowed                                                                                                           | Yes   |
+| Classes/ Personal Trainer | The heading h4 follows the heading h2 (with computed level 2) skipping 1 heading level                                                                                                             | Yes   |
+| Classes/Pilates           | The heading h4 follows the heading h2 (with computed level 2) skipping 1 heading level                                                                                                             | Yes   |
+| Accounts/Login            | The heading h4 follows the heading h2 (with computed level 2) skipping 1 heading level                                                                                                             | Yes   |
+| Accounts/Password/Reset   | Consider adding a lang attribute to the html start tag to declare the language of this document. Trailing slash on void elements has no effect and interacts badly with unquoted attribute values. | Yes   |
+| Accounts/Password/Reset   | Consider adding a lang attribute to the html start tag to declare the language of this document.                                                                                                   | Yes   |
+
+I have attached screenshots of the test results
+
+<details><summary>Final result</summary>
+<img src="static/images/home/validatorpt.png">
+</details>
+
+<details><summary>Final result</summary>
+<img src="static/images/home/validatorpt.png">
+</details>
+
+<details><summary>Final result</summary>
+<img src="static/images/home/validatorpt.png">
+</details>
+
 ### Testing User Stories
 
   #### Viewing and Navigation
