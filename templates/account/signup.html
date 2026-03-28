@@ -6,11 +6,11 @@
 {% block extra_css %}
 <style>
     .auth-shell {
-        min-height: calc(100vh - 220px);
+        min-height: calc(100vh - 300px);
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
-        padding: 2rem 1rem;
+        padding: 1.5rem 1rem;
         background:
             radial-gradient(circle at 15% 20%, rgba(0, 123, 255, 0.10), transparent 35%),
             radial-gradient(circle at 85% 80%, rgba(13, 110, 253, 0.08), transparent 35%),
@@ -113,6 +113,17 @@
     .auth-errors ul {
         margin: 0;
         padding-left: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+        .auth-shell {
+            min-height: auto;
+            padding: 1rem 0.75rem;
+        }
+
+        .auth-card {
+            max-width: 100%;
+        }
     }
 </style>
 {% endblock %}

@@ -168,6 +168,30 @@ body {
     padding-bottom: 2rem;
 }
 
+.site-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.site-footer .container {
+    margin-top: 0;
+}
+
+.site-footer h2 {
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+}
+
+.site-footer .row {
+    row-gap: 1rem !important;
+}
+
+.site-footer p,
+.site-footer li {
+    margin-bottom: 0.35rem;
+}
+
 .home-footer {
     background: linear-gradient(135deg, #5b2a9d 0%, #7b3fbd 100%);
     border: 1px solid #4d2287;
