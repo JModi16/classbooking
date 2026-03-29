@@ -10,7 +10,6 @@ def view_cart(request):
     """Display shopping cart with bookings"""
     cart = request.session.get('cart', {})
     cart_items, total, _ = build_cart_items(cart)
-
     if total < getattr(settings, 'FREE_DELIVERY_THRESHOLD', 0):
         delivery = (
             total * getattr(
@@ -44,7 +43,7 @@ def add_class_to_cart(request, class_id):
         })
     cart = request.session.get('cart', {})
     class_id_str = str(class_id)
-    
+
     # For class bookings, quantity is typically 1 (booking for yourself)
     # but could be multiple if helping someone else book
     quantity = request.POST.get('quantity', 1)
@@ -52,33 +51,44 @@ def add_class_to_cart(request, class_id):
         quantity = int(quantity)
     except (ValueError, TypeError):
         quantity = 1
-    
+
     # Check if we have enough spots
     available = exercise_class.get_available_spots()
     if quantity > available:
         return JsonResponse({
             'success': False,
-            'message': f'Only {available} spot(s) available'
+            'message': (
+                f'Only {available} spot(s) available'
+            )
         })
-    
+
     if class_id_str in cart:
         cart[class_id_str] += quantity
     else:
         cart[class_id_str] = quantity
-    
+
     request.session['cart'] = cart
     return JsonResponse({
         'success': True,
         'cart_count': sum(cart.values()),
-        'message': f'Added {quantity} spot(s) to booking'
+        'message': (
+            f'Added {quantity} spot(s) to booking'
+        ),
     })
 
 
 @login_required
 def add_package_to_cart(request, instructor_id, package_type):
     """Add instructor package option to cart"""
-    instructor = get_object_or_404(Instructor, id=instructor_id, is_active=True)
-    package_option = get_package_option(instructor, package_type)
+    instructor = get_object_or_404(
+        Instructor,
+        id=instructor_id,
+        is_active=True,
+    )
+    package_option = get_package_option(
+        instructor,
+        package_type,
+    )
 
     if not package_option:
         return JsonResponse({
@@ -185,4 +195,7 @@ def add_to_cart(request, service_id):
         cart[service_id] = 1
 
     request.session['cart'] = cart
-    return JsonResponse({'success': True, 'cart_count': sum(cart.values())})
+    return JsonResponse({
+        'success': True,
+        'cart_count': sum(cart.values()),
+    })
