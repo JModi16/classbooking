@@ -95,8 +95,8 @@ def main():
         print(f"Instructor already exists: {instructor.get_display_name()}")
     print(
         "   Rating: "
-            f"{instructor.rating}, Experience: "
-            f"{instructor.years_experience} years\n"
+        f"{instructor.rating}, Experience:"
+        f"{instructor.years_experience} years\n"
     )
 
     print("Getting Yoga category...")
