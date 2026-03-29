@@ -505,15 +505,4 @@ EMAIL_FROM_NAME = os.environ.get('EMAIL_FROM_NAME', 'Service Booking Platform').
 SUPPORT_EMAIL = os.environ.get('SUPPORT_EMAIL', EMAIL_HOST_USER or 'mammas.cakes16@gmail.com').strip()
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 
-### Set up Stripe Payments
 
-1. Log in to Stripe, click on the developers tab and API keys copy the API key and set them in Heroku as config variables in the following:
-
-- STRIPE_PUBLIC_KEY: Stripe publishable key goes here
-- STRIPE_SECRET_KEY: Stripe secret key goes here
-
-2. Back in Stripe set up a new webhook for your deployed site by clicking on webhooks, click on 'add endpoint' and paste in your deployed site's URL followed by /checkout/wh/ and set it to listen for all events.
-3. Click on your newly set up webhook and click on 'Signing Secret' at the top to reveal the secret value. Copy it and set it as a new config variable in Heroku:
-- STRIPE_WH_SECRET: Signing secret from new webhook.
-
-```
