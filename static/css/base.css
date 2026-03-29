@@ -253,6 +253,7 @@ body {
 
 .media-cover {
     object-fit: cover;
+    object-position: top center;
 }
 
 .avatar-56 {
