@@ -1,14 +1,4 @@
-﻿"""
-Create 10 unique instructors, each assigned to exactly one class type.
-Distribution: Personal Trainer (3), Yoga (3), Pilates (2), Boxercise (2)
-
-Safe mode behavior:
-- New records are created with full data.
-- Existing records only have blank fields filled.
-- Existing non-blank Admin values are never overwritten.
-"""
-
-from django.core.files.base import ContentFile
+﻿from django.core.files.base import ContentFile
 from profiles.models import Instructor, UserProfile
 from django.contrib.auth.models import User
 import os
@@ -336,11 +326,10 @@ def create_10_instructors():
     for data in INSTRUCTORS:
         username = data['username']
         print(
-            f"Processing: {
-                data['first_name']} {
-                data['last_name']} ({
-                data['class_type']})...",
-            end=" ")
+            f"Processing: {data['first_name']} {data['last_name']} "
+            f"({data['class_type']})...",
+            end=" "
+        )
 
         # Get or create user
         user, user_created = User.objects.get_or_create(
