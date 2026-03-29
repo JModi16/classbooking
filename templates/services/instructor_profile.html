@@ -93,7 +93,7 @@
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <h4 class="card-title"><i class="fas fa-tags"></i> Rates & Packages</h4>
-                    {% if instructor.user.username in ['neil_patel', 'john_mcgovern', 'sheena_shah'] %}
+                    {% if instructor.user.username == 'neil_patel' or instructor.user.username == 'john_mcgovern' or instructor.user.username == 'sheena_shah' %}
                         <span class="badge bg-warning text-dark ms-2">All information is strictly fictional</span>
                     {% endif %}
                     <hr>
