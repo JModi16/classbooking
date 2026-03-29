@@ -236,19 +236,23 @@ body {
 }
 
 .media-thumb-150 {
-    height: 150px;
+    max-height: 150px;
+    width: 100%;
 }
 
 .media-thumb-165 {
-    height: 165px;
+    max-height: 165px;
+    width: 100%;
 }
 
 .media-thumb-200 {
-    height: 200px;
+    max-height: 200px;
+    width: 100%;
 }
 
 .media-thumb-400 {
-    height: 400px;
+    max-height: 400px;
+    width: 100%;
 }
 
 .media-cover {
