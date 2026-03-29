@@ -104,7 +104,7 @@ select option[value=""] {
 @media (max-width: 767.98px) {
     #payment-form .alert-info code {
         white-space: normal;
-        word-break: break-word;
+        overflow-wrap: break-word;
     }
 
     .submit-button {
