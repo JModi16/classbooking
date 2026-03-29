@@ -129,6 +129,52 @@ I ran the code through [CI Python Liner](https://pep8ci.herokuapp.com/), which s
 | Cart          | utils.py                               | E501 lines too long                                                                                 | Fixed                                                                     |
 | cart          | views.py                               | E501, E292 and E293 and E302                                                                        | No, blank line still exists                                               |
 
+
+## Lighthouse Testing
+The site was run through Google Chrome Devtools To The main reasons for the low result were:
+
+* Improve Image Delivery- reduce image size and change image from .jpg format .webp format
+* Render-blocking resources - AWS, JSDeliver, JQuery impacting rendering page content to the screen, which I wasn't able to improve
+* Document Request Latency- Reduce latency by avoiding redirects ensuring faster server response and enable text compression.
+* Use efficient cache lifetimes- impacted by stripe utility which could not be adjusted
+
+
+
+#### For full results see dropdown below
+
+### Desktop
+</details>
+<details><summary>Home</summary>
+<img src="static/images/home/lighthousehome.png">
+</details>
+<details><summary>Instructors Page</summary>
+<img src="static/images/home/lighthouseinstructors.png">
+</details>
+<details><summary>Classes Page</summary>
+<img src="static/images/home/lighthouseclass1.png">
+</details>
+<details><summary>Pilates</summary>
+<img src="static/images/home/lighthousepilates.png">
+</details>
+<details><summary>Personal Trainer</summary>
+<img src="static/images/home/lighthousept.png">
+</details>
+<details><summary>Yoga</summary>
+<img src="static/images/home/lighthouseyoga.png">
+</details>
+<details><summary>Boxercise</summary>
+<img src="static/images/home/lighthousebox.png">
+</details>
+<details><summary>Cart</summary>
+<img src="static/images/home/lighthousecart.png">
+</details>
+<details><summary>Checkout</summary>
+<img src="static/images/home/lighthousecheckoutpng">
+</details>
+<details><summary>My Bookings</summary>
+<img src="static/images/home/lighthousebookings.png">
+</details>
+  
 ### Testing User Stories
 
   #### Viewing and Navigation
