@@ -32,17 +32,65 @@ The initial test of the page validated by URL using [W3C HTML Validator](https:/
 
 I have attached screenshots of the test results
 
-<details><summary>Final result</summary>
+<details><summary>Validator results</summary>
+<img src="static/images/home/validatorh5.png">
+</details>
+
+<details><summary>Validator Results</summary>
 <img src="static/images/home/validatorpt.png">
 </details>
 
-<details><summary>Final result</summary>
-<img src="static/images/home/validatorpt.png">
+<details><summary>Validator Results</summary>
+<img src="static/images/home/validatorpassword.png">
 </details>
 
-<details><summary>Final result</summary>
-<img src="static/images/home/validatorpt.png">
+## CSS Validation
+I run the CSS code through [W3C CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_input) by direct input and file upload.
+for 4 files
+
+1. Base.css
+2. checkout.css
+3. classes.css
+4. instructors.css
+
+No errors found on any files.
+See one screenshot below, which applies to all files
+<details><summary>Validator Results</summary>
+<img src="static/images/home/css.png">
 </details>
+
+### Warnings
+
+### Warnings
+
+* Vendor extension error - there is nothing to do about this since those extensions help support browser compatibility efforts
+* "The Value break-word is deprecated " Replaced word with overflow wrap in checkout.css
+* Same colour for background-color and border-color - necessary action to override Bootstrap styling
+
+<details><summary>CSS Warnings</summary>
+<img src="static/images/home/warningcss.png">
+</details>
+
+<details><summary>CSS Warning</summary>
+<img src="static/images/home/csswarnings.png">
+</details>
+
+
+## JavaScript Linting
+I have one javescript file stripe_element.js. I ran the JavaScript code through [JSHint](https://jshint.com/), which  showed one missing colon, and one undefined variable Stripe.  I fixed this by  adding  the JSHint-compatible global declaration, declaring Stripe as a known global for JSHint at the top of stripe_element.js. This tells JShint that Stripe is provided externally by Stripe.JS. 
+
+Below shows screenshot with JSHint warnings and JSHint Fixed with Metric information
+
+<details><summary>JSHint Warnings</summary>
+<img src="static/images/home/jshint.png">
+</details>
+
+<details><summary>JSHint Fixed</summary>
+<img src="static/images/home/jshint2.png">
+</details>
+
+## Python Linting
+I ran the code through [CI Python Liner](https://pep8ci.herokuapp.com/), which shows a multiple errors mostly regarding blank lines, missing whitespaces and too long lines.
 
 ### Testing User Stories
 
