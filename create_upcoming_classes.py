@@ -1,19 +1,14 @@
-"""Simple reset: keep 10 primary instructors and create 2 upcoming classes each."""
-
 import os
 import sys
 from datetime import timedelta
-
 import django
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'service_platform.settings')
-sys.path.insert(0, os.path.dirname(__file__))
-django.setup()
-
 from django.utils import timezone
 from profiles.models import Instructor
 from services.models import Category, ExerciseClass
+sys.path.insert(0, os.path.dirname(__file__))
 
+
+django.setup()
 
 PRIMARY = {
     'john_mcgovern': 'Personal Trainer',
@@ -28,15 +23,18 @@ PRIMARY = {
     'james_taylor': 'Boxercise',
 }
 
-
 def reset_classes():
     now = timezone.now()
     all_instructors = Instructor.objects.select_related('user')
     primary_usernames = set(PRIMARY.keys())
 
     # 1) Keep only primary instructors active
-    all_instructors.exclude(user__username__in=primary_usernames).update(is_active=False)
-    primary_instructors = all_instructors.filter(user__username__in=primary_usernames)
+    all_instructors.exclude(
+        user__username__in=primary_usernames
+    ).update(is_active=False)
+    primary_instructors = all_instructors.filter(
+        user__username__in=primary_usernames
+    )
 
     # 2) Ensure primary instructor class_type + active status
     for instructor in primary_instructors:
@@ -54,19 +52,32 @@ def reset_classes():
     # 3) Remove ALL future classes, then recreate a clean set
     ExerciseClass.objects.filter(start_datetime__gte=now).delete()
 
-    categories = {category.name: category for category in Category.objects.all()}
+    categories = {
+        category.name: category
+        for category in Category.objects.all()
+    }
     if not categories:
         print('❌ No categories found. Please create categories first.')
         return
 
     # 4) Create exactly 2 future classes per primary instructor
     created = 0
-    ordered_primary = sorted(primary_instructors, key=lambda item: item.user.username)
+    ordered_primary = sorted(
+        primary_instructors,
+        key=lambda item: item.user.username
+    )
 
     for index, instructor in enumerate(ordered_primary):
         class_type = PRIMARY[instructor.user.username]
-        category = categories.get(class_type) or next(iter(categories.values()))
-        price = instructor.package_single_rate or instructor.hourly_rate or 20.00
+        category = (
+            categories.get(class_type)
+            or next(iter(categories.values()))
+        )
+        price = (
+            instructor.package_single_rate
+            or instructor.hourly_rate
+            or 20.00
+        )
         display_name = instructor.get_display_name()
 
         for slot in range(2):
@@ -81,8 +92,12 @@ def reset_classes():
             end_datetime = start_datetime + timedelta(hours=1)
 
             ExerciseClass.objects.create(
-                name=f'{class_type} - {display_name} (Session {slot + 1})',
-                description=f'{class_type} training session with {display_name}.',
+                name=(
+                    f'{class_type} - {display_name} (Session {slot + 1})'
+                ),
+                description=(
+                    f'{class_type} training session with {display_name}.'
+                ),
                 category=category,
                 instructor=instructor,
                 start_datetime=start_datetime,
