@@ -209,7 +209,7 @@ To create the database:
 3. You will receive an email with the new PostgreSQL instance. Keep these details safe, they will be used shortly.
 
 #### Heroku
-To deploy Little Pont to Heroku, take the following steps:
+To deploy class-booking to Heroku, take the following steps:
 1. Create a requirements.txt file using the terminal command `pip freeze > requirements.txt`
 2. Create a Procfile with the terminal command `echo web: python app.py > Procfile`. Ensure you use a capital 'P' for this file.
 3. `git add` and `git commit` these changes and `git push` to GitHub repository
