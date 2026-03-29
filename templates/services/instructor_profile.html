@@ -93,6 +93,9 @@
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <h4 class="card-title"><i class="fas fa-tags"></i> Rates & Packages</h4>
+                    {% if instructor.user.username == 'neil_patel' %}
+                        <span class="badge bg-warning text-dark ms-2">All information is strictly fictional</span>
+                    {% endif %}
                     <hr>
                     <div class="table-responsive">
                         <table class="table table-hover">
