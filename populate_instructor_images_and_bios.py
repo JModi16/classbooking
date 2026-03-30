@@ -292,10 +292,20 @@ def populate_instructors():
             instructor.is_verified = data['is_verified']
             instructor.is_active = True
 
-            img_io = generate_placeholder_image(data['first_name'], data['last_name'])
+            img_io = generate_placeholder_image(
+                data['first_name'], data['last_name']
+            )
             image_name = f"instructor_{username}.png"
-            instructor.image.save(image_name, ContentFile(img_io.read()), save=False)
-            print("✅ Created\n   → Full profile created\n   → Profile image generated")
+            instructor.image.save(
+                image_name,
+                ContentFile(img_io.read()),
+                save=False
+            )
+            print(
+                "✅ Created\n"
+                "   → Full profile created\n"
+                "   → Profile image generated"
+            )
             instructor.save()
             created_count += 1
         else:
@@ -346,7 +356,9 @@ def populate_instructors():
     )
     print("\nInstructor profiles are now live on the platform:")
     print("  • Visit: http://127.0.0.1:8000/services/")
-    print("  • Admin: http://127.0.0.1:8000/admin/profiles/instructor/")
+    print(
+        "  • Admin: http://127.0.0.1:8000/admin/profiles/instructor/"
+    )
     print(
         "\nStorage location depends on USE_AWS setting "
         "(S3 when enabled, local media folder otherwise)."
