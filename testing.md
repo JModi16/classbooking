@@ -4,7 +4,7 @@
 
 
 # Table of content
-
+* [Testing User Stories](#testing-user-stories)
 * [Validation](#validation)
     * [HTML Validation](#html-validation)
     * [CSS Validation](#css-validation)
@@ -13,8 +13,51 @@
     * [Lighthouse Testing](#lighthouse-testing)
 * [Responsiveness](#responsiveness)
 * [Testing site functionality](#testing-site-functionality)
-* [User Stories Testing](#user-stories-testing)
 * [Bugs, Issues and Solutions](#bugs-issues-and-solutions)
+
+## Testing User Stories
+
+-   #### Viewing and Navigation
+
+
+   1. As a site user, I want to be browse approved Instructors with profile images and descriptions available. The Instructors link on the navigation bar or hamburger menu on smaller devices displays this.
+   2. As a site user, I want to be able to view class types available. The Classes link on the navigation bar or hamburger menu on smaller devices displays this. 
+The colourful design and choice of classeses available shows what the platforms delivers .
+3. As a site user, I want to be able to select each Instructors profile.  
+  4. As a site user, I want to be able to select the class type of my preference .
+5. As a site user, I want to view the price and package deals of classes on offer.
+6. As a site user, once logged in I want to be able to book a class .
+7. As a  site user, I want to view the contents of my booking cart and be able to add, edit or delete class bookings.
+
+  
+  
+-   #### Registration and User Account 
+ 
+   1. As site user, I want to be able to easily register and account.
+   2. As a registered user, I want to easily be able to login and logout of my account.
+   3. As a registered user, I want to be able to recover my password if i have forgotten it, by receiving a password reset mail.  
+4. As a registered user, I would like to receive a confirmation with an acknowledgment that an account has been created with details of site options. 
+    
+   
+ 
+-   ####  Checkout and Bookings 
+   1. As a site user I want to select and purchase a class or package from the cart and checkout page.  
+   2. As a site user, I want an easy and streamlined payment process where the payment interface is user-friendly. 
+   3. As a site user, when a class booking is confirmed, I would like this to be shown on screen. 
+4. As a site user, I would like to receive a booking confirmation by email with required booking details. 
+
+ 
+-   #### Site Administrator 
+ 
+1. As a site admin, I want to be able to easily add, edit and delete classes types. 
+2. As a site admin, I want to easily be able to add, edit or delete Instructors and their profiles. 
+
+3. As a site administrator, I want to add, remove or edit a scheduled exercise classes which have been created. 
+
+4. As a site administrator, I want to add, edit and remove registered user account profiles.
+
+5. As a site administrator, I want to be able to update images of Instructors and class types.
+   
 
 # Validation 
 ## HTML Validation
@@ -242,39 +285,38 @@ Manual testing was performed on the site with multiple different testing scenari
 The colourful design and choice of classeses available shows what the platforms delivers .
 3. As a site user, I want to be able to select each Instructors profile.  
   4. As a site user, I want to be able to select the class type of my preference .
-5. As a site user, I want to view the price and package deals of classes on offer 
-6. As a site user, once logged in I want to be able to book a class 
-7. As a  site user, i want to view the contents of my booking cart and be able to add, edit or delete class bookings.
+5. As a site user, I want to view the price and package deals of classes on offer.
+6. As a site user, once logged in I want to be able to book a class .
+7. As a  site user, I want to view the contents of my booking cart and be able to add, edit or delete class bookings.
 
   
   
 -   #### Registration and User Account 
  
-   1. As site user, I want to be able to easily register and account 
-   2. As a registered user, I want to easily be able to login and logout of my account 
+   1. As site user, I want to be able to easily register and account.
+   2. As a registered user, I want to easily be able to login and logout of my account.
    3. As a registered user, I want to be able to recover my password if i have forgotten it, by receiving a password reset mail.  
-4. As a registered user, I would like to receive a confirmation with acknowledgment that an account has been created with details of site options. 
+4. As a registered user, I would like to receive a confirmation with an acknowledgment that an account has been created with details of site options. 
     
    
  
 -   ####  Checkout and Bookings 
-   1. As a site user I want to select and purchase a class or package from the cart and checkout page  
-   2. As a site user, I want an easy and streamlined payment process where the payment interface is user-friendly 
+   1. As a site user I want to select and purchase a class or package from the cart and checkout page.  
+   2. As a site user, I want an easy and streamlined payment process where the payment interface is user-friendly. 
    3. As a site user, when a class booking is confirmed, I would like this to be shown on screen. 
-
 4. As a site user, I would like to receive a booking confirmation by email with required booking details. 
 
  
 -   #### Site Administrator 
  
-1. As a site admin, I want to be able to easily add, edit and delete classes types 
-2. As a site admin, I want to easily be able to add, edit or delete Instructors and their profiles 
+1. As a site admin, I want to be able to easily add, edit and delete classes types. 
+2. As a site admin, I want to easily be able to add, edit or delete Instructors and their profiles. 
 
-3. As a site administrator, I want to add, remove or edit a scheduled exercise classes which have been created 
+3. As a site administrator, I want to add, remove or edit a scheduled exercise classes which have been created. 
 
 4. As a site administrator, I want to add, edit and remove registered user account profiles.
 
-5. As a site administrator, I want to be able to update images of Instructors and class types
+5. As a site administrator, I want to be able to update images of Instructors and class types.
    
 
 # Bugs, Issues and Solutions
