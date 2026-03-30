@@ -194,11 +194,11 @@ Results below
 | Ipad Pro 3rd Generation | 2388 by 1668 px             | Pass         | Pass  | Pass               | Pass        | Pass    | Pass                            | Pass | Pass     | Pass        | Pass        | Pass       | Pass               | Pass             |
 | Ipad Pro 5th Generation | 2732 by 2048 px             | Pass         | Pass  | Pass               | Pass        | Pass    | Pass                            | Pass | Pass     | Pass        | Pass        | Pass       | Pass               | Pass             |
 
-
+I physically tested the site across three different web browsers. Chrome being default, Microsoft Edge and Apple Safari. I found that some images on my home page were not presented well on Chrome as they were on Apple Safari web browser.This was vice versa, where some images were presenting better on Safari instead of Chrome and Microsoft Edge. I checked my css styling properties and my current setup includes object-fit: cover, width: 100%, and responsive container which is already compatible with Safari and Edge.I attempted to use Adobe Express to crop the images, save in jpg and png but did not make a difference. I finally resolved this by applying media thumb-165 with height-auto and max-height:150px to fix mobile cropping on home page and better visibility. Devices need their browsing data and cache deleted for changes to be synchronized.
 
 -   ### Testing site functionality
 
-Manual testing was performed on teh site with multiple different testing scenarios. Please see below
+Manual testing was performed on the site with multiple different testing scenarios. Please see below
 
 
 | Site Page                                     | Testing Performed                                                                                                                                                                                                                                 | Expected Outcome                                                                                                                                                                                                                                                                                                                 | Result |
