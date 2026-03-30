@@ -187,7 +187,7 @@ Site Administrators only have priveleges to modify the site such as;  add / remo
 
 ## Testing
 
-Extensive testing was carried out on this project. Please review [Testing.md](TESTING.md) for all testing performed.
+Extensive testing was carried out on this project. Please review [testing.md](testing.md) for all testing performed.
 
 
 ## Deployment
