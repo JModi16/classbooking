@@ -64,7 +64,7 @@ Class-Booking is my forth milestone project for Code Institute's Level 5 Diploma
  ### Database Schema
 The database was designed using DpDiagram.io. There are 5 tables within this relational database: User, Cake, Customer, Order and OrderItem.
 <details><summary>ERD</summary>
-<img src="static/images/erdcakes.png">
+<img src="static/images/home/dbclass1.png">
 </details>
 
 
