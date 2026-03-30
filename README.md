@@ -15,11 +15,6 @@ Class-Booking is my forth milestone project for Code Institute's Level 5 Diploma
 * [Skeleton](#skeleton)
 * [Surface](#surface)
 * [Features](#features)
-    * [Home Page](#home-page)
-    * [Product Page](#products-page)
-    * [Profile Page](#profile-page)
-    * [Contact Form](#contact-form)
-    * [Authentication](#authentication)
 * [Technologies](#technologies-used)
 * [Testing](#testing)
 * [Future Enhancements](#Future-Enhancements)
@@ -159,6 +154,9 @@ Students can view a range of Instructors on this page.
 <details><summary>Stripe Transaction Summary</summary>
 <img src="static/images/home/stripesuccess.png">
 </details> Stripe Dashboard in the Events and Logs show payment has succeeded
+<details><summary>Contact Us Form Summary</summary>
+<img src="static/images/home/contactus.png">
+</details> Site users have the option to access the contact us form in the quick link sections. Once completed, form is submitted to site owner.
 
  ## Site Admin 
 Site Administrators only have priveleges to modify the site such as;  add / remove classes in categories, add, remove or modify class instructors, student profiles, email addresses, add, remove and edit scheduled exercise classes using super user login credentials. Please see below
@@ -181,9 +179,60 @@ Site Administrators only have priveleges to modify the site such as;  add / remo
 <details><summary>  Classes Scheduled  </summary>
 <img src="static/images/home/scheduledclasses.png">
 </details>Admins can view upcoming scheduled classes and past classes in Services, Exercise classes.
-<details><summary>  Email   </summary>
+<details><summary> Email   </summary>
 <img src="static/images/home/scheduledclasses.png">
 </details>Admins can view upcoming scheduled and past scheduled classes booked by students and past classes in Checkout, Class bookings.
+
+## Technologies Used
+
+## Language
+* HTML - Used for the main structure of the page
+* CSS - Used for styling, combined with Bootstrap
+* JavaScript - Used for fronend interactive features
+  * Stripe Payment Functionality
+  * Update Add/Remove classes from booking cart
+  * Checkout function
+* Python - Used for the core of the page backend
+  * Python Modules Used:
+    * asgiref==3.7.2
+    * boto3==1.28.80
+    * botocore==1.31.80
+    * dj-database-url==0.5.0
+    * Django==3.2.22
+    * django-allauth==0.41.0
+    * django-countries==7.2.1
+    * django-crispy-forms==1.14.0
+    * django-ses==3.5.0
+    * django-storages==1.14.2
+    * gunicorn==21.2.0
+    * jmespath==1.0.1
+    * oauthlib==3.2.2
+    * Pillow==10.1.0
+    * psycopg2==2.9.9
+    * python3-openid==3.2.0
+    * pytz==2023.3.post1
+    * requests-oauthlib==1.3.1
+    * s3transfer==0.7.0
+    * sqlparse==0.4.4
+    * stripe==7.6.0
+    * urllib3==1.26.18
+* Tools
+  * [GitHub](https://github.com/) - used as repository to store all development and image files from workspace
+  * [VS Code](hhttps://code.visualstudio.com/) - used as the core development workspace platform,, to create all files and store images for project
+  * [Heroku](https://dashboard.heroku.com/) - used to deploy the site
+  * [Favicon.io](https://favicon.io/) - used for a browser tab icon
+  * [Bootstrap5](https://getbootstrap.com/) - used for the styling as well as the responsivness of the site
+  * [Google Fonts](https://fonts.google.com/) - used to select and import font for the project
+  * [JsHint](https://jshint.com/) - used for validating the javascript code
+  * [CI Phython Linter](https://pep8ci.herokuapp.com/) - used for validating the python code
+  * [HTML - W3C HTML Validator](https://validator.w3.org/#validate_by_uri+with_options) - used for validating the HTML
+  * [CSS - Jigsaw CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_uri) - used for validating the CSS
+  * [Chrome Del Tools](https://developer.chrome.com/docs/devtools/) - used for debugging and testing with Lighthouse
+  * [AWS](https://aws.amazon.com/) - for storing media and static data
+  * [Stripe](https://dashboard.stripe.com/)- to accept payments in test mode, view status of transactions
+  * [Gmail](https://mail.google.com/mail)- used as email host provider to send and receive mail
+  * Django Admin- to manage backend data , profiles and information from the backend.
+
 
 ## Testing
 
@@ -447,57 +496,37 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
 7. Save, add, commit and push these changes to make a deployment to Heroku. In the build log you will see that the static files were collected, and in our S3 bucket we can see the static folder with all the static files in it.
 8. Navigate to S3 and open the bucket. Create folder and name it 'media', to store all the media files for the site. Add media files for site by clicking upload and choosing the relevant files.
 
-#### Correct settings.py configuration
-1. Ensure the following final setup within the settings.py file looks like this:
-```
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+### Set up Stripe Payments
 
-if 'USE_AWS' in os.environ:
-     # Cache control
-    AWS_S3_OBJECT_PARAMETERS = {
-        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
-        'CacheControl': 'max-age=94608000',
-    }
+1. Log in to Stripe, click on the developers tab and API keys copy the API key and set them in Heroku as config variables in the following:
+
+- STRIPE_PUBLIC_KEY: Stripe publishable key goes here
+- STRIPE_SECRET_KEY: Stripe secret key goes here
+
+2. Back in Stripe set up a new webhook for your deployed site by clicking on webhooks, click on 'add endpoint' and paste in your deployed site's URL followed by /checkout/wh/ and set it to listen for all events.
+3. Click on your newly set up webhook and click on 'Signing Secret' at the top to reveal the secret value. Copy it and set it as a new config variable in Heroku:
+- STRIPE_WH_SECRET: Signing secret from new webhook.
+
+# Credits
+
+## Code
+* I've looked through a lot of ideas and website to find a concept for this project, and my main inspiration was my local personal HIIT Training centre and yoga classes which I attend and previously attended
+* Building the e-commerce project in Django was a huge and sometimes really overwhelmig challenge. The majority of the code was based on Code Institute's 'Boutique Ado' walkthrough project., which was a really good foundation and starting point for my own project
+
+## Images
+* Fitness class images were obtained from :
+    * [FreePik](https://www.freepik.com/)
+    * [Mcgovernhealthandfitnesss](https://www.facebook.com/mcgovernhealthandfitness)
+    * [David Lloyd- Pilates](https://www.davidlloyd.co.uk/pilates/)
+    * [Telegraph-boxercise](https://www.telegraph.co.uk/health-fitness/fitness/workouts)
+    * [Sheena Shah-Yoga](https://www.yogawithsheena.com/)
+    * [Neil Patel-founder of chikri yoga](https://www.chikri.com/)
+  
     
-    # Bucket Config
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'eu-north-1')
-    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
-    AWS_DEFAULT_ACL = None
-    AWS_QUERYSTRING_AUTH = False
-    AWS_S3_FILE_OVERWRITE = False
 
-    # Static and media files
-    STATICFILES_LOCATION = 'static'
-    MEDIAFILES_LOCATION = 'media'
-
-    # Override static and media URLs in production
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Stripe
-STRIPE_CURRENCY = 'gbp'
-STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
-STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
-STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
-
-# Email settings
-EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', '1').strip().lower() in ('1', 'true', 'yes', 'on')
-EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', '0').strip().lower() in ('1', 'true', 'yes', 'on')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-EMAIL_FROM_NAME = os.environ.get('EMAIL_FROM_NAME', 'Service Booking Platform').strip()
-SUPPORT_EMAIL = os.environ.get('SUPPORT_EMAIL', EMAIL_HOST_USER or 'mammas.cakes16@gmail.com').strip()
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
-
+## Acknowledgments
+* The whole team at [Code Institute](https://codeinstitute.net/) for their teaching and support
+* My tutor Manuel Perez Romero from Bristol City College for his professional guidance and patience
+* Lyrica Zhang- from Talk Campus volunteering at Bristol City College
 
