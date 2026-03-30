@@ -520,7 +520,7 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
 ## Images
 * Fitness class images were obtained from :
     * [FreePik](https://www.freepik.com/)
-    * [Mcgovernhealthandfitnesss](https://www.facebook.com/mcgovernhealthandfitness)
+    * [Mcgovernhealthandfitnesss](https://www.facebook.com/mcgovernhealthandfitness/)
     * [David Lloyd- Pilates](https://www.davidlloyd.co.uk/pilates/)
     * [Telegraph-boxercise](https://www.telegraph.co.uk/health-fitness/fitness/workouts)
     * [Sheena Shah-Yoga](https://www.yogawithsheena.com/)
