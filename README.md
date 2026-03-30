@@ -159,6 +159,9 @@ Students can view a range of Instructors on this page.
 <details><summary>Stripe Transaction Summary</summary>
 <img src="static/images/home/stripesuccess.png">
 </details> Stripe Dashboard in the Events and Logs show payment has succeeded
+<details><summary>Contact Us Form Summary</summary>
+<img src="static/images/home/contactus.png">
+</details> Site users have the option to access the contact us form in the quick link sections. Once completed, form is submitted to site owner.
 
  ## Site Admin 
 Site Administrators only have priveleges to modify the site such as;  add / remove classes in categories, add, remove or modify class instructors, student profiles, email addresses, add, remove and edit scheduled exercise classes using super user login credentials. Please see below
@@ -181,9 +184,60 @@ Site Administrators only have priveleges to modify the site such as;  add / remo
 <details><summary>  Classes Scheduled  </summary>
 <img src="static/images/home/scheduledclasses.png">
 </details>Admins can view upcoming scheduled classes and past classes in Services, Exercise classes.
-<details><summary>  Email   </summary>
+<details><summary> Email   </summary>
 <img src="static/images/home/scheduledclasses.png">
 </details>Admins can view upcoming scheduled and past scheduled classes booked by students and past classes in Checkout, Class bookings.
+
+## Technologies Used
+
+## Language
+* HTML - Used for the main structure of the page
+* CSS - Used for styling, combined with Bootstrap
+* JavaScript - Used for fronend interactive features
+  * Stripe Payment Functionality
+  * Update Add/Remove classes from booking cart
+  * Checkout function
+* Python - Used for the core of the page backend
+  * Python Modules Used:
+    * asgiref==3.7.2
+    * boto3==1.28.80
+    * botocore==1.31.80
+    * dj-database-url==0.5.0
+    * Django==3.2.22
+    * django-allauth==0.41.0
+    * django-countries==7.2.1
+    * django-crispy-forms==1.14.0
+    * django-ses==3.5.0
+    * django-storages==1.14.2
+    * gunicorn==21.2.0
+    * jmespath==1.0.1
+    * oauthlib==3.2.2
+    * Pillow==10.1.0
+    * psycopg2==2.9.9
+    * python3-openid==3.2.0
+    * pytz==2023.3.post1
+    * requests-oauthlib==1.3.1
+    * s3transfer==0.7.0
+    * sqlparse==0.4.4
+    * stripe==7.6.0
+    * urllib3==1.26.18
+* Tools
+  * [GitHub](https://github.com/) - used as repository to store all development and image files from workspace
+  * [VS Code](hhttps://code.visualstudio.com/) - used as the core development workspace platform,, to create all files and store images for project
+  * [Heroku](https://dashboard.heroku.com/) - used to deploy the site
+  * [Favicon.io](https://favicon.io/) - used for a browser tab icon
+  * [Bootstrap5](https://getbootstrap.com/) - used for the styling as well as the responsivness of the site
+  * [Google Fonts](https://fonts.google.com/) - used to select and import font for the project
+  * [JsHint](https://jshint.com/) - used for validating the javascript code
+  * [CI Phython Linter](https://pep8ci.herokuapp.com/) - used for validating the python code
+  * [HTML - W3C HTML Validator](https://validator.w3.org/#validate_by_uri+with_options) - used for validating the HTML
+  * [CSS - Jigsaw CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_uri) - used for validating the CSS
+  * [Chrome Del Tools](https://developer.chrome.com/docs/devtools/) - used for debugging and testing with Lighthouse
+  * [AWS](https://aws.amazon.com/) - for storing media and static data
+  * [Stripe](https://dashboard.stripe.com/)- to accept payments in test mode, view status of transactions
+  * [Gmail](https://mail.google.com/mail)- used as email host provider to send and receive mail
+  * Django Admin- to manage backend data , profiles and information from the backend.
+
 
 ## Testing
 
@@ -500,4 +554,14 @@ EMAIL_FROM_NAME = os.environ.get('EMAIL_FROM_NAME', 'Service Booking Platform').
 SUPPORT_EMAIL = os.environ.get('SUPPORT_EMAIL', EMAIL_HOST_USER or 'mammas.cakes16@gmail.com').strip()
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 
+### Set up Stripe Payments
+
+1. Log in to Stripe, click on the developers tab and API keys copy the API key and set them in Heroku as config variables in the following:
+
+- STRIPE_PUBLIC_KEY: Stripe publishable key goes here
+- STRIPE_SECRET_KEY: Stripe secret key goes here
+
+2. Back in Stripe set up a new webhook for your deployed site by clicking on webhooks, click on 'add endpoint' and paste in your deployed site's URL followed by /checkout/wh/ and set it to listen for all events.
+3. Click on your newly set up webhook and click on 'Signing Secret' at the top to reveal the secret value. Copy it and set it as a new config variable in Heroku:
+- STRIPE_WH_SECRET: Signing secret from new webhook.
 
