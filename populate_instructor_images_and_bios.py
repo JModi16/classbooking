@@ -15,45 +15,6 @@ django.setup()
 # Instructor data with bios and descriptions
 INSTRUCTORS_DATA = [
     {
-        'username': 'sarah_smith',
-        'first_name': 'Sarah',
-        'last_name': 'Smith',
-        'email': 'sarah@example.com',
-        'bio': (
-            'Sarah is a certified Hatha Yoga instructor with 8 years of '
-            'experience teaching in London. She specializes in beginner-'
-            'friendly classes that focus on flexibility and mindfulness. '
-            'Sarah completed her 200-hour yoga teacher training at Yoga '
-            'Alliance and has helped hundreds of students discover the '
-            'transformative power of yoga.'
-        ),
-        'lesson_description': (
-            'My yoga classes combine traditional Hatha techniques with '
-            'modern flexibility training. Each session includes warm-up '
-            'poses, main asana practice, and a deep relaxation period. I '
-            'focus on proper alignment and breathing techniques to help you '
-            'build strength while reducing stress. Perfect for all levels, '
-            'from complete beginners to experienced practitioners.'
-        ),
-        'specialties': (
-            'Hatha Yoga, Vinyasa Flow, Yoga for Flexibility, Mindfulness'
-        ),
-        'certifications': (
-            'Yoga Alliance 200-Hour RYT, Certified Yoga Instructor, '
-            'CPR/First Aid'
-        ),
-        'years_experience': 8,
-        'hourly_rate': 45.00,
-        'package_single_rate': 18.00,
-        'package_5_rate': 80.00,
-        'package_10_rate': 150.00,
-        'package_monthly_rate': 120.00,
-        'rating': 4.8,
-        'total_reviews': 127,
-        'instagram': 'https://instagram.com/sarah_yoga',
-        'is_verified': True,
-    },
-    {
         'username': 'james_taylor',
         'first_name': 'James',
         'last_name': 'Taylor',
@@ -379,7 +340,8 @@ def populate_instructors():
     print("✅ ALL INSTRUCTORS POPULATED SUCCESSFULLY")
     print("="*70)
     print(
-        f"\nSummary: {created_count} created, {updated_count} updated, "
+        f"\nSummary: {created_count} created, "
+        f"{updated_count} updated, "
         f"{unchanged_count} unchanged"
     )
     print("\nInstructor profiles are now live on the platform:")
