@@ -12,7 +12,7 @@
     * [Python Linting](#python-linting)
     * [Lighthouse Testing](#lighthouse-testing)
 * [Responsiveness](#responsiveness)
-* [Manual Testing](#manual-testing)
+* [Testing site functionality](#testing-site-functionality)
 * [User Stories Testing](#user-stories-testing)
 * [Bugs, Issues and Solutions](#bugs-issues-and-solutions)
 
