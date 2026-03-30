@@ -39,12 +39,7 @@
                 </span>
             {% endif %}
             
-            {% if instructor.rating %}
-                <div class="text-warning h4 mb-2">
-                    ★ {{ instructor.rating|floatformat:1 }}
-                </div>
-                <p class="text-muted small">{{ instructor.total_reviews }} review{{ instructor.total_reviews|pluralize }}</p>
-            {% endif %}
+
             
             {% if instructor.years_experience %}
                 <p class="text-muted">

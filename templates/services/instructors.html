@@ -59,15 +59,7 @@
                                 </span>
                             {% endif %}
                             
-                            <!-- Rating -->
-                            {% if instructor.rating %}
-                                <div class="mb-2">
-                                    <span class="text-warning">
-                                        ★ {{ instructor.rating|floatformat:1 }}
-                                    </span>
-                                    <small class="text-muted">({{ instructor.total_reviews }} reviews)</small>
-                                </div>
-                            {% endif %}
+
                             
                             <!-- Specialties -->
                             {% if instructor.specialties %}
