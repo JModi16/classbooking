@@ -15,11 +15,6 @@ Class-Booking is my forth milestone project for Code Institute's Level 5 Diploma
 * [Skeleton](#skeleton)
 * [Surface](#surface)
 * [Features](#features)
-    * [Home Page](#home-page)
-    * [Product Page](#products-page)
-    * [Profile Page](#profile-page)
-    * [Contact Form](#contact-form)
-    * [Authentication](#authentication)
 * [Technologies](#technologies-used)
 * [Testing](#testing)
 * [Future Enhancements](#Future-Enhancements)
@@ -512,4 +507,26 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
 2. Back in Stripe set up a new webhook for your deployed site by clicking on webhooks, click on 'add endpoint' and paste in your deployed site's URL followed by /checkout/wh/ and set it to listen for all events.
 3. Click on your newly set up webhook and click on 'Signing Secret' at the top to reveal the secret value. Copy it and set it as a new config variable in Heroku:
 - STRIPE_WH_SECRET: Signing secret from new webhook.
+
+# Credits
+
+## Code
+* I've looked through a lot of ideas and website to find a concept for this project, and my main inspiration was my local personal HIIT Training centre and yoga classes which I attend and previously attended
+* Building the e-commerce project in Django was a huge and sometimes really overwhelmig challenge. The majority of the code was based on Code Institute's 'Boutique Ado' walkthrough project., which was a really good foundation and starting point for my own project
+
+## Images
+* Fitness class images were obtained from :
+    * [FreePik](https://www.freepik.com/)
+    * [Mcgovernhealthandfitnesss](https://www.facebook.com/mcgovernhealthandfitness)
+    * [David Lloyd- Pilates](https://www.davidlloyd.co.uk/pilates/)
+    * [Telegraph-boxercise](https://www.telegraph.co.uk/health-fitness/fitness/workouts)
+    * [Sheena Shah-Yoga](https://www.yogawithsheena.com/)
+    * [Neil Patel-founder of chikri yoga](https://www.chikri.com/)
+  
+    
+
+## Acknowledgments
+* The whole team at [Code Institute](https://codeinstitute.net/) for their teaching and support
+* My tutor Manuel Perez Romero from Bristol City College for his professional guidance and patience
+* Lyrica Zhang- from Talk Campus volunteering at Bristol City College
 
