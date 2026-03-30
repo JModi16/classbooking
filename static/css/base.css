@@ -214,9 +214,13 @@ body {
 
 .home-footer {
     background: linear-gradient(135deg, #5b2a9d 0%, #7b3fbd 100%);
-    .media-thumb-165 {
-        height: auto;
-        max-height: 150px;
+}
+
+ .media-thumb-165 {
+    height: auto;
+    max-height: 150px;
+}
+
 .home-footer h5 {
     color: #ffffff;
 }
