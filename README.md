@@ -19,6 +19,9 @@ Class-Booking is my forth milestone project for Code Institute's Level 5 Diploma
 * [Testing](#testing)
 * [Future Enhancements](#Future-Enhancements)
 * [Deployment](#deployment)
+    * [Heroku](#Heroku)
+    * [AWS](#AWS)
+    * [Stripe](#Stripe)
 * [Credits](#credits)
 
 ## Strategy
@@ -245,14 +248,14 @@ Extensive testing was carried out on this project. Please review [testing.md](te
 
 This website was created using the CI full template (https://github.com/Code-Institute-Org/ci-full-template)
 
-#### Database creation
+### Database creation
 
 To create the database:
 1. Navigate to the CI Database Maker(https://dbs.ci-dbs.net/) which creates a new PostgreSQL database.
 2. Type in your email address into the input field as directed and click submit
 3. You will receive an email with the new PostgreSQL instance. Keep these details safe, they will be used shortly.
 
-#### Heroku
+## Heroku
 To deploy class-booking to Heroku, take the following steps:
 1. Create a requirements.txt file using the terminal command `pip freeze > requirements.txt`
 2. Create a Procfile with the terminal command `echo web: python app.py > Procfile`. Ensure you use a capital 'P' for this file.
@@ -283,7 +286,7 @@ To deploy class-booking to Heroku, take the following steps:
 11. In the "Manual Deployment" section, ensure the main branch is selected then click "Deploy Branch"
 
 
-#### Connect new DB to Heroku app
+### Connect new DB to Heroku app
 1. In the terminal, install dj_database_url and psycopg2, both of these are needed to connect to your external database.
 
 2. pip3 install dj_database_url==0.5.0 psycopg2
@@ -374,7 +377,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', '')
 DEBUG = 'DEVELOPMENT' in os.environ
 ```
 
-
+## AWS
 ### Set Up AWS to store static and media files
 
 1. Sign up to AWS [here](https://aws.amazon.com/).
@@ -496,8 +499,8 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
 7. Save, add, commit and push these changes to make a deployment to Heroku. In the build log you will see that the static files were collected, and in our S3 bucket we can see the static folder with all the static files in it.
 8. Navigate to S3 and open the bucket. Create folder and name it 'media', to store all the media files for the site. Add media files for site by clicking upload and choosing the relevant files.
 
-
-### Set up Stripe Payments
+## Stripe
+#### Set up Stripe Payments
 
 1. Log in to Stripe, click on the developers tab and API keys copy the API key and set them in Heroku as config variables in the following:
 
