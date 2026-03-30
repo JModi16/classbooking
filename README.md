@@ -157,7 +157,7 @@ Students can view a range of Instructors on this page.
 <details><summary>Stripe Transaction Summary</summary>
 <img src="static/images/home/stripesuccess.png">
 </details> Stripe Dashboard in the Events and Logs show payment has succeeded
-<details><summary>Contact Us Form Summary</summary>
+<details><summary>Contact Us Form </summary>
 <img src="static/images/home/contactus.png">
 </details> Site users have the option to access the contact us form in the quick link sections. Once completed, form is submitted to site owner.
 
