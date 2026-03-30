@@ -1,0 +1,12 @@
+Hi {{ user.get_full_name|default:user.username }},
+
+Thank you for registering at Service Booking Platform!
+
+Please confirm your email address by clicking the link below:
+
+{{ activate_url }}
+
+If you did not register, please ignore this email.
+
+Best regards,
+The Service Booking Platform Team
