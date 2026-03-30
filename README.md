@@ -1,9 +1,8 @@
 <h1 align="center">Class-Booking</h1>
 
-![Website mock-up](static/images/mockup.png)
+![Website mock-up](static/images/home/mockup.png)
 
-Class booking is an e-commerce website project created for a fictional fitness class booking platform based in North West London. The main objective of site is to create a user-fiendly enable students to book a class using an easy and 
-intuitive approach. User has four class types to book: Personal training, Yoga, Pilates and Boxercise. The site owner only recommends Instructors who are approved and accredited.
+Class booking is an e-commerce website project created for a fictional fitness class booking platform based in North West London. The main objective of site is to create a user-fiendly enable students to book a class using an easy and intuitive approach. User has four class types to book: Personal training, Yoga, Pilates and Boxercise. The site owner only recommends Instructors who are approved and accredited.
 
 Project was created using Python, Django, HTML5, CSS3, and JavaScript. The data was stored in a PostgreSQL database manipulation and deployed using Heroku. AWS is used for media storage and Stripe to accept payments.
 Class-Booking is my forth milestone project for Code Institute's Level 5 Diploma in Web Application Development.
@@ -23,15 +22,6 @@ Class-Booking is my forth milestone project for Code Institute's Level 5 Diploma
     * [Authentication](#authentication)
 * [Technologies](#technologies-used)
 * [Testing](#testing)
-  * [Validation](#validation)
-    * [HTML Validation](#html-validation)
-    * [CSS Validation](#css-validation)
-    * [JavaScript Linting](#javascript-linting)
-    * [Python Linting](#python-linting)
-    * [Lighthouse Testing](#lighthouse-testing)
-    * [Responsiveness](#responsiveness)
-* [Manual Testing](#manual-testing)
-* [Bugs, Issues and Solutions](#bugs-issues-and-solutions)
 * [Future Enhancements](#Future-Enhancements)
 * [Deployment](#deployment)
 * [Credits](#credits)
@@ -74,7 +64,7 @@ Class-Booking is my forth milestone project for Code Institute's Level 5 Diploma
  ### Database Schema
 The database was designed using DpDiagram.io. There are 5 tables within this relational database: User, Cake, Customer, Order and OrderItem.
 <details><summary>ERD</summary>
-<img src="static/images/erdcakes.png">
+<img src="static/images/home/dbclass1.png">
 </details>
 
 
@@ -194,6 +184,11 @@ Site Administrators only have priveleges to modify the site such as;  add / remo
 <details><summary>  Email   </summary>
 <img src="static/images/home/scheduledclasses.png">
 </details>Admins can view upcoming scheduled and past scheduled classes booked by students and past classes in Checkout, Class bookings.
+
+## Testing
+
+Extensive testing was carried out on this project. Please review [testing.md](testing.md) for all testing performed.
+
 
 ## Deployment
 
