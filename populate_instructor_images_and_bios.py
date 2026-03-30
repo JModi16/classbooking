@@ -1,11 +1,3 @@
-"""
-Script to populate instructor images and biographical data programmatically.
-Safe mode behavior:
-- New records are created with full data.
-- Existing records only have blank fields filled.
-- Existing non-blank Admin values are never overwritten.
-"""
-
 import os
 import sys
 import django
@@ -339,17 +331,12 @@ def populate_instructors():
             instructor.is_verified = data['is_verified']
             instructor.is_active = True
 
-            img_io = generate_placeholder_image(
-                data['first_name'], data['last_name'])
+            img_io = generate_placeholder_image(data['first_name'], data['last_name'])
             image_name = f"instructor_{username}.png"
-            instructor.image.save(
-                image_name, ContentFile(img_io.read()), save=False)
+            instructor.image.save(image_name, ContentFile(img_io.read()), save=False)
+            print("✅ Created\n   → Full profile created\n   → Profile image generated")
             instructor.save()
             created_count += 1
-
-            print("✅ Created")
-            print("   → Full profile created")
-            print("   → Profile image generated")
         else:
             # Existing records: fill blank fields only
             field_map = {
